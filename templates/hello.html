@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church ERP Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --church-primary: #2c1810;
+            --church-secondary: #8b4513;
+            --church-gold: #d4af37;
+            --church-light-gold: #f4e4a6;
+            --church-white: #faf8f3;
+            --church-light: #f5f2e8;
+            --church-shadow: rgba(44, 24, 16, 0.1);
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, var(--church-light) 0%, #e8ddc7 100%);
+            color: var(--church-primary);
+        }
+
+        .card-stat {
+            background: linear-gradient(135deg, var(--church-white) 0%, #f8f5f0 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--church-shadow);
+            border: none !important;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--church-gold) 0%, var(--church-light-gold) 100%);
+        }
+
+        .card-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--church-shadow);
+        }
+
+        .stats-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+
+        .text-church-primary { color: var(--church-primary) !important; }
+        .text-church-secondary { color: var(--church-secondary) !important; }
+        .text-church-gold { color: var(--church-gold) !important; }
+        .bg-church-primary { background-color: var(--church-primary) !important; }
+        .bg-church-secondary { background-color: var(--church-secondary) !important; }
+        .bg-church-gold { background-color: var(--church-gold) !important; }
+
+        .card h6 {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .card h3 {
+            font-weight: 600;
+            font-size: 2.2rem;
+        }
+
+        .feature-card {
+            background: var(--church-white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--church-shadow);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--church-shadow);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-church {
+            background: linear-gradient(135deg, var(--church-gold) 0%, var(--church-light-gold) 100%);
+            color: var(--church-primary);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-church:hover {
+            background: linear-gradient(135deg, var(--church-light-gold) 0%, var(--church-gold) 100%);
+            color: var(--church-primary);
+            transform: translateY(-1px);
+        }
+
+        .chart-container {
+            background: var(--church-white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--church-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-family: 'Cinzel', serif;
+            color: var(--church-primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-4">
+        <!-- Stats Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stat h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-church-primary">Total Members</h6>
+                                <h3 class="text-church-primary">1,247</h3>
+                            </div>
+                            <i class="fas fa-users stats-icon text-church-gold"></i>
+                        </div>
+                        <div class="mt-2">
+                            <span class="text-success"><i class="fas fa-arrow-up"></i> 5.2%</span>
+                            <span class="text-muted ms-2">From last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stat h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-church-secondary">Monthly Tithes</h6>
+                                <h3 class="text-church-secondary">$45.2K</h3>
+                            </div>
+                            <i class="fas fa-hand-holding-heart stats-icon text-church-gold"></i>
+                        </div>
+                        <div class="mt-2">
+                            <span class="text-success"><i class="fas fa-arrow-up"></i> 8.1%</span>
+                            <span class="text-muted ms-2">From last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stat h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-church-primary">Attendance Rate</h6>
+                                <h3 class="text-church-primary">87%</h3>
+                            </div>
+                            <i class="fas fa-clipboard-check stats-icon text-church-gold"></i>
+                        </div>
+                        <div class="mt-2">
+                            <span class="text-danger"><i class="fas fa-arrow-down"></i> 2.3%</span>
+                            <span class="text-muted ms-2">From last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stat h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-church-secondary">Total Offerings</h6>
+                                <h3 class="text-church-secondary">$28.7K</h3>
+                            </div>
+                            <i class="fas fa-donate stats-icon text-church-gold"></i>
+                        </div>
+                        <div class="mt-2">
+                            <span class="text-success"><i class="fas fa-arrow-up"></i> 12.4%</span>
+                            <span class="text-muted ms-2">From last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-8">
+                <div class="chart-container">
+                    <h5 class="chart-title">Monthly Financial Overview</h5>
+                    <canvas id="financialChart" height="100"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="chart-container">
+                    <h5 class="chart-title">Attendance Distribution</h5>
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="feature-icon rounded-circle bg-church-primary me-3">
+                                <i class="fas fa-pray text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-0">Prayer Requests</h5>
+                        </div>
+                        <p class="card-text">Manage and track prayer requests from congregation members.</p>
+                        <a href="#" class="btn btn-church">View Requests</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="feature-icon rounded-circle bg-church-secondary me-3">
+                                <i class="fas fa-calendar-alt text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-0">Events & Services</h5>
+                        </div>
+                        <p class="card-text">Schedule and manage church events, services, and activities.</p>
+                        <a href="#" class="btn btn-church">Manage Events</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="feature-icon rounded-circle bg-church-gold me-3">
+                                <i class="fas fa-file-invoice-dollar text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-0">Financial Reports</h5>
+                        </div>
+                        <p class="card-text">Generate detailed financial reports and stewardship analytics.</p>
+                        <a href="#" class="btn btn-church">View Reports</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Financial Chart
+        const financialCtx = document.getElementById('financialChart').getContext('2d');
+        const financialChart = new Chart(financialCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Tithes',
+                        data: [38000, 42000, 41000, 45000, 43000, 47000, 44000, 46000, 48000, 45200, 0, 0],
+                        borderColor: '#d4af37',
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Offerings',
+                        data: [22000, 25000, 24000, 26000, 25500, 28000, 26500, 27000, 29000, 28700, 0, 0],
+                        borderColor: '#8b4513',
+                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'Cinzel'
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + (value / 1000) + 'K';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Attendance Chart
+        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+        const attendanceChart = new Chart(attendanceCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Sunday Service', 'Midweek Prayer', 'Youth Group', 'Bible Study'],
+                datasets: [{
+                    data: [450, 180, 95, 120],
+                    backgroundColor: [
+                        '#d4af37',
+                        '#8b4513',
+                        '#2c1810',
+                        '#f4e4a6'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: 'Crimson Text',
+                                size: 12
+                            },
+                            padding: 15
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

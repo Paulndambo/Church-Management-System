@@ -1,0 +1,33 @@
+<div class="modal fade" id="editDepartmentModal{{department.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Church Department</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-department' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" id="department_id" name="department_id" value="{{department.id}}" readonly />
+                  <div class="row mb-2">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Department Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    value="{{department.name}}"
+                    required
+                  />
+                </div>
+                </div>
+
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Department</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

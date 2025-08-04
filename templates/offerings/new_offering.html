@@ -1,0 +1,61 @@
+<div class="modal fade" id="newOfferingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Record Service Offering</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-offering' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Branch</label>
+                      <select class="form-select" id="branch" name="branch" required>
+                        {% for branch in branches %}
+                            <option value={{branch.id}}>{{branch.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Church Service</label>
+                    <select class="form-select" id="service" name="service" required>
+                        {% for service in services %}
+                            <option value={{service.id}}>{{service.name}}</option>
+                         {% endfor %}
+                      </select>
+                  </div>
+                  
+                  </div>
+  
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Total Amount</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount"
+                      name="amount"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Offering Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="offering_date"
+                      name="offering_date"
+                        required
+                    />
+                  </div>
+                </div>               
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Record Offerings</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

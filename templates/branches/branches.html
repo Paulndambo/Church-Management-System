@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="table-card">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Church Branches</h3>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" placeholder="Search..." 
+            id="searchInput" value="{{ search_query }}">
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newBranchModal">New Branch</button>
+          </div>
+    </div>
+ 
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Town</th>
+                    <th>Created On</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for branch in branches %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ branch.name }}</td>
+                    <td>{{ branch.town }}</td>
+                    <td>{{  branch.created_at}}</td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            
+                            <a class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editBranchModal{{branch.id}}"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteBranchModal{{branch.id}}"><i class="fas fa-trash"></i></a>
+                           
+                            
+                        </div>
+                    </td>
+                    {% include "branches/delete_branch.html" %}
+                    {% include "branches/edit_branch.html" %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        No branches found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Table Footer with Pagination -->
+    <div class="table-footer">
+        
+    </div>
+</div>
+{% include "branches/new_branch.html" %}
+
+{% endblock content %}
+
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const loader = document.getElementById('loader');
+        let searchTimeout;
+
+        // Search functionality
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(searchTimeout);
+            loader.classList.add('active');
+
+            searchTimeout = setTimeout(() => {
+                const searchQuery = this.value;
+                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+            }, 500);
+        });
+
+        // Sort functionality
+        document.querySelectorAll('th[data-sort]').forEach(header => {
+            header.addEventListener('click', function() {
+                const sortField = this.dataset.sort;
+                const currentIcon = this.querySelector('i');
+                let direction = 'asc';
+
+                if (currentIcon.classList.contains('fa-sort-up')) {
+                    direction = 'desc';
+                }
+
+                window.location.href = `?sort=${sortField}&direction=${direction}`;
+            });
+        });
+
+        // Delete functionality
+        let studentToDelete = null;
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                studentToDelete = this.dataset.id;
+            });
+        });
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            if (studentToDelete) {
+                loader.classList.add('active');
+                
+                fetch(`/students/${studentToDelete}/delete/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    }
+                })
+                .finally(() => {
+                    loader.classList.remove('active');
+                });
+            }
+        });
+
+        // Utility function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock additional_scripts %}

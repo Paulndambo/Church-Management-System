@@ -1,0 +1,76 @@
+<div class="modal fade" id="newProjectModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">New Church Project</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-project' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Project Name</label>
+                      <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                        required
+                    />
+                    </div>
+                  </div>
+  
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Total Budget</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="total_budget"
+                      name="total_budget"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Amount Raised</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount_raised"
+                      name="amount_raised"
+                        required
+                    />
+                  </div>
+                </div> 
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Start Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="start_date"
+                      name="start_date"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">End Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="end_date"
+                      name="end_date"
+                        required
+                    />
+                  </div>
+                </div>              
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Create Project</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

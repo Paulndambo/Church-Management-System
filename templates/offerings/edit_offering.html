@@ -1,0 +1,69 @@
+<div class="modal fade" id="editOfferingModal{{offering.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Service Offering</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-offering' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="offering_id" id="offering_id" value="{{offering.id}}" readonly required/>
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Branch</label>
+                      <select class="form-select" id="branch" name="branch" required>
+                        <option value={{offering.branch.id}}>{{offering.branch.name}}</option>
+                        {% for branch in branches %}
+                            {% if branch.id != offering.branch.id %}
+                                <option value={{branch.id}}>{{branch.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Church Service</label>
+                    <select class="form-select" id="service" name="service" required>
+                         <option value={{offering.service.id}}>{{offering.service.name}}</option>
+                        {% for service in services %}
+                            {% if service.id != offering.service.id %}
+                                <option value={{service.id}}>{{service.name}}</option>
+                            {% endif %}
+                         {% endfor %}
+                      </select>
+                  </div>
+                  
+                  </div>
+  
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Total Amount</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount"
+                      name="amount"
+                      value="{{offering.amount}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Offering Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="offering_date"
+                      name="offering_date"
+                      value="{{offering.offering_date|date:'Y-m-d'}}"
+                        required
+                    />
+                  </div>
+                </div>               
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Offerings</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

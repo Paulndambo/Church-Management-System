@@ -1,0 +1,32 @@
+<div class="modal fade" id="newDepartmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">New Church Department</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-department' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                  <div class="row mb-2">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Department Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    required
+                  />
+                </div>
+             
+                </div>
+                
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Create Department</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

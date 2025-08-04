@@ -1,0 +1,82 @@
+<div class="modal fade" id="editProjectModal{{project.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Church Project</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-project' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="project_id" id="project_id" value="{{project.id}}" readonly required />
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Project Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        value="{{project.name}}"
+                        required
+                    />
+                    </div>
+              
+                  </div>
+  
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Total Budget</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="total_budget"
+                      name="total_budget"
+                      value="{{project.total_budget}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Amount Raised</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount_raised"
+                      name="amount_raised"
+                      value="{{project.amount_raised}}"
+                        required
+                    />
+                  </div>
+                </div> 
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Start Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="start_date"
+                      name="start_date"
+                      value="{{project.start_date|date:'Y-m-d'}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">End Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="end_date"
+                      name="end_date"
+                      value="{{project.end_date|date:'Y-m-d'}}"
+                        required
+                    />
+                  </div>
+                </div>              
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Project</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

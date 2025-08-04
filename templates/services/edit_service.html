@@ -1,0 +1,71 @@
+<div class="modal fade" id="editChurchServiceModal{{service.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Church Service</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-church-service' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" value="{{service.id}}" name="service_id" id="service_id" readonly required />
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        value="{{service.name}}"
+                        required
+                    />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Service Day</label>
+                      <select class="form-select" id="service_day" name="service_day" required>
+                        <option value="{{service.service_day}}">{{service.service_day}}</option>
+                        {% for service_day in service_days %}
+                          {% if service_day != service.service_day %}
+                            <option value={{service_day}}>{{service_day}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                </div>
+  
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Starts At</label>
+                    <input
+                      type="time"
+                      class="form-control"
+                      id="starts_at"
+                      name="starts_at"
+                      value="{{service.starts_at|date:'H:i'}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Ends At</label>
+                    <input
+                      type="time"
+                      class="form-control"
+                      id="ends_at"
+                      name="ends_at"
+                      value="{{service.ends_at|date:'H:i'}}"
+                        required
+                    />
+                  </div>
+                </div>               
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Update Church Service</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

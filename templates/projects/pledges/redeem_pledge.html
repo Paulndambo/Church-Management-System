@@ -1,0 +1,44 @@
+<div class="modal fade" id="redeemPledgeModal{{pledge.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Pledge</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'redeem-pledge' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" value="{{pledge.id}}" name="pledge_id" id="pledge_id" readonly required />
+                
+                <div class="row mb-3">
+                    <p>Amount Pledged: <b>{{pledge.amount_pledged}}</b></p>
+                    <p>Amount Redeemed: <b>{{pledge.amount_redeemed}}</b></p>
+                    <p>Pledge Balance: <b>{{pledge.balance}}</b></p>
+                </div>
+                <hr/>
+                {% if pledge.balance > 0 %}
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Amount Redeeming</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount"
+                      name="amount"
+                      value="{{pledge.amount}}"
+                        required
+                    />
+                  </div>
+                 
+                </div>              
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Redeem Pledge</button>
+                </div>
+                {% else %}
+                <p>This pledge has been fully Redeemed, Thank you!</p>
+                {% endif %}
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

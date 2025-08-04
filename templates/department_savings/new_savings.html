@@ -1,0 +1,60 @@
+<div class="modal fade" id="newSavingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Record Department Savings</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-savings' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                <div class="row mb-3">
+                    <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Department</label>
+                    <select class="form-select" id="department" name="department" required>
+                        {% for department in departments %}
+                            <option value={{department.id}}>{{department.name}}</option>
+                         {% endfor %}
+                      </select>
+                  </div>
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Branch</label>
+                      <select class="form-select" id="branch" name="branch" required>
+                        {% for branch in branches %}
+                            <option value={{branch.id}}>{{branch.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+  
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Total Amount</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount"
+                      name="amount"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Savings Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="savings_date"
+                      name="savings_date"
+                        required
+                    />
+                  </div>
+                </div>               
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Record Savings</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>
