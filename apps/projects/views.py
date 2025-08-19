@@ -141,6 +141,9 @@ def edit_contribution(request):
         amount = request.POST.get("amount")
         
         existing = ProjectContribution.objects.get(id=contribution_id)
+
+        existing.pledge.amount_redeemed -= Decimal(amount)
+        existing.pledge.save()
         
         existing.project.amount_raised -= Decimal(existing.amount)
         existing.project.save()
@@ -154,6 +157,9 @@ def edit_contribution(request):
         existing.project.amount_raised += Decimal(amount)
         existing.project.save()
         
+        existing.pledge.amount_redeemed += Decimal(amount)
+        existing.pledge.save()
+
         return redirect("contributions")
     return render(request, "projects/contributions/edit_contribution.html")
 
