@@ -244,6 +244,5 @@ For support and questions:
 - Contributors and testers
 - Church communities for feedback and suggestions
 
----
 
 **Built with ❤️ for church communities worldwide**

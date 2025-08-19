@@ -2,12 +2,11 @@
 <html>
 <head>
     <title>DASHBOARD | CHURCH ERP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     {% block additional_css %}
     {% endblock additional_css %}
@@ -66,6 +65,7 @@
             pointer-events: none;
             z-index: -1;
         }
+
         .wrapper {
             display: flex;
             min-height: 100vh;
@@ -94,6 +94,7 @@
         .shadow-church { box-shadow: 0 4px 20px var(--church-shadow) !important; }
         .shadow-church-deep { box-shadow: 0 8px 30px var(--church-shadow-deep) !important; }
 
+        /* Sidebar */
         #sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(180deg, var(--church-primary) 0%, var(--church-deep-blue) 100%);
@@ -126,18 +127,16 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        /* Make the navigation container scrollable */
         #sidebar .sidebar-nav {
             flex-grow: 1;
             overflow-y: auto;
-            /* Custom scrollbar styling */
+            padding: 16px 0;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
         }
 
-        /* Webkit scrollbar styling */
         #sidebar .sidebar-nav::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
 
         #sidebar .sidebar-nav::-webkit-scrollbar-track {
@@ -146,21 +145,26 @@
 
         #sidebar .sidebar-nav::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
+            border-radius: 2px;
         }
 
         #sidebar ul {
             padding: 0;
             list-style: none;
+            margin: 0;
+        }
+
+        #sidebar ul li {
+            margin: 2px 0;
         }
 
         #sidebar ul li a {
-            padding: 15px 20px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             color: var(--church-cream);
             text-decoration: none;
-            transition: all 0.3s;
+            transition: var(--transition);
             position: relative;
             border-left: 3px solid transparent;
             font-weight: 500;
@@ -181,9 +185,10 @@
         }
 
         #sidebar .icon {
-            margin-right: 10px;
+            margin-right: 12px;
             width: 20px;
             text-align: center;
+            font-size: 16px;
         }
 
         #sidebar.collapsed .link-text {
@@ -193,10 +198,14 @@
         #sidebar .submenu {
             background: rgba(0,0,0,0.2);
             display: none;
+            margin-left: 0;
         }
 
         #sidebar .submenu a {
-            padding-left: 50px;
+            padding-left: 52px;
+            font-size: 13px;
+            padding-top: 8px;
+            padding-bottom: 8px;
         }
 
         #sidebar.collapsed .submenu a {
@@ -207,17 +216,20 @@
             display: none !important;
         }
 
+        /* Content Area */
         #content {
             margin-left: var(--sidebar-width);
             width: 100%;
-            padding: 20px;
-            transition: all 0.3s;
+            padding: 24px;
+            transition: var(--transition);
+            min-height: 100vh;
         }
 
         #content.collapsed {
             margin-left: var(--sidebar-collapsed-width);
         }
 
+        /* Cards */
         .card {
            font-family: 'Cinzel', serif;
             font-weight: 600;
@@ -463,6 +475,7 @@
         .stats-icon {
             font-size: 2.5rem;
             opacity: 0.8;
+            color: var(--church-gold);
         }
 
         
@@ -514,26 +527,64 @@
             color: var(--church-dark);
         }
 
-        @media (max-width: 768px) {
-            .table-toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-input {
-                max-width: 100%;
-            }
-
-            .table-footer {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .pagination {
-                margin-top: 1rem;
-            }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2b6cb0 0%, var(--accent-color) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
         }
 
+        .btn-secondary {
+            background: var(--church-gray);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Table Footer */
+        .table-footer {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-top: 1px solid var(--church-border);
+            background: #fafbfc;
+        }
+
+        .page-info {
+            color: var(--church-gray);
+            font-size: 14px;
+        }
+
+        /* Pagination */
+        .pagination {
+            margin: 0;
+        }
+
+        .page-link {
+            border: 1px solid var(--church-border);
+            color: var(--church-primary);
+            padding: 8px 12px;
+            border-radius: var(--border-radius-sm);
+            margin: 0 2px;
+        }
+
+        .page-link:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        /* Loader */
         .loader {
             width: 100%;
             height: 3px;
@@ -672,12 +723,10 @@
     <div class="wrapper">
         {% include "includes/sidebar.html" %}
 
-        <div id="content">
+        <div id="content" class="fade-in-up">
             {% block content %}
             {% endblock content %}
-            
-       
- </div>
+        </div>
     </div>
 
     {% block additional_scripts %}
@@ -702,7 +751,17 @@
                 toggle.addEventListener('click', function(e) {
                     e.preventDefault();
                     const submenu = this.nextElementSibling;
-                    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+                    const isVisible = submenu.style.display === 'block';
+                    
+                    // Close all other submenus
+                    document.querySelectorAll('.submenu').forEach(menu => {
+                        menu.style.display = 'none';
+                    });
+                    
+                    // Toggle current submenu
+                    if (!isVisible) {
+                        submenu.style.display = 'block';
+                    }
                 });
             });
 
@@ -719,6 +778,14 @@
 
             // Check on resize
             window.addEventListener('resize', checkWidth);
+
+            // Add active state to current page
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('#sidebar a').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
         });
     </script>
 </body>

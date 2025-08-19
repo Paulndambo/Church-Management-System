@@ -4,49 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Church Management System | Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg-color: #f8fafc;
+            --primary-color: #1a365d;
+            --primary-hover: #2d3748;
+            --accent-color: #d69e2e;
+            --bg-color: #f7fafc;
             --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --text-light: #64748b;
-            --error-color: #ef4444;
-            --success-color: #10b981;
+            --text-color: #1a365d;
+            --text-light: #718096;
+            --error-color: #e53e3e;
+            --success-color: #38a169;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
             color: var(--text-color);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(214, 158, 46, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(26, 54, 93, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(113, 128, 150, 0.05) 0%, transparent 50%);
+            z-index: -1;
         }
 
         .login-container {
             background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
             width: 100%;
-            max-width: 420px;
-            padding: 2rem;
-            animation: fadeIn 0.5s ease-in-out;
+            max-width: 450px;
+            padding: 3rem 2.5rem;
+            animation: fadeInUp 0.8s ease-out;
+            position: relative;
+            border: 1px solid var(--border-color);
         }
 
-        @keyframes fadeIn {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -56,178 +81,265 @@
 
         .login-header {
             text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
             margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-icon i {
+            font-size: 2.5rem;
+            color: white;
         }
 
         .login-header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .login-header p {
             color: var(--text-light);
-            font-size: 0.875rem;
-        }
-
-        .logo {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .logo svg {
-            width: 64px;
-            height: 64px;
+            font-size: 1rem;
+            line-height: 1.6;
         }
 
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--text-color);
         }
 
         .form-control {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1rem;
             font-size: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            transition: all 0.2s ease;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: #f8fafc;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(214, 158, 46, 0.1);
+            background: white;
         }
 
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            font-size: 0.875rem;
+        .form-control::placeholder {
+            color: var(--text-light);
         }
 
-        .remember-forgot label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
+        .input-group {
+            position: relative;
         }
 
-        .remember-forgot input[type="checkbox"] {
-            margin-right: 0.5rem;
-            cursor: pointer;
+        .input-group .form-control {
+            padding-left: 3rem;
         }
 
-        .forgot-password {
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .forgot-password:hover {
-            color: var(--primary-hover);
-            text-decoration: underline;
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            z-index: 2;
         }
 
         .btn {
             display: block;
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 1rem 1.5rem;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             text-align: center;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .btn-primary {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
             color: white;
+            box-shadow: var(--shadow);
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .login-footer {
             text-align: center;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
             font-size: 0.875rem;
             color: var(--text-light);
         }
 
         .login-footer a {
-            color: var(--primary-color);
+            color: var(--accent-color);
             text-decoration: none;
-            transition: color 0.2s ease;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
 
         .login-footer a:hover {
-            color: var(--primary-hover);
-            text-decoration: underline;
+            color: var(--primary-color);
         }
 
         .alert {
-            padding: 0.75rem 1rem;
-            margin-bottom: 1rem;
-            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
             font-size: 0.875rem;
             display: none;
+            border: none;
         }
 
         .alert-error {
-            background-color: rgba(239, 68, 68, 0.1);
+            background-color: rgba(229, 62, 62, 0.1);
             color: var(--error-color);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-left: 4px solid var(--error-color);
         }
 
         .alert-success {
-            background-color: rgba(16, 185, 129, 0.1);
+            background-color: rgba(56, 161, 105, 0.1);
             color: var(--success-color);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-left: 4px solid var(--success-color);
         }
 
+        .alert.show {
+            display: block;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .forgot-password {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
         @media (max-width: 480px) {
             .login-container {
-                padding: 1.5rem;
+                padding: 2rem 1.5rem;
+                margin: 1rem;
             }
             
-            .remember-forgot {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.75rem;
+            .login-header h1 {
+                font-size: 1.75rem;
             }
+            
+            .logo-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logo-icon i {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading State */
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="logo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
+            <div class="logo-icon">
+                <i class="fas fa-church"></i>
+            </div>
         </div>
         
         <div class="login-header">
-            <h1>Welcome to CMIS</h1>
+            <h1>Welcome Back</h1>
             <p>Sign in to access your church management dashboard</p>
         </div>
         
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ message.tags }} show" role="alert">
+                    <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %} me-2"></i>
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endfor %}
         {% endif %}
@@ -235,18 +347,71 @@
         <form id="loginForm" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
-                <label for="email">Username</label>
-                <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
+                <label for="username">Username</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" name="username" class="form-control" 
+                           placeholder="Enter your username" required>
+                </div>
             </div>
             
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" class="form-control" 
+                           placeholder="Enter your password" required>
+                </div>
             </div>
             
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary" id="loginBtn">
+                <span class="btn-text">Sign In</span>
+            </button>
         </form>
         
+        <div class="form-footer">
+            <a href="#" class="forgot-password">Forgot your password?</a>
+        </div>
+        
+        <div class="login-footer">
+            <p>&copy; 2024 Church Management System. All rights reserved.</p>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = loginBtn.querySelector('.btn-text');
+
+            loginForm.addEventListener('submit', function(e) {
+                // Add loading state
+                loginBtn.classList.add('loading');
+                btnText.textContent = 'Signing In...';
+                loginBtn.disabled = true;
+            });
+
+            // Auto-hide alerts after 5 seconds
+            document.querySelectorAll('.alert').forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 300);
+                }, 5000);
+            });
+
+            // Add focus effects to form inputs
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
