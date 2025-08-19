@@ -93,7 +93,7 @@
                         </td>
                         <td>
                             <span class="status-badge status-{{ member.status|lower }}">
-                                <i class="fas fa-circle me-1" style="font-size: 8px;"></i>
+                              
                                 {{ member.status }}
                             </span>
                         </td>
@@ -105,15 +105,7 @@
                                         title="Edit Member">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-sm btn-outline-info" 
-                                        title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" 
-                                        title="Delete Member"
-                                        onclick="confirmDelete({{ member.id }}, '{{ member.user.name }}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                
                             </div>
                         </td>
                     </tr>
