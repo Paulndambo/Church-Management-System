@@ -184,7 +184,7 @@ def delete_church_service(request):
 ### Church Members Management
 class MemberListView(LoginRequiredMixin, ListView):
     model = Member
-    template_name = "members/members.html"
+    template_name = "members/members_list.html"
     context_object_name = "members"
     paginate_by = 10
 
@@ -256,7 +256,7 @@ def new_member(request):
         )
         
         return redirect("members")
-    return render(request, "members/new_member.html")
+    return render(request, "members/new_membership.html")
 
 @login_required
 def edit_member(request):
