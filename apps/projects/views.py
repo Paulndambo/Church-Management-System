@@ -34,6 +34,8 @@ class ProjectsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["project_types"] = dict(Project._meta.get_field('project_type').choices)
+        context["project_statuses"] = dict(Project._meta.get_field('status').choices)
         return context
     
 
@@ -46,13 +48,17 @@ def new_project(request):
         amount_raised = request.POST.get("amount_raised")
         start_date = request.POST.get("start_date")
         end_date = request.POST.get("end_date")
+        project_type = request.POST.get("project_type")
+        status = request.POST.get("status")
        
         Project.objects.create(
             name=name,
             start_date=start_date,
             end_date=end_date,
             total_budget=total_budget,
-            amount_raised=amount_raised
+            amount_raised=amount_raised,
+            project_type=project_type,
+            status=status
         )
         
         return redirect("projects")
@@ -69,13 +75,17 @@ def edit_project(request):
         amount_raised = request.POST.get("amount_raised")
         start_date = request.POST.get("start_date")
         end_date = request.POST.get("end_date")
+        project_type = request.POST.get("project_type")
+        status = request.POST.get("status")
        
         Project.objects.filter(id=project_id).update(
             name=name,
             start_date=start_date,
             end_date=end_date,
             total_budget=total_budget,
-            amount_raised=amount_raised
+            amount_raised=amount_raised,
+            project_type=project_type,
+            status=status
         )
         
         return redirect("projects")
