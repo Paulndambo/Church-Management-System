@@ -1,6 +1,7 @@
 from django.db import models
 from decimal import Decimal
 
+
 from apps.core.models import AbstractBaseModel
 # Create your models here.
 class DepartmentSaving(AbstractBaseModel):
@@ -18,7 +19,7 @@ class MemberDepartmentSaving(AbstractBaseModel):
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     
     def __str__(self) -> str:
-        return self.member.user.username
+        return self.member.user.username if self.member else "Member"
         
 
 class MemberTithing(AbstractBaseModel):
@@ -27,8 +28,8 @@ class MemberTithing(AbstractBaseModel):
     tithing_date = models.DateField()
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     
-    def __str__(self):
-        return self.member.user.username
+    def __str__(self) -> str:
+        return self.member.user.username if self.member else "Tithe"
     
     
 class Offering(AbstractBaseModel):
@@ -56,3 +57,11 @@ class ChurchExpense(AbstractBaseModel):
     
     def __str__(self):
         return self.name
+    
+
+
+class ChurchDonation(AbstractBaseModel):
+    member = models.ForeignKey("membership.Member", on_delete=models.SET_NULL, null=True, related_name="partnerdonations")
+    partner = models.ForeignKey("partners.ChurchPartner", on_delete=models.SET_NULL, null=True, related_name="memberdonations")
+    amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
+    donation_date = models.DateField()

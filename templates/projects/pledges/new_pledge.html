@@ -1,53 +1,100 @@
 <div class="modal fade" id="newPledgeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 text-center">New Pledge</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-            <form action="{% url 'new-pledge' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="modal-body">
-
-                <div class="row mb-3">
-                    <div class="col">
-                      <label for="exampleInputPassword1" class="form-label fw-bold">Member</label>
-                      <select class="form-select" id="member" name="member" required>
-                        {% for member in members %}
-                            <option value={{member.id}}>{{member.name}}</option>
-                         {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-  
-                <div class="row mb-2">
-                  <div class="col">
-                      <label for="exampleInputPassword1" class="form-label fw-bold">Project</label>
-                      <select class="form-select" id="project" name="project" required>
-                        {% for project in projects %}
-                            <option value={{project.id}}>{{project.name}}</option>
-                         {% endfor %}
-                      </select>
-                    </div>
-                </div> 
-                <div class="row mb-2">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Amount Pledging</label>
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="amount_pledged"
-                      name="amount_pledged"
-                        required
-                    />
-                  </div>
-                 
-                </div>              
-                <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-primary w-30">Create Pledge</button>
-                </div>
-              </div>
-              </form>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-center fw-bold">New Pledge</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
+      <form action="{% url 'new-pledge' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body">
+
+          <!-- Partner / Member -->
+          <div class="row mb-3">
+            <div class="col">
+              <label class="form-label fw-bold">Pledge Type</label>
+              <select class="form-select" id="pledge_type" name="pledge_type" required>
+                <option value="member_pledge">Church Member Pledge</option>
+                <option value="partner_pledge">Church Partner Pledge</option>
+              </select>
+            </div>
+
+            <div class="col" id="partner_group">
+              <label class="form-label fw-bold">Church Partner</label>
+              <select class="form-select" id="partner" name="partner">
+                {% for partner in partners %}
+                  <option value="{{partner.id}}">{{partner.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col" id="member_group">
+              <label class="form-label fw-bold">Church Member</label>
+              <select class="form-select" id="member" name="member">
+                {% for member in members %}
+                  <option value="{{member.id}}">{{member.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- Project -->
+          <div class="row mb-2">
+            <div class="col">
+              <label class="form-label fw-bold">Project</label>
+              <select class="form-select" id="project" name="project" required>
+                {% for project in projects %}
+                  <option value="{{project.id}}">{{project.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col">
+              <label class="form-label fw-bold">Amount Pledging</label>
+              <input
+                type="number"
+                class="form-control"
+                id="amount_pledged"
+                name="amount_pledged"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary w-30">Create Pledge</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const pledgeType = document.getElementById("pledge_type");
+  const memberGroup = document.getElementById("member_group");
+  const partnerGroup = document.getElementById("partner_group");
+  const memberSelect = document.getElementById("member");
+  const partnerSelect = document.getElementById("partner");
+
+  function toggleFields() {
+    if (pledgeType.value === "member_pledge") {
+      memberGroup.style.display = "block";
+      partnerGroup.style.display = "none";
+      memberSelect.required = true;
+      partnerSelect.required = false;
+    } else if (pledgeType.value === "partner_pledge") {
+      partnerGroup.style.display = "block";
+      memberGroup.style.display = "none";
+      partnerSelect.required = true;
+      memberSelect.required = false;
+    }
+  }
+
+  pledgeType.addEventListener("change", toggleFields);
+
+  // Run once on page load to set initial state
+  toggleFields();
+});
+</script>

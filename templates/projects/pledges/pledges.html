@@ -25,7 +25,7 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Member</th>
+                    <th>Pledged By</th>
                     <th>Project</th>
                     <th>Pledged</th>
                     <th>Redeemed</th>
@@ -38,7 +38,7 @@
                 {% for pledge in pledges %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ pledge.member.name }}</td>
+                    <td>{{ pledge.pledger }}</td>
                     <td>{{ pledge.project }}</td>
                     <td>{{  pledge.amount_pledged}}</td>
                     <td>{{  pledge.amount_redeemed}}</td>

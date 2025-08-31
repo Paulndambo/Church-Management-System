@@ -25,27 +25,21 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Member</th>
+                    <th>Contributor</th>
                     <th>Project</th>
                     <th>Amount</th>
                     <th>Date</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
                 {% for contribution in contributions %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ contribution.member.name }}</td>
+                    <td>{{ contribution.contributor }}</td>
                     <td>{{ contribution.project }}</td>
                     <td>{{  contribution.amount}}</td>
                     <td>{{  contribution.created_at|date:'Y-m-d'}}</td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editContributionModal{{contribution.id}}"><i class="fas fa-edit"></i></a>
-                        </div>
-                    </td>
-                    {% include "projects/contributions/edit_contribution.html" %}
+                    
                 </tr>
                 {% empty %}
                 <tr>

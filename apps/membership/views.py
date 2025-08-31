@@ -1,18 +1,20 @@
 from django.shortcuts import render, redirect
 from django.db import transaction
+from django.http import HttpRequest
 from django.db.models import Q
+from typing import Any
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from apps.membership.models import Department, Branch, Member, ChurchService
+from apps.membership.models import Department, Branch, Member, ChurchService, ServiceAttendance
 from apps.users.models import User
 from apps.core.constants import GENDER_CHOICES, USER_POSITIONS, STATUS_CHOICES
 # Create your views here.
 
 ### Departments Management
 @login_required
-def departments(request):
+def departments(request: HttpRequest):
     departments = Department.objects.all().order_by("-created_at")
     
     context = {
@@ -21,7 +23,7 @@ def departments(request):
     return render(request, "departments/departments.html", context)
 
 @login_required
-def new_department(request):
+def new_department(request: HttpRequest):
     if request.method == "POST":
         name = request.POST.get("name")
         
@@ -33,7 +35,7 @@ def new_department(request):
     return render(request, "departments/new_department.html")
 
 @login_required
-def edit_department(request):
+def edit_department(request: HttpRequest):
     if request.method == "POST":
         department_id = request.POST.get("department_id")
         department_name = request.POST.get("name")
@@ -45,7 +47,7 @@ def edit_department(request):
     return render(request, "departments/edit_department.html")
 
 
-def delete_department(request):
+def delete_department(request: HttpRequest):
     if request.method == "POST":
         department_id = request.POST.get("department_id")
         department = Department.objects.get(id=department_id)
@@ -55,7 +57,7 @@ def delete_department(request):
 
 ### Branches Management
 @login_required
-def branches(request):
+def branches(request: HttpRequest):
     branches = Branch.objects.all().order_by("-created_at")
     
     context = {
@@ -65,9 +67,8 @@ def branches(request):
 
 
 @login_required
-def branch_details(request, id):
+def branch_details(request: HttpRequest, id: int):
     branch = Branch.objects.get(id=id)
-    
     
     context = {
         "branch": branch
@@ -76,30 +77,22 @@ def branch_details(request, id):
     return render(request, "branches/branch_details.html", context)
 
 @login_required
-def new_branch(request):
+def new_branch(request: HttpRequest):
     if request.method == "POST":
         name = request.POST.get("name")
         town = request.POST.get("town")
         location = request.POST.get("location")
-        
-        print("**************Branch Data********")
-        print(f"Name: {name}")
-        print(f"Town: {town}")
-        print(f"Location: {location}")
-        print("**************Branch Data********")
-        
+         
         Branch.objects.create(
             name=name,
             location=location,
             town=town
         )
-        
-        
         return redirect("branches")
     return render(request, "branches/new_branch.html")
 
 @login_required
-def edit_branch(request):
+def edit_branch(request: HttpRequest):
     if request.method == "POST":
         branch_id = request.POST.get("branch_id")
         branch_name = request.POST.get("name")
@@ -115,7 +108,7 @@ def edit_branch(request):
     return render(request, "branches/edit_branch.html")
 
 @login_required
-def delete_branch(request):
+def delete_branch(request: HttpRequest):
     if request.method == "POST":
         branch_id = request.POST.get("branch_id")
         branch = Department.objects.get(id=branch_id)
@@ -126,10 +119,10 @@ def delete_branch(request):
 
 ### Services Management
 @login_required
-def church_services(request):
+def church_services(request: HttpRequest):
     services = ChurchService.objects.all().order_by("-created_at")
     
-    context = {
+    context: dict[str, Any] = {
         "services": services,
         "service_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     }
@@ -137,7 +130,7 @@ def church_services(request):
 
 
 @login_required
-def new_church_service(request):
+def new_church_service(request: HttpRequest):
     if request.method == "POST":
         name = request.POST.get("name")
         starts_at = request.POST.get("starts_at")
@@ -155,7 +148,7 @@ def new_church_service(request):
     return render(request, "services/new_service.html")
 
 @login_required
-def edit_church_service(request):
+def edit_church_service(request: HttpRequest):
     if request.method == "POST":
         service_id = request.POST.get("service_id")
         name = request.POST.get("name")
@@ -173,13 +166,14 @@ def edit_church_service(request):
     return render(request, "services/edit_service.html")
 
 @login_required
-def delete_church_service(request):
+def delete_church_service(request: HttpRequest):
     if request.method == "POST":
         service_id = request.POST.get("service_id")
         service = ChurchService.objects.get(id=service_id)
         service.delete()
         return redirect("church-services")
     return render(request, "services/delete_service.html")
+
 
 ### Church Members Management
 class MemberListView(LoginRequiredMixin, ListView):
@@ -203,7 +197,7 @@ class MemberListView(LoginRequiredMixin, ListView):
         # Get sort parameter
         return queryset.order_by("-created_at")
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: dict[str, Any]):
         context = super().get_context_data(**kwargs)
         context["branches"] = Branch.objects.all()
         context["departments"] = Department.objects.all()
@@ -214,7 +208,7 @@ class MemberListView(LoginRequiredMixin, ListView):
 
 @login_required
 @transaction.atomic
-def new_member(request):
+def new_member(request: HttpRequest):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -259,7 +253,7 @@ def new_member(request):
     return render(request, "members/new_membership.html")
 
 @login_required
-def edit_member(request):
+def edit_member(request: HttpRequest):
     if request.method == "POST":
         member_id = request.POST.get("member_id")
         first_name = request.POST.get("first_name")
@@ -303,7 +297,7 @@ def edit_member(request):
 
 @login_required
 @transaction.atomic
-def delete_member(request):
+def delete_member(request: HttpRequest):
     if request.method == "POST":
         member_id = request.POST.get("member_id")
         member = Member.objects.get(id=member_id)
@@ -312,3 +306,54 @@ def delete_member(request):
         member.delete()
         return redirect("members")
     return render(request, "members/delete_member.html")
+
+
+
+### Church Attendance Management
+class ServiceAttendaceView(LoginRequiredMixin, ListView):
+    model = ServiceAttendance
+    template_name = "attendances/attendances.html"
+    context_object_name = "attendances"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("search", "")
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(id__icontains=search_query)
+                | Q(user__id_number__icontains=search_query)
+                | Q(user__first_name__icontains=search_query)
+                | Q(user__last_name__icontains=search_query)
+            )
+
+        # Get sort parameter
+        return queryset.order_by("-created_at")
+
+    def get_context_data(self, **kwargs: dict[str, Any]):
+        context = super().get_context_data(**kwargs)
+        context["church_services"] = ChurchService.objects.all()
+        context["members"] = Member.objects.all()
+        return context
+    
+
+@login_required
+@transaction.atomic
+def new_attendance(request: HttpRequest):
+    if request.method == "POST":
+        member = request.POST.get("member")
+        service = request.POST.get("church_service")
+        status = request.POST.get("status")
+                
+        member = Member.objects.get(id=member)
+        service = ChurchService.objects.get(id=service)
+
+        ServiceAttendance.objects.create(
+            member=member,
+            service=service,
+            status=status
+        )
+        
+        return redirect("attendances")
+    return render(request, "attendances/new_attendance.html")

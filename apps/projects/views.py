@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.projects.models import Project, ProjectContribution, ProjectPledge
+from apps.partners.models import ChurchPartner
 from apps.membership.models import Member
 # Create your views here.
 
@@ -109,62 +110,6 @@ class ProjectContributionsListView(LoginRequiredMixin, ListView):
         return context
     
 
-@login_required
-@transaction.atomic
-def new_contribution(request):
-    if request.method == "POST":
-        project = request.POST.get("project")
-        member = request.POST.get("member")
-        amount = request.POST.get("amount")
-    
-       
-        contribution = ProjectContribution.objects.create(
-            project_id=project,
-            member_id=member,
-            amount=amount
-        )
-        
-        contribution.project.amount_raised += Decimal(amount)
-        contribution.project.save()
-        
-        return redirect("contributions")
-    return render(request, "projects/contributions/new_contribution.html")
-
-
-@login_required
-@transaction.atomic
-def edit_contribution(request):
-    if request.method == "POST":
-        contribution_id = request.POST.get("contribution_id")
-        project_id = request.POST.get("project")
-        member = request.POST.get("member")
-        amount = request.POST.get("amount")
-        
-        existing = ProjectContribution.objects.get(id=contribution_id)
-
-        existing.pledge.amount_redeemed -= Decimal(amount)
-        existing.pledge.save()
-        
-        existing.project.amount_raised -= Decimal(existing.amount)
-        existing.project.save()
-        
-        ProjectContribution.objects.filter(id=contribution_id).update(
-            project_id=project_id,
-            member_id=member,
-            amount=amount
-        )
-        
-        existing.project.amount_raised += Decimal(amount)
-        existing.project.save()
-        
-        existing.pledge.amount_redeemed += Decimal(amount)
-        existing.pledge.save()
-
-        return redirect("contributions")
-    return render(request, "projects/contributions/edit_contribution.html")
-
-
-
 ## Church Project Contributions Pledges
 class ProjectPledgesListView(LoginRequiredMixin, ListView):
     model = ProjectPledge
@@ -190,6 +135,7 @@ class ProjectPledgesListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["members"] = Member.objects.all()
         context["projects"] = Project.objects.all()
+        context["partners"] = ChurchPartner.objects.all()
         return context
     
 
@@ -199,15 +145,23 @@ def new_pledge(request):
     if request.method == "POST":
         project = request.POST.get("project")
         member = request.POST.get("member")
+        partner = request.POST.get("partner")
         amount_pledged = request.POST.get("amount_pledged")
-    
-       
-        ProjectPledge.objects.create(
-            project_id=project,
-            member_id=member,
-            amount_pledged=amount_pledged
-        )
-        
+        pledge_type = request.POST.get("pledge_type")
+        # Add logic to handle different pledge types
+
+        if pledge_type == "partner_pledge":
+            ProjectPledge.objects.create(
+                project_id=project,
+                partner_id=partner if partner else None,
+                amount_pledged=amount_pledged
+            )
+        elif pledge_type == "member_pledge":
+            ProjectPledge.objects.create(
+                project_id=project,
+                member_id=member,
+                amount_pledged=amount_pledged
+            )
         
         return redirect("pledges")
     return render(request, "projects/pledges/new_pledge.html")
@@ -219,12 +173,10 @@ def edit_pledge(request):
     if request.method == "POST":
         pledge_id = request.POST.get("pledge_id")
         project = request.POST.get("project")
-        member = request.POST.get("member")
         amount_pledged = request.POST.get("amount_pledged")
     
         ProjectPledge.objects.filter(id=pledge_id).update(
             project_id=project,
-            member_id=member,
             amount_pledged=amount_pledged
         )
         
@@ -238,14 +190,14 @@ def redeem_pledge(request):
     if request.method == "POST":
         pledge_id = request.POST.get("pledge_id")
         amount = request.POST.get("amount")
-    
-       
+           
         pledge = ProjectPledge.objects.get(id=pledge_id)
         pledge.amount_redeemed += Decimal(amount)
         
         ProjectContribution.objects.create(
             project=pledge.project,
-            member=pledge.member,
+            member=pledge.member if pledge.member else None,
+            partner=pledge.partner if pledge.partner else None,
             pledge=pledge,
             amount=amount
         )

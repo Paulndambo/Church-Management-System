@@ -60,3 +60,12 @@ class ChurchService(AbstractBaseModel):
     
     def __str__(self):
         return self.name
+    
+
+class ServiceAttendance(AbstractBaseModel):
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    service = models.ForeignKey(ChurchService, on_delete=models.CASCADE)
+    status = models.CharField(max_length=50, choices=(("Present", "Present"), ("Absent", "Absent")), default="Present")
+    
+    def __str__(self):
+        return f"{self.member.user.get_full_name()} - {self.service.name} on {self.date}"
