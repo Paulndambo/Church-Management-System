@@ -1,0 +1,134 @@
+<div class="modal fade" id="captureSectionDataModal{{report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Capture Section Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'capture-data' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" name="report_id" id="report_id" value="{{report.id}}" readonly/>
+
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label fw-bold">Section</label>
+                        <select class="form-select" id="section" name="section" required>
+                            {% for section in sections %}
+                                <option value={{section.id}}>{{section.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Kenya Kids</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="kenya_kids"
+                            name="kenya_kids"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">General Fund</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="general_fund"
+                            name="general_fund"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Sunday School</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="sunday_school"
+                            name="sunday_school"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Pastors Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="pastors_tithe"
+                            name="pastors_tithe"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Presbyter Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="presbyter_tithe"
+                            name="presbyter_tithe"
+                            required
+                        />
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Easter</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="easter"
+                            name="easter"
+                            value="0"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Special Offering</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="special_offering"
+                            name="special_offering"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Children Attendance</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="children"
+                            name="children"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Adult Attendance</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="adult"
+                            name="adult"
+                            required
+                        />
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                  <input type="submit" class="btn btn-primary w-30" value="Capture Section Data" />
+                </div>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>

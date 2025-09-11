@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="table-card mb-4">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3 class="fw-bold">District Month Report</h3>
+        </div>
+        
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureSectionDataModal{{report.id}}">Record Section Data</button>
+            <a href="{% url 'district-report' report.id %}" class="btn btn-warning">Print</a>
+        </div>
+    </div>
+</div>
+
+{% include "districts/capture_section_data.html" %}
+
+<div class="table-card mb-4">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Month Finances</h3>
+        </div>
+    </div>
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Section</th>
+                    <th>Month</th>
+                    <th>Total Amount</th>
+                    <th>Recorded On</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for finance in finances %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ finance.section }}</td>
+                    <td>{{ finance.month }}({{ finance.year }})</td>
+                    <td>{{ finance.total_amount }}</td>
+                    <td>{{ finance.created_at }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        No finances found
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td><b>Grand Total</b></td>
+                    <td></td>
+                    <td><b>{{ district_grand_total }}</b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="table-card mb-4">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Month Attendances</h3>
+        </div>
+    </div>
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Section</th>
+                    <th>Month</th>
+                    <th>Children</th>
+                    <th>Adult</th>
+                    <th>Total</th>
+                    <th>Recorded On</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for attendance in attendances %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ attendance.section }}</td>
+                    <td>{{ attendance.month }}({{ attendance.year }})</td>
+                    <td>{{ attendance.children }}</td>
+                    <td>{{ attendance.adult }}</td>
+                    <td>{{ attendance.total_attendance }}</td>
+                    <td>{{ attendance.created_at }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        No finances found
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td><b>Grand Total</b></td>
+                    <td></td>
+                    <td><b>{{ total_children_attendance }}</b></td>
+                    <td><b>{{ total_adult_attendance }}</b></td>
+                    <td><b>{{ grand_total_attendance }}</b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+  
+</div>
+
+<div class="table-card mb-4">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>District Expenses</h3>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureDistrictExpenseModal{{report.id}}">Record Expense</button>
+        </div>
+    </div>
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Expense Name</th>
+                    <th>Amount</th>
+                    <th>Recorded On</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ expense.expense_name }}</td>
+                    <td>{{ expense.amount_spend }}</td>
+                    <td>{{ expense.created_at }}</td>
+                </tr>
+                
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        No expenses found
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td><b>Grand Total</b></td>
+                    <td><b>{{ total_expenses }}</b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include "districts/expenses/new_expense.html" %}
+
+<div class="table-card mb-4">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>FOR NATIONAL OFFICE</h3>
+        </div>
+    </div>
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td>1.</td>
+                    <td>10% General Fund</td>
+                    <td>{{ ten_percent_general_fund }}</td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>5% Sunday School</td>
+                    <td>{{ five_percent_sunday_school }}</td>
+                </tr>
+                <tr>
+                    <td>3.</td>
+                    <td>5% Hazina ya Mchungaji</td>
+                    <td>{{ five_percent_pastors_tithe }}</td>
+                </tr>
+                <tr>
+                    <td>4.</td>
+                    <td>Half Easter Offering</td>
+                    <td>{{ half_easter_offering }}</td>
+                </tr>
+                <tr>
+                    <td>5.</td>
+                    <td>Kenya Kids</td>
+                    <td>{{ kenya_kids }}</td>
+                </tr>
+                <tr>
+                    <td>6.</td>
+                    <td>Sadaka Maalum</td>
+                    <td>{{ special_offering }}</td>
+                </tr>
+                <tr>
+                    <td>7.</td>
+                    <td>Fungu la Kumi la Dist. Supt</td>
+                    <td>{{ district_supt_tithe }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Total</td>
+                    <td>{{ district_total }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

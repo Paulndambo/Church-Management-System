@@ -26,4 +26,12 @@ urlpatterns = [
 
     path("attendances/", views.ServiceAttendaceView.as_view(), name="attendances"),
     path("new-attendance/", views.new_attendance, name="new-attendance"),
+
+    path("groups/", views.MemberGroupsListView.as_view(), name="groups"),
+    path("new-group/", views.new_member_group, name="new-group"),
+    path("edit-group/", views.edit_member_group, name="edit-group"),
+    path("delete-group/", views.delete_member_group, name="delete-group"),
+    path("group/<int:id>/details/", views.group_details, name="group-detail"),
+    path("new-group-member/", views.add_group_member, name="new-group-member"),
+    path("edit-group-member/", views.edit_group_member, name="edit-group-member"),
 ]

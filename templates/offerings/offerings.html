@@ -40,17 +40,12 @@
                     <td>{{ offering.service }}</td>
                     <td>{{  offering.amount}}</td>
                     <td>{{  offering.offering_date}}</td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editOfferingModal{{offering.id}}"><i class="fas fa-edit"></i></a>
-                        </div>
-                    </td>
-                    {% include "offerings/edit_offering.html" %}
+                    
                 </tr>
                 {% empty %}
                 <tr>
                     <td colspan="8" class="text-center py-4">
-                        No branches found
+                        No offerings found
                     </td>
                 </tr>
                 {% endfor %}

@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.projects.models import Project, ProjectContribution, ProjectPledge
 from apps.partners.models import ChurchPartner
 from apps.membership.models import Member
+from apps.payments.models import ChurchLedger
 # Create your views here.
 
 # Church Projects
@@ -204,7 +205,7 @@ def redeem_pledge(request):
         pledge = ProjectPledge.objects.get(id=pledge_id)
         pledge.amount_redeemed += Decimal(amount)
         
-        ProjectContribution.objects.create(
+        contribution = ProjectContribution.objects.create(
             project=pledge.project,
             member=pledge.member if pledge.member else None,
             partner=pledge.partner if pledge.partner else None,
@@ -215,6 +216,14 @@ def redeem_pledge(request):
         pledge.project.amount_raised += Decimal(amount)
         pledge.project.save()
         pledge.save()
+
+        ChurchLedger.objects.create(
+            name="Project Pledge Redemption",
+            description=f"{contribution.member.user.name} Redeemed pledge for project {pledge.project.name}",
+            amount=Decimal(amount),
+            direction="Income",
+            user=request.user
+        )
        
         return redirect("pledges")
     return render(request, "projects/pledges/redeem_pledge.html")

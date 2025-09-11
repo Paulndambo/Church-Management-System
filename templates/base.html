@@ -721,7 +721,11 @@
 </head>
 <body>
     <div class="wrapper">
+        {% if request.user.role == "Distric Supritendant" %}
+        {% include "includes/district_sidebar.html" %}
+        {% else %}
         {% include "includes/sidebar.html" %}
+        {% endif %}
 
         <div id="content" class="fade-in-up">
             {% block content %}

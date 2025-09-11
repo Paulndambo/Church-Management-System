@@ -1,0 +1,64 @@
+<div class="modal fade" id="editGroupMemberModal{{member.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Edit Group Member</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-group-member' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="number" id="group_member_id" name="group_member_id" value="{{member.id}}" hidden readonly />
+                <div class="row mb-3">
+                    
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Date Joined</label>
+                      <input
+                      type="date"
+                      class="form-control"
+                      id="date_joined"
+                      name="date_joined"
+                        value="{{member.date_joined|date:'Y-m-d'}}"
+                        required
+                    />
+                    </div>
+                </div>
+  
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Role</label>
+                    <select class="form-select" id="role" name="role">
+                        <option value={{member.role}}>{{member.role}}</option>
+                        {% for role in roles %}
+                            {% if role != member.role %}
+                                <option value={{role}}>{{role}}</option>
+                            {% endif %}
+                         {% endfor %}
+                      </select>
+                  </div>
+                  
+                </div>
+
+                <div class="row mb-3">
+                  
+                  <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Status</label>
+                      <select class="form-select" id="status" name="status">
+                        <option value={{member.status}}>{{member.status}}</option>
+                        {% for status in statuses %}
+                            {% if status != member.status %}
+                                <option value={{status}}>{{status}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                </div>
+     
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Group Member</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

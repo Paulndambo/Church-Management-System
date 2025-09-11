@@ -7,7 +7,11 @@ from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from apps.membership.models import Department, Branch, Member, ChurchService, ServiceAttendance
+from apps.membership.models import (
+    Department, Branch, Member, ChurchService, ServiceAttendance,
+    MemberGroup, GroupMember
+)
+from apps.core.models import UserActionLog
 from apps.users.models import User
 from apps.core.constants import GENDER_CHOICES, USER_POSITIONS, STATUS_CHOICES
 # Create your views here.
@@ -23,12 +27,20 @@ def departments(request: HttpRequest):
     return render(request, "departments/departments.html", context)
 
 @login_required
+@transaction.atomic
 def new_department(request: HttpRequest):
     if request.method == "POST":
         name = request.POST.get("name")
         
-        Department.objects.create(
+        department = Department.objects.create(
             name=name
+        )
+
+        UserActionLog.objects.create(
+            user=request.user,
+            action_type="Create",
+            action_description=f"Created new department: {department.name}",
+            metadata={"department_id": department.id, "department_name": department.name}
         )
         
         return redirect("departments")
@@ -40,9 +52,17 @@ def edit_department(request: HttpRequest):
         department_id = request.POST.get("department_id")
         department_name = request.POST.get("name")
         
-        Department.objects.filter(id=department_id).update(
+        department = Department.objects.filter(id=department_id).update(
             name=department_name
         )
+
+        UserActionLog.objects.create(
+            user=request.user,
+            action_type="Update",
+            action_description=f"Updated department ID: {department_id} to new name: {department_name}",
+            metadata={"department_id": department_id, "old_department_name": "", "new_department_name": department_name}
+        )
+
         return redirect("departments")
     return render(request, "departments/edit_department.html")
 
@@ -354,6 +374,227 @@ def new_attendance(request: HttpRequest):
             service=service,
             status=status
         )
+
         
         return redirect("attendances")
     return render(request, "attendances/new_attendance.html")
+
+
+
+### Church Member Groups Management
+class MemberGroupsListView(LoginRequiredMixin, ListView):
+    model = MemberGroup
+    template_name = "groups/groups.html"
+    context_object_name = "groups"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("search", "")
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(id__icontains=search_query)
+                | Q(name__icontains=search_query)
+            )
+
+        # Get sort parameter
+        return queryset.order_by("-created_at")
+
+    def get_context_data(self, **kwargs: dict[str, Any]):
+        context = super().get_context_data(**kwargs)
+        context["branches"] = Branch.objects.all()
+        context["departments"] = Department.objects.all()
+        context["members"] = Member.objects.all()
+        context["status_choices"] = STATUS_CHOICES
+        return context
+
+
+@login_required
+@transaction.atomic
+def new_member_group(request: HttpRequest):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        date_started = request.POST.get("date_started")
+        branch = request.POST.get("branch")
+        chairperson = request.POST.get("chairperson")
+        secretary = request.POST.get("secretary")
+        treasurer = request.POST.get("treasurer")
+        status = request.POST.get("status")
+        
+        
+        new_group = MemberGroup.objects.create(
+            name=name,
+            date_started=date_started,
+            branch_id=branch,
+            chairperson_id=chairperson,
+            secretary_id=secretary,
+            treasurer_id=treasurer,
+            status=status
+        )
+
+        GroupMember.objects.create(
+            group=new_group,
+            member_id=chairperson,
+            role="Chairperson",
+            date_joined=date_started
+        )
+
+        GroupMember.objects.create(
+            group=new_group,
+            member_id=secretary,
+            role="Secretary",
+            date_joined=date_started
+        )
+
+        GroupMember.objects.create(
+            group=new_group,
+            member_id=treasurer,
+            role="Treasurer",
+            date_joined=date_started
+        )
+        
+        return redirect("groups")
+    return render(request, "groups/new_group.html")
+
+
+@login_required
+@transaction.atomic
+def edit_member_group(request: HttpRequest):
+    if request.method == "POST":
+        group_id = request.POST.get("group_id")
+        name = request.POST.get("name")
+        date_started = request.POST.get("date_started")
+        branch = request.POST.get("branch")
+        chairperson = request.POST.get("chairperson")
+        secretary = request.POST.get("secretary")
+        treasurer = request.POST.get("treasurer")
+        status = request.POST.get("status")
+
+
+        membership_group = MemberGroup.objects.get(id=group_id)
+        GroupMember.objects.filter(group_id=group_id, member=membership_group.chairperson).update(role="Member")
+        GroupMember.objects.filter(group_id=group_id, member=membership_group.secretary).update(role="Member")
+        GroupMember.objects.filter(group_id=group_id, member=membership_group.treasurer).update(role="Member")
+
+        membership_group.chairperson = None
+        membership_group.secretary = None
+        membership_group.treasurer = None
+        membership_group.save()
+        
+        MemberGroup.objects.filter(id=group_id).update(
+            name=name,
+            date_started=date_started,
+            branch_id=branch,
+            chairperson_id=chairperson,
+            secretary_id=secretary,
+            treasurer_id=treasurer,
+            status=status
+        )
+
+        chairperson = GroupMember.objects.filter(group_id=group_id, member_id=chairperson).first()
+        if not chairperson:
+            GroupMember.objects.create(
+                group_id=group_id,
+                member_id=chairperson,
+                role="Chairperson",
+                date_joined=date_started
+            )
+        else:
+            chairperson.role = "Chairperson"
+            chairperson.save()
+
+        secretary = GroupMember.objects.filter(group_id=group_id, member_id=secretary).first()
+        if not secretary:
+            GroupMember.objects.create(
+                group_id=group_id,
+                member_id=secretary,
+                role="Secretary",
+                date_joined=date_started
+            )
+        else:
+            secretary.role = "Secretary"
+            secretary.save()
+
+        treasurer = GroupMember.objects.filter(group_id=group_id, member_id=treasurer).first()
+        if not treasurer:
+            GroupMember.objects.create(
+                group_id=group_id,
+                member_id=treasurer,
+                role="Treasurer",
+                date_joined=date_started
+            )
+        else:
+            treasurer.role = "Treasurer"
+            treasurer.save()
+        
+        return redirect("groups")
+    return render(request, "groups/edit_group.html")
+
+
+@login_required
+@transaction.atomic
+def delete_member_group(request: HttpRequest):
+    if request.method == "POST":
+        group_id = request.POST.get("group_id")
+        group = MemberGroup.objects.get(id=group_id)
+        group.delete()
+        return redirect("groups")
+    return render(request, "groups/delete_group.html")
+
+
+@login_required
+def group_details(request: HttpRequest, id: int):
+    group = MemberGroup.objects.get(id=id)
+    group_members = group.groupmembers.all()
+    members = Member.objects.exclude(id__in=group_members.values_list('member_id', flat=True))
+    
+    context: dict[str, Any] = {
+        "group": group,
+        "group_members": group_members,
+        "members": members,
+        "roles": ["Member", "Chairperson", "Secretary", "Treasurer"],
+        "statuses": STATUS_CHOICES,
+    }
+    return render(request, "groups/group_details.html", context)
+
+
+@login_required
+def add_group_member(request: HttpRequest):
+    if request.method == "POST":
+        group_id = request.POST.get("group_id")
+        member_id = request.POST.get("member_id")
+        role = request.POST.get("role")
+        status = request.POST.get("status")
+        date_joined = request.POST.get("date_joined")
+        
+        group = MemberGroup.objects.get(id=group_id)
+        member = Member.objects.get(id=member_id)
+        
+        GroupMember.objects.create(
+            group=group,
+            member=member,
+            role=role,
+            status=status,
+            date_joined=date_joined
+        )
+        
+        return redirect("group-detail", id=group_id)
+    return render(request, "groups/add_group_member.html")
+
+
+@login_required
+def edit_group_member(request: HttpRequest):
+    if request.method == "POST":
+        group_member_id = request.POST.get("group_member_id")
+        role = request.POST.get("role")
+        status = request.POST.get("status")
+        date_joined = request.POST.get("date_joined")
+
+        group_member = GroupMember.objects.get(id=group_member_id)
+        group_member.role = role
+        group_member.status = status
+        group_member.date_joined = date_joined
+        group_member.save()
+        return redirect("group-details", id=group_id)
+    return render(request, "groups/edit_group_member.html")

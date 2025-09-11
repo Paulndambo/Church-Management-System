@@ -15,7 +15,6 @@
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
-
             <!-- Memberships Section -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
@@ -26,6 +25,7 @@
                 <ul class="collapse submenu">
                     <li><a href="{% url 'branches' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-map-marked-alt"></i> Branches</a></li>
                     <li><a href="{% url 'members' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-user-friends"></i> Members</a></li>
+                    <li><a href="{% url 'groups' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-user-friends"></i>Bible Study Groups</a></li>
                     <li><a href="{% url 'partners' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-handshake me-2"></i> Church Partners</a></li>
                     <li><a href="{% url 'departments' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-sitemap me-2"></i> Departments</a></li>
                 </ul>
@@ -42,8 +42,9 @@
                     <li><a href="{% url 'offerings' %}" class="nav-link"><i class="fas fa-hand-holding-heart me-2"></i> Offerings</a></li>
                     <li><a href="{% url 'tithings' %}" class="nav-link"><i class="fas fa-donate me-2"></i> Members Tithings</a></li>
                     <li><a href="{% url 'expenses' %}" class="nav-link"><i class="fas fa-file-invoice-dollar me-2"></i> Expenses</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-book-open me-2"></i> Church Ledger</a></li>
                     <li><a href="{% url 'department-savings' %}" class="nav-link"><i class="fas fa-piggy-bank me-2"></i> Department Savings</a></li>
+                    <li><a href="{% url 'donations' %}" class="nav-link"><i class="fas fa-donate me-2"></i> Donations</a></li>
+                    <li><a href="{% url 'church-ledger' %}" class="nav-link"><i class="fas fa-book-open me-2"></i> Church Ledger</a></li>
                 </ul>
             </li>
 
@@ -78,12 +79,12 @@
             <!-- Inventory -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-boxes icon"></i>
-                    <span class="link-text">Inventory</span>
+                    <i class="fa-solid fa-chart-simple icon"></i>
+                    <span class="link-text">Reports</span>
                     <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="#" class="nav-link"><i class="fas fa-warehouse me-2"></i> Assets</a></li>
+                    <li><a href="{% url 'monthly-reports' %}" class="nav-link"><i class="fas fa-warehouse me-2"></i> Monthly Reports</a></li>
                     <li><a href="#" class="nav-link"><i class="fas fa-apple-alt me-2"></i> Food</a></li>
                 </ul>
             </li>

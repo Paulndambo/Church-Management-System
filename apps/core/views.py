@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from apps.membership.models import Member
@@ -7,6 +7,8 @@ from apps.projects.models import ProjectContribution, ProjectPledge, Project
 # Create your views here.
 @login_required
 def home(request):
+    if request.user.role == "Distric Supritendant":
+        return redirect("district-reports")
     total_members = Member.objects.count()
     total_department_savings = sum(DepartmentSaving.objects.values_list("amount", flat=True))
     tithes_total = sum(MemberTithing.objects.values_list("amount", flat=True))

@@ -40,12 +40,6 @@
                     <td>{{ tithing.member.branch }}</td>
                     <td>{{  tithing.amount}}</td>
                     <td>{{  tithing.tithing_date}}</td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editTitheModal{{tithing.id}}"><i class="fas fa-edit"></i></a>
-                        </div>
-                    </td>
-                    {% include "tithings/edit_tithing.html" %}
                 </tr>
                 {% empty %}
                 <tr>
