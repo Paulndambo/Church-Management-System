@@ -12,7 +12,7 @@ USER_ROLES = (
     ("Teens Department Leader", "Teens Department Leader"),
     ("Church Secretary", "Church Secretary"),
     ("Church Treasurer", "Church Treasurer"),
-    ("Distric Supritendant", "Distric Supritendant"),
+    ("District Supritendant", "District Supritendant"),
     ("Presbyter", "Presbyter"),
 )
 

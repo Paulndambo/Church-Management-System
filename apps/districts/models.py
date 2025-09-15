@@ -46,6 +46,10 @@ class DistrictFinance(AbstractBaseModel):
     pastors_fund = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     month = models.CharField(max_length=255, null=True)
     year = models.IntegerField(null=True)
+    kagdom = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    district_missions = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    resource_mobilisation = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    church_support = models.DecimalField(max_digits=100, decimal_places=2, default=0)
 
     def __str__(self) -> str:
         return self.district.name    

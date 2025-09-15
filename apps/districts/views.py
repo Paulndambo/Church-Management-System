@@ -386,6 +386,13 @@ def district_report_details(request: HttpRequest, id: int):
 
     total_expenses = sum(expenses.values_list("amount_spend", flat=True))
 
+    total_kagdom = sum(finances.values_list("kagdom", flat=True))
+    total_resource_mobilisation = sum(finances.values_list("resource_mobilisation", flat=True))
+    total_district_missions= sum(finances.values_list("district_missions", flat=True))
+    total_church_support = sum(finances.values_list("church_support", flat=True))
+
+    total_additionals = total_kagdom + total_resource_mobilisation + total_district_missions + total_church_support
+
     context = {
         "report": report,
         "attendances": attendances,
@@ -404,7 +411,12 @@ def district_report_details(request: HttpRequest, id: int):
         "district_total": round(district_total, 2),
         "total_expenses": total_expenses,
         "district_grand_total": district_grand_total,
-        "easter_total": total_easter
+        "easter_total": total_easter,
+        "total_kagdom": total_kagdom,
+        "total_resource_mobilisation": total_resource_mobilisation,
+        "total_district_missions": total_district_missions,
+        "total_church_support": total_church_support,
+        "total_additionals": total_additionals
     }
     return render(request, "districts/report_details.html", context)
 
@@ -425,6 +437,15 @@ def district_report(request: HttpRequest, id: int):
     total_easter = sum(finances.values_list("easter", flat=True))
     kenya_kids = sum(finances.values_list("kenya_kids", flat=True))
     special_offering = sum(finances.values_list("special_offering", flat=True))
+
+
+    total_kagdom = sum(finances.values_list("kagdom", flat=True))
+    total_resource_mobilisation = sum(finances.values_list("resource_mobilisation", flat=True))
+    total_district_missions= sum(finances.values_list("district_missions", flat=True))
+    total_church_support = sum(finances.values_list("church_support", flat=True))
+
+    total_additionals = total_kagdom + total_resource_mobilisation + total_district_missions + total_church_support
+
 
     ten_percent_general_fund = Decimal(0.1) * total_general_fund
     five_percent_sunday_school = Decimal(0.05) * total_sunday_school
@@ -469,7 +490,12 @@ def district_report(request: HttpRequest, id: int):
         "revenue_totals": round(revenue_totals, 2),
         "total_pastors_fund": round(total_pastors_fund, 2),
         "total_general_fund": round(total_general_fund, 2),
-        "total_sunday_school": round(total_sunday_school, 2)
+        "total_sunday_school": round(total_sunday_school, 2),
+        "total_kagdom": total_kagdom,
+        "total_resource_mobilisation": total_resource_mobilisation,
+        "total_district_missions": total_district_missions,
+        "total_church_support": total_church_support,
+        "total_additionals": total_additionals
     }
     return render(request, "districts/district_report.html", context)
 
@@ -493,6 +519,11 @@ def capture_section_data(request: HttpRequest):
 
         children = request.POST.get("children")
         adult = request.POST.get("adult")
+
+        kagdom = request.POST.get("kagdom")
+        church_support = request.POST.get("church_support")
+        resource_mobilisation = request.POST.get("resource_mobilisation")
+        district_missions = request.POST.get("district_missions")
 
         church_section = Section.objects.get(id=section)
         report = DistrictReport.objects.get(id=report_id)    
@@ -519,7 +550,11 @@ def capture_section_data(request: HttpRequest):
             presbyter_tithe=presbyter_tithe,
             easter=easter,
             special_offering=special_offering,
-            kenya_kids=kenya_kids
+            kenya_kids=kenya_kids,
+            district_missions=district_missions,
+            resource_mobilisation=resource_mobilisation,
+            kagdom=kagdom,
+            church_support=church_support
         )
 
         return redirect("district-report-details", id=report_id)

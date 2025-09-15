@@ -10,8 +10,8 @@
         </div>
         
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureSectionDataModal{{report.id}}">Record Section Data</button>
-            <a href="{% url 'district-report' report.id %}" class="btn btn-warning">Print</a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureSectionDataModal{{report.id}}">Fill Section Report</button>
+            <a href="{% url 'district-report' report.id %}" class="btn btn-warning">Print District Report</a>
         </div>
     </div>
 </div>
@@ -133,7 +133,7 @@
             <h3>District Expenses</h3>
         </div>
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureDistrictExpenseModal{{report.id}}">Record Expense</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureDistrictExpenseModal{{report.id}}">Record District Expense</button>
         </div>
     </div>
     <!-- Table Toolbar --> 
@@ -181,68 +181,108 @@
 {% include "districts/expenses/new_expense.html" %}
 
 <div class="table-card mb-4">
-    <div class="row py-3 px-2">
-        <div class="col">
-            <h3>FOR NATIONAL OFFICE</h3>
-        </div>
-    </div>
+   
     <!-- Table Toolbar --> 
     <!-- Loading Bar -->
     <div class="loader" id="loader"></div>
 
     <!-- Table Container -->
-    <div class="table-container px-2">
-        <table class="table data-table table-sm">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr>
-                    <td>1.</td>
-                    <td>10% General Fund</td>
-                    <td>{{ ten_percent_general_fund }}</td>
-                </tr>
-                <tr>
-                    <td>2.</td>
-                    <td>5% Sunday School</td>
-                    <td>{{ five_percent_sunday_school }}</td>
-                </tr>
-                <tr>
-                    <td>3.</td>
-                    <td>5% Hazina ya Mchungaji</td>
-                    <td>{{ five_percent_pastors_tithe }}</td>
-                </tr>
-                <tr>
-                    <td>4.</td>
-                    <td>Half Easter Offering</td>
-                    <td>{{ half_easter_offering }}</td>
-                </tr>
-                <tr>
-                    <td>5.</td>
-                    <td>Kenya Kids</td>
-                    <td>{{ kenya_kids }}</td>
-                </tr>
-                <tr>
-                    <td>6.</td>
-                    <td>Sadaka Maalum</td>
-                    <td>{{ special_offering }}</td>
-                </tr>
-                <tr>
-                    <td>7.</td>
-                    <td>Fungu la Kumi la Dist. Supt</td>
-                    <td>{{ district_supt_tithe }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Total</td>
-                    <td>{{ district_total }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Section A.</h3>
+            <div class="table-container px-2">
+                <table class="table data-table table-sm">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td>1.</td>
+                            <td>KAGDOM</td>
+                            <td>{{ total_kagdom }}</td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>District Missions</td>
+                            <td>{{ total_district_missions }}</td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>Resource Mobilisation</td>
+                            <td>{{ total_resource_mobilisation }}</td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>Church Support</td>
+                            <td>{{ total_church_support }}</td>
+                        </tr>
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+       
+        <div class="col">
+            <h3>FOR NATIONAL OFFICE</h3>
+            <div class="table-container px-2">
+                <table class="table data-table table-sm">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td>1.</td>
+                            <td>10% General Fund</td>
+                            <td>{{ ten_percent_general_fund }}</td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>5% Sunday School</td>
+                            <td>{{ five_percent_sunday_school }}</td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>5% Hazina ya Mchungaji</td>
+                            <td>{{ five_percent_pastors_tithe }}</td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>Half Easter Offering</td>
+                            <td>{{ half_easter_offering }}</td>
+                        </tr>
+                        <tr>
+                            <td>5.</td>
+                            <td>Kenya Kids</td>
+                            <td>{{ kenya_kids }}</td>
+                        </tr>
+                        <tr>
+                            <td>6.</td>
+                            <td>Sadaka Maalum</td>
+                            <td>{{ special_offering }}</td>
+                        </tr>
+                        <tr>
+                            <td>7.</td>
+                            <td>Fungu la Kumi la Dist. Supt</td>
+                            <td>{{ district_supt_tithe }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><b>Grand Totals</b></td>
+                            <td><b>{{ district_total }}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    
 </div>
 {% endblock content %}
