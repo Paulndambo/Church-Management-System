@@ -1,0 +1,45 @@
+<div class="modal fade" id="editDistrictMeetingModal{{meeting.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit District Meeting</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="#" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="meeting_id" id="meeting_id" value="{{meeting.id}}" readonly/>
+                    <div class="row mb-3">
+                  <div class="col">
+                    <label class="form-label fw-bold">District</label>
+                    <select class="form-select" id="district_id" name="district_id" required>
+                        <option value="{{meeting.district.id}}">{{meeting.district.name}}</option>
+                        {% for district in districts %}
+                            {% if district.id != meeting.district.id %}
+                                <option value="{{district.id}}">{{district.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Meeting Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="meeting_date"
+                      name="meeting_date"
+                      value="{{meeting.meeting_date|date:'Y-m-d'}}"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Meeting</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

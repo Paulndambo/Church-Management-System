@@ -21,7 +21,7 @@
 <div class="table-card mb-4">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3>Month Finances</h3>
+            <h3>Sections Monthly Data</h3>
         </div>
     </div>
     <!-- Table Toolbar --> 
@@ -29,103 +29,85 @@
     <div class="loader" id="loader"></div>
 
     <!-- Table Container -->
-    <div class="table-container px-2">
-        <table class="table data-table table-sm">
+    <div class="table-container big-table px-2">
+        <table class="table data-table table-sm table-borders-all">
             <thead>
                 <tr>
                     <th></th>
-                    <th>Section</th>
-                    <th>Month</th>
-                    <th>Total Amount</th>
-                    <th>Recorded On</th>
+                    <th><span>Section</span></th>
+                    <th><span>Presbyter</span></th>
+                    <th><span>General Fund</span></th>
+                    <th><span>Sunday School</span></th>
+                    <th><span>Pastors Fund</span></th>
+                    <th><span>Presbyter Tithe</span></th>
+                    <th><span>Pastor's Tithe</span></th>
+                    <th><span>Easter Building</span></th>
+                    <th><span>Kenya Kids</span></th>
+                    <th><span>Special Offering</span></th>
+                    <th><span>Adult Att.</span></th>
+                    <th><span>Children Att.</span></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                {% for finance in finances %}
+                {% for report in reports %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ finance.section }}</td>
-                    <td>{{ finance.month }}({{ finance.year }})</td>
-                    <td>{{ finance.total_amount }}</td>
-                    <td>{{ finance.created_at }}</td>
+                    <td>{{ report.section }}</td>
+                    <td>{{ report.section.presbyter.name }}</td>
+                    <td>{{ report.general_fund }}</td>
+                    <td>{{ report.sunday_school }}</td>
+                    <td>{{ report.pastors_fund }}</td>
+                    <td>{{ report.presbyter_tithe }}</td>
+                    <td>{{ report.pastors_tithe }}</td>
+                    <td>{{ report.easter }}</td>
+                    <td>{{ report.kenya_kids }}</td>
+                    <td>{{ report.special_offering}}</td>
+                    <td>{{ report.adult }}</td>
+                    <td>{{ report.children }}</td>
+                    
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="8" class="text-center py-4">
+                    <td colspan="12" class="text-center py-4">
                         No finances found
                     </td>
                 </tr>
                 {% endfor %}
                 <tr>
                     <td></td>
-                    <td><b>Grand Total</b></td>
                     <td></td>
-                    <td><b>{{ district_grand_total }}</b></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-<div class="table-card mb-4">
-    <div class="row py-3 px-2">
-        <div class="col">
-            <h3>Month Attendances</h3>
-        </div>
-    </div>
-    <!-- Table Toolbar --> 
-    <!-- Loading Bar -->
-    <div class="loader" id="loader"></div>
-
-    <!-- Table Container -->
-    <div class="table-container px-2">
-        <table class="table data-table table-sm">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Section</th>
-                    <th>Month</th>
-                    <th>Children</th>
-                    <th>Adult</th>
-                    <th>Total</th>
-                    <th>Recorded On</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                {% for attendance in attendances %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ attendance.section }}</td>
-                    <td>{{ attendance.month }}({{ attendance.year }})</td>
-                    <td>{{ attendance.children }}</td>
-                    <td>{{ attendance.adult }}</td>
-                    <td>{{ attendance.total_attendance }}</td>
-                    <td>{{ attendance.created_at }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center py-4">
-                        No finances found
-                    </td>
-                </tr>
-                {% endfor %}
                 <tr>
                     <td></td>
-                    <td><b>Grand Total</b></td>
+                    <td><b>Totals</b></td>
                     <td></td>
-                    <td><b>{{ total_children_attendance }}</b></td>
+                    <td><b>{{ total_general_fund }}</b></td>
+                    <td><b>{{ total_sunday_school }}</b></td>
+                    <td><b>{{ total_pastors_fund }}</b></td>
+                    <td><b>{{ total_presbyter_tithe }}</b></td>
+                    <td><b>{{ total_pastors_tithe }}</b></td>
+                    <td><b>{{ easter_total }}</b></td>
+                    <td><b>{{ kenya_kids }}</b></td>
+                    <td><b>{{ special_offering }}</b></td>
                     <td><b>{{ total_adult_attendance }}</b></td>
-                    <td><b>{{ grand_total_attendance }}</b></td>
-                    <td></td>
+                    <td><b>{{ total_children_attendance }}</b></td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-  
 </div>
+
+
 
 <div class="table-card mb-4">
     <div class="row py-3 px-2">
@@ -219,6 +201,12 @@
                             <td>4.</td>
                             <td>Church Support</td>
                             <td>{{ total_church_support }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>5.</td>
+                            <td>Church Welfare</td>
+                            <td>{{ total_church_welfare }}</td>
                         </tr>
                 
                     </tbody>

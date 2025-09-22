@@ -27,6 +27,8 @@ class Department(AbstractBaseModel):
     
 
 class Branch(AbstractBaseModel):
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True, name="churchbranches")
+    section = models.ForeignKey("sections.Section", on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=500, null=True)
     town = models.CharField(max_length=255)

@@ -30,6 +30,7 @@ class User(AbstractUser, AbstractBaseModel):
     address = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
+    branch = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True)
    
     
     def __str__(self):

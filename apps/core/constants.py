@@ -27,3 +27,7 @@ def get_month_number(month_name: str) -> int:
         return list(calendar.month_name).index(month_name)
     except ValueError:
         return -1  # return -1 if invalid
+    
+
+def get_month_name(month_number: int) -> str:
+    return calendar.month_name[month_number]

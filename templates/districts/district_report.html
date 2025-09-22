@@ -164,148 +164,70 @@
           <thead>
             <tr>
               <th></th>
-              <th>Section</th>
-              <th>Presbyter</th>
-              <th>10% General Fund</th>
-              <th>10% Sunday School</th>
-              <th>5% Pastors Fund</th>
-              <th>Total</th>
+              <th><span>Section</span></th>
+              <th><span>Presbyter</span></th>
+              <th><span>General Fund</span></th>
+              <th><span>Sunday School</span></th>
+              <th><span>Pastors Fund</span></th>
+              <th><span>Presbyter Tithe</span></th>
+              <th><span>Pastor's Tithe</span></th>
+              <th><span>Easter Building</span></th>
+              <th><span>Kenya Kids</span></th>
+              <th><span>Special Offering</span></th>
+              <th><span>Adult Att.</span></th>
+              <th><span>Children Att.</span></th>
             </tr>
           </thead>
           <tbody>
-            {% for revenue in finances %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <td>{{revenue.section}}</td>
-              <td>{{revenue.section.presbyter.name}}</td>
-              <td>{{revenue.general_fund}}</td>
-              <td>{{revenue.sunday_school}}</td>
-              <td>{{revenue.pastors_fund}}</td>
-              <td>{{revenue.revenue_total}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-              <td>Grand Totals</td>
-              <td>{{total_general_fund}}</td>
-              <td>{{total_sunday_school}}</td>
-              <td>{{total_pastors_fund}}</td>
-              <td>{{revenue_totals}}</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <!-- Other Revenue Section -->
-      <div class="section">
-        <h2 class="section-title">Other Revenue</h2>
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Section</th>
-              <th>Easter Building</th>
-              <th>Special Offering</th>
-              <th>Kenya Kids</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for non_tithe in finances %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <td>{{non_tithe.section}}</td>
-              <td>{{non_tithe.easter}}</td>
-              <td>{{non_tithe.special_offering}}</td>
-              <td>{{non_tithe.kenya_kids}}</td>
-              <td>{{non_tithe.non_tithe_totals}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td>Grand Total</td>
-              <td>{{easter_total}}</td>
-              <td>{{special_offering}}</td>
-              <td>{{kenya_kids}}</td>
-              <td>{{non_tithe_totals}}</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <!-- Tithes Revenue -->
-      <div class="section">
-        <h2 class="section-title">Tithes Revenue</h2>
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Section</th>
-              <th>Presbyter's Tithe</th>
-              <th>Half Pastor's Tithe</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for tithe in finances %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <td>{{tithe.section}}</td>
-              <td>{{tithe.presbyter_tithe}}</td>
-              <td>{{tithe.pastors_tithe}}</td>
-              <td>{{tithe.tithe_totals}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td>Grand Total</td>
-              <td>{{total_presbyter_tithe}}</td>
-              <td>{{total_pastors_tithe}}</td>
-              <td>{{tithe_totals}}</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <!-- Attendance Section -->
-      <div class="section">
-        <h2 class="section-title">Attendance</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Section</th>
-              <th>Adults</th>
-              <th>Children</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for record in attendances %}
+            {% for report in reports %}
             <tr>
               <td>{{ forloop.counter }}</td>
-              <td>{{ record.section }}</td>
-              <td>{{ record.adult }}</td>
-              <td>{{ record.children }}</td>
-              <td>{{ record.total_attendance }}</td>
+                <td>{{ report.section }}</td>
+                <td>{{ report.section.presbyter.name }}</td>
+                <td>{{ report.general_fund }}</td>
+                <td>{{ report.sunday_school }}</td>
+                <td>{{ report.pastors_fund }}</td>
+                <td>{{ report.presbyter_tithe }}</td>
+                <td>{{ report.pastors_tithe }}</td>
+                <td>{{ report.easter }}</td>
+                <td>{{ report.kenya_kids }}</td>
+                <td>{{ report.special_offering}}</td>
+                <td>{{ report.adult }}</td>
+                <td>{{ report.children }}</td>
             </tr>
             {% endfor %}
           </tbody>
           <tfoot>
             <tr>
-              <td></td>
-              <td>Grand Totals</td>
-              <td>{{total_adult_attendance}}</td>
-              <td>{{total_children_attendance}}</td>
-              <td>{{grand_total_attendance}}</td>
-            </tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Totals</b></td>
+                    <td></td>
+                    <td><b>{{ total_general_fund }}</b></td>
+                    <td><b>{{ total_sunday_school }}</b></td>
+                    <td><b>{{ total_pastors_fund }}</b></td>
+                    <td><b>{{ total_presbyter_tithe }}</b></td>
+                    <td><b>{{ total_pastors_tithe }}</b></td>
+                    <td><b>{{ easter_total }}</b></td>
+                    <td><b>{{ kenya_kids }}</b></td>
+                    <td><b>{{ special_offering }}</b></td>
+                    <td><b>{{ total_adult_attendance }}</b></td>
+                    <td><b>{{ total_children_attendance }}</b></td>
+                </tr>
           </tfoot>
         </table>
       </div>
@@ -400,6 +322,11 @@
                   <td>4.</td>
                   <td>Church Support</td>
                   <td>{{ total_church_support }}</td>
+              </tr>
+              <tr>
+                  <td>5.</td>
+                  <td>Church Welfare</td>
+                  <td>{{ total_church_welfare }}</td>
               </tr>
           </tbody>
           <tfoot>

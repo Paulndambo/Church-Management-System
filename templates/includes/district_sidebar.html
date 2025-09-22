@@ -9,6 +9,7 @@
     <div class="sidebar-nav">
         <ul class="list-unstyled">
             <!-- Dashboard -->
+            
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-church icon"></i>
@@ -17,8 +18,10 @@
                 </a>
                 <ul class="collapse submenu">
                     <li><a href="{% url 'district-sections' %}" class="nav-link"><i class="fas fa-church me-2"></i> Sections</a></li>
+                    <li><a href="{% url 'district-churches' %}" class="nav-link"><i class="fas fa-church me-2"></i> Churches</a></li>
                 </ul>
             </li>
+            
            
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
@@ -34,25 +37,14 @@
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-clipboard-list icon"></i>
-                    <span class="link-text">Attendance</span>
+                    <span class="link-text">Meetings</span>
                     <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'district-attendances' %}" class="nav-link"><i class="fas fa-clipboard-list me-2"></i> Attendance</a></li>
+                    <li><a href="{% url 'district-meetings' %}" class="nav-link"><i class="fas fa-clipboard-list me-2"></i> Meetings</a></li>
                 </ul>
             </li>
-            
-            <li>
-                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-hand-holding-usd icon"></i>
-                    <span class="link-text">Finances</span>
-                    <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
-                </a>
-                <ul class="collapse submenu">
-                    <li><a href="{% url 'district-finances' %}" class="nav-link"><i class="fas fa-hand-holding-usd me-2"></i> Finances</a></li>
-                    <li><a href="{% url 'district-expenses' %}" class="nav-link"><i class="fas fa-file-invoice-dollar me-2"></i> Expenses</a></li>
-                </ul>
-            </li>
+        
            
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">

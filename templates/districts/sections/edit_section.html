@@ -35,17 +35,6 @@
                         {% endfor %}
                       </select>
                   </div>
-                  <div class="col">
-                    <label class="form-label fw-bold">Presbyter</label>
-                    <select class="form-select" id="presbyter" name="presbyter" required>
-                        <option value="{{section.presbyter.id}}">{{section.presbyter.name}}</option>
-                        {% for presbyter in presbyters %}
-                            {% if presbyter.id != section.presbyter.id %}
-                                <option value="{{presbyter.id}}">{{presbyter.name}}</option>
-                            {% endif %}
-                        {% endfor %}
-                      </select>
-                  </div>
                 </div>
 
                 <div class="text-center mt-3">
