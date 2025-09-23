@@ -1,0 +1,60 @@
+<div class="modal fade" id="editPartnerPledgeModal{{pledge.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Pledge</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-pledge' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" value="{{pledge.id}}" name="pledge_id" id="pledge_id" readonly required />
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Church Partner</label>
+                      <select class="form-select" id="partner" name="partner" required>
+                        <option value="{{pledge.partner.id}}">{{pledge.partner.name}}</option>
+                        {% for partner in partners %}
+                            {% if partner.id != pledge.partner.id %}
+                                <option value={{partner.id}}>{{partner.name}}</option>
+                            {% endif %}
+                         {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+  
+                <div class="row mb-2">
+                  <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Project</label>
+                      <select class="form-select" id="project" name="project" required>
+                        <option value="{{pledge.project.id}}">{{pledge.project.name}}</option>
+                        {% for project in projects %}
+                            {% if project.id != pledge.project.id %}
+                                <option value={{project.id}}>{{project.name}}</option>
+                            {% endif %}
+                         {% endfor %}
+                      </select>
+                    </div>
+                </div> 
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Amount Pledging</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount_pledged"
+                      name="amount_pledged"
+                      value="{{pledge.amount_pledged}}"
+                        required
+                    />
+                  </div>
+                 
+                </div>              
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Pledge</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

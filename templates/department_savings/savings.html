@@ -40,12 +40,7 @@
                     <td>{{ saving.branch }}</td>
                     <td>{{  saving.amount}}</td>
                     <td>{{  saving.savings_date}}</td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editSavingsModal{{saving.id}}"><i class="fas fa-edit"></i></a>
-                        </div>
-                    </td>
-                    {% include "department_savings/edit_savings.html" %}
+                    
                 </tr>
                 {% empty %}
                 <tr>

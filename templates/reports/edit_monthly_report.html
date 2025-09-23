@@ -1,0 +1,51 @@
+<div class="modal fade" id="editMonthlyReportModal{{report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">New Monthly Report</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-monthly-report' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                     <input type="hidden" name="report_id" id="report_id" value="{{report.id}}" readonly required />
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Branch</label>
+                         <select class="form-select" id="branch" name="branch" required>
+                        {% for branch in branches %}
+                            <option value={{branch.id}}>{{branch.name}}</option>
+                         {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+  
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Month</label>
+                     <select class="form-select" id="month_name" name="month_name" required>
+                        {% for month in months %}
+                            <option value={{month}}>{{month}}</option>
+                         {% endfor %}
+                      </select>
+                  </div>
+                </div> 
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Report Year</label>
+                     <select class="form-select" id="year" name="year" required>
+                        {% for year in years %}
+                            <option value={{year}}>{{year}}</option>
+                         {% endfor %}
+                      </select>
+                  </div>
+                </div>  
+                      
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Create Monthly Report</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

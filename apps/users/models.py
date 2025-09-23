@@ -12,12 +12,16 @@ USER_ROLES = (
     ("Teens Department Leader", "Teens Department Leader"),
     ("Church Secretary", "Church Secretary"),
     ("Church Treasurer", "Church Treasurer"),
+    ("District Supritendant", "District Supritendant"),
+    ("Presbyter", "Presbyter"),
 )
 
 GENDER_CHOICES = (
     ("Male", "Male"),
     ("Female", "Female"),
 )
+
+
 class User(AbstractUser, AbstractBaseModel):
     role = models.CharField(max_length=255, choices=USER_ROLES, default="Church Member")
     phone_number = models.CharField(max_length=255, null=True)
@@ -26,6 +30,8 @@ class User(AbstractUser, AbstractBaseModel):
     address = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
+    branch = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True)
+   
     
     def __str__(self):
         return self.username
@@ -34,7 +40,6 @@ class User(AbstractUser, AbstractBaseModel):
         return self.get_full_name()
     
     
-
 class Visitor(AbstractBaseModel):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)

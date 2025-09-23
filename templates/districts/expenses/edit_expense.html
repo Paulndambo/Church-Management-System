@@ -1,0 +1,47 @@
+<div class="modal fade" id="editDistrictExpenseModal{{expense.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Update Expense</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-district-expense' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="expense_id" id="expense_id" value="{{expense.id}}" readonly/>
+                    <div class="row mb-3">
+                        <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Expense Name</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="expense_name"
+                            name="expense_name"
+                            value="{{expense.expense_name}}"
+                            required
+                        />
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Amount Spend</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="amount_spend"
+                            name="amount_spend"
+                            value="{{expense.amount_spend}}"
+                            required
+                        />
+                        </div>
+                    </div>
+                
+                <div class="text-center mt-3">
+                  <input type="submit" class="btn btn-primary w-30" value="Record Expense" />
+                </div>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>

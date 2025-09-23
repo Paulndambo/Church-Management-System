@@ -11,114 +11,81 @@
             <!-- Dashboard -->
             <li>
                 <a href="/" class="nav-link">
-                    <i class="fas fa-tachometer-alt icon"></i>
+                    <i class="fas fa-home icon"></i>
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
-
             <!-- Memberships Section -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-users icon"></i>
                     <span class="link-text">Memberships</span>
-                    <i class="fas fa-chevron-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
+                    <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li class="nav-item"><a href="{% url 'branches' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-map-marker-alt"></i> Branches</a></li>
-                    <li class="nav-item"><a href="{% url 'members' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-user-friends"></i> Members</a></li> 
+                    <li><a href="{% url 'branches' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-map-marked-alt"></i> Branches</a></li>
+                    <li><a href="{% url 'members' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-user-friends"></i> Members</a></li>
+                    <li><a href="{% url 'groups' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-user-friends"></i>Bible Study Groups</a></li>
+                    <li><a href="{% url 'partners' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-handshake me-2"></i> Church Partners</a></li>
+                    <li><a href="{% url 'departments' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-sitemap me-2"></i> Departments</a></li>
                 </ul>
             </li>
 
             <!-- Finance Section -->
             <li>
-                <a href="#" class="dropdown-toggle" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-sitemap icon"></i>
-                    <span class="link-text">Departments</span>
-                </a>
-                <ul class="collapse submenu">
-                    <li class="nav-item"><a href="{% url 'departments' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-sitemap"></i> Departments</a></li>
-                    <li class="nav-item"><a href="{% url 'department-savings' %}" class="nav-link d-flex align-items-center gap-2"><i class="fas fa-piggy-bank"></i> Department Savings</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" class="dropdown-toggle" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-dollar-sign icon"></i>
-                    <span class="link-text">Finance</span>
-                    <i class="fas fa-chevron-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
-                </a>
-                <ul class="collapse submenu">
-                    <li><a href="{% url 'offerings' %}" class="nav-link"><i class="fas fa-hand-holding-heart me-2"></i>Offerings</a></li>
-                    <li><a href="{% url 'tithings' %}" class="nav-link"><i class="fas fa-donate me-2"></i>Members Tithings</a></li>
-                    <li><a href="{% url 'expenses' %}" class="nav-link"><i class="fas fa-receipt me-2"></i>Expenses</a></li>
-                </ul>
-            </li>
-
-            <!-- Department Management -->
-            <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-sitemap icon"></i>
-                    <span class="link-text">Departments</span>
-                    <i class="fas fa-chevron-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
+                    <i class="fas fa-coins icon"></i>
+                    <span class="link-text">Finance</span>
+                    <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'departments' %}" class="nav-link"><i class="fas fa-sitemap me-2"></i>Departments</a></li>
-                    <li><a href="{% url 'department-savings' %}" class="nav-link"><i class="fas fa-piggy-bank me-2"></i>Department Savings</a></li>
+                    <li><a href="{% url 'offerings' %}" class="nav-link"><i class="fas fa-hand-holding-heart me-2"></i> Offerings</a></li>
+                    <li><a href="{% url 'tithings' %}" class="nav-link"><i class="fas fa-donate me-2"></i> Members Tithings</a></li>
+                    <li><a href="{% url 'expenses' %}" class="nav-link"><i class="fas fa-file-invoice-dollar me-2"></i> Expenses</a></li>
+                    <li><a href="{% url 'department-savings' %}" class="nav-link"><i class="fas fa-piggy-bank me-2"></i> Department Savings</a></li>
+                    <li><a href="{% url 'donations' %}" class="nav-link"><i class="fas fa-donate me-2"></i> Donations</a></li>
+                    <li><a href="{% url 'church-ledger' %}" class="nav-link"><i class="fas fa-book-open me-2"></i> Church Ledger</a></li>
                 </ul>
             </li>
 
             <!-- Church Projects -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-hammer icon"></i>
+                    <i class="fas fa-project-diagram icon"></i>
                     <span class="link-text">Projects</span>
-                    <i class="fas fa-chevron-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
+                    <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'projects' %}" class="nav-link"><i class="fas fa-tools me-2"></i>Projects</a></li>
-                    <li><a href="{% url 'contributions' %}" class="nav-link"><i class="fas fa-hand-holding-usd me-2"></i>Contributions</a></li>
-                    <li><a href="{% url 'pledges' %}" class="nav-link"><i class="fas fa-handshake me-2"></i>Pledges</a></li>
+                    <li><a href="{% url 'projects' %}" class="nav-link"><i class="fas fa-tasks me-2"></i> Projects</a></li>
+                    <li><a href="{% url 'contributions' %}" class="nav-link"><i class="fas fa-hand-holding-usd me-2"></i> Contributions</a></li>
+                    <li><a href="{% url 'pledges' %}" class="nav-link"><i class="fas fa-file-signature me-2"></i> Pledges</a></li>
                 </ul>
             </li>
 
             <!-- Attendance & Services -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-calendar-check icon"></i>
+                    <i class="fas fa-calendar-alt icon"></i>
                     <span class="link-text">Attendance</span>
-                    <i class="fas fa-chevron-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
+                    <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'church-services' %}" class="nav-link"><i class="fas fa-church me-2"></i>Church Services</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-user-check me-2"></i>Attendance</a></li>
-                    <li><a href="{% url 'visitors' %}" class="nav-link"><i class="fas fa-user-plus me-2"></i>Visitors</a></li>
-                </ul>
-            </li>
-
-            <!-- Partnerships -->
-            <li>
-                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-handshake icon"></i>
-                    <span class="link-text">Partnerships</span>
-                    <i class="fas fa-chevron-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
-                </a>
-                <ul class="collapse submenu">
-                    <li><a href="#" class="nav-link"><i class="fas fa-users-cog me-2"></i>Partners</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-hand-holding-usd me-2"></i>Partners Contributions</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-handshake me-2"></i>Partners Pledges</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-gift me-2"></i>Donations</a></li>
+                    <li><a href="{% url 'church-services' %}" class="nav-link"><i class="fas fa-church me-2"></i> Church Services</a></li>
+                    <li><a href="{% url 'attendances' %}" class="nav-link"><i class="fas fa-user-check me-2"></i> Attendances</a></li>
+                    <li><a href="{% url 'visitors' %}" class="nav-link"><i class="fas fa-user-plus me-2"></i> Visitors</a></li>
                 </ul>
             </li>
 
             <!-- Inventory -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-boxes icon"></i>
-                    <span class="link-text">Inventory</span>
-                    <i class="fas fa-chevron-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
+                    <i class="fa-solid fa-chart-simple icon"></i>
+                    <span class="link-text">Reports</span>
+                    <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="#" class="nav-link"><i class="fas fa-building me-2"></i>Assets</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-utensils me-2"></i>Food</a></li>
+                    <li><a href="{% url 'monthly-reports' %}" class="nav-link"><i class="fas fa-warehouse me-2"></i> Monthly Reports</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-apple-alt me-2"></i> Food</a></li>
                 </ul>
             </li>
 
@@ -127,11 +94,11 @@
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-user-circle icon"></i>
                     <span class="link-text">Profile</span>
-                    <i class="fas fa-chevron-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
+                    <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="#" class="nav-link"><i class="fas fa-user-cog me-2"></i>Settings</a></li>
-                    <li><a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-user-cog me-2"></i> Settings</a></li>
+                    <li><a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                 </ul>
             </li>
         </ul>

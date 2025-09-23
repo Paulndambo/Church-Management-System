@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
@@ -313,22 +314,7 @@
             padding: 15px;
             cursor: pointer;
         }
-        .table-card {
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
-            background: white;
-            margin: 5px 0;
-        }
-
-        .table-toolbar {
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            border-bottom: 1px solid #e3e6f0;
-        }
+        
 
         .search-input {
             position: relative;
@@ -363,6 +349,23 @@
             color: var(--church-secondary);
         }
 
+        .table-card {
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            background: white;
+            margin: 5px 0;
+        }
+
+        .table-toolbar {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid #e3e6f0;
+        }
+
         .table-container {
             overflow-x: auto;
         }
@@ -372,8 +375,7 @@
         }
 
         .data-table th {
-            background: linear-gradient(135deg, var(--church-primary) 0%, var(--church-deep-blue) 100%);
-            color: var(--church-cream);
+            
             font-weight: 600;
             border-bottom: 2px solid var(--church-accent);
         }
@@ -385,6 +387,54 @@
 
         .data-table tbody tr:hover {
             background-color: #f8f9fc;
+        }
+
+        /* Borders everywhere */
+        
+        .table-borders-all td {
+            border: 1px solid #ccc;
+        }
+
+       .table-container {
+            display: block;
+            width: 100%;
+            overflow-x: scroll;            /* always show scrollbar */
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+        }
+
+        .big-table th {
+            font-weight: 600;
+            border-bottom: 2px solid var(--church-accent);
+            text-align: left;        /* keep alignment clean */
+            white-space: nowrap;     /* prevent line breaks */
+            vertical-align: bottom;  /* align rotated text nicely */
+            height: 120px;           /* give enough room for tilted text */
+            padding: 5px;            /* reduce padding for compactness */
+        }
+
+        .big-table th span {
+            display: inline-block;
+            transform: rotate(-20deg); /* tilt headers */
+            transform-origin: bottom left; /* pivot from bottom-left corner */
+        }
+
+        .big-table th {
+            position: relative;
+            border-bottom: 1px solid #ccc;
+            height: 120px;
+        }
+
+        .big-table th::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #ccc;
+            transform: rotate(-20deg);
+            transform-origin: left bottom;
         }
 
         .status-badge {
@@ -452,15 +502,7 @@
             color: #e74a3b;
         }
 
-        .table-footer {
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            border-top: 1px solid #e3e6f0;
-        }
+        
 
         .page-info {
             color: #858796;
@@ -721,7 +763,11 @@
 </head>
 <body>
     <div class="wrapper">
+        {% if request.user.role == "District Supritendant" %}
+        {% include "includes/district_sidebar.html" %}
+        {% else %}
         {% include "includes/sidebar.html" %}
+        {% endif %}
 
         <div id="content" class="fade-in-up">
             {% block content %}

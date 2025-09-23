@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monthly Church Report</title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 15mm;
+    }
+
+    :root {
+      --muted: #555;
+      --accent: #0b66c3;
+      --line: #ccc;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    body {
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .report-container {
+      background: white;
+      max-width: 100%;
+      width: 297mm;
+      min-height: 210mm;
+      padding: 15mm;
+      margin: 0 auto;
+      box-sizing: border-box;
+      box-shadow: 0 0 8px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0.5rem 0;
+      color: var(--accent);
+      font-size: 1.8rem;
+    }
+
+    h2.section-title {
+      text-align: left;
+      font-size: 1rem;
+      margin: 1rem 0 0.5rem;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.2rem;
+      color: var(--accent);
+    }
+
+    .church-info {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .church-info p {
+      margin: 0.2rem 0;
+      color: var(--muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.7rem; /* smaller text for better fit */
+      table-layout: auto; /* let columns size dynamically */
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.5rem;
+      text-align: center;
+      vertical-align: middle;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+
+    th {
+      background: #f1f5f9;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 0.72rem;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #fafafa;
+    }
+
+    tfoot td {
+      font-weight: bold;
+      background: #eaf3fc;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+      page-break-inside: avoid;
+    }
+
+    .signatures {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 2rem;
+      page-break-before: always;
+    }
+
+    .signature-line {
+      width: 30%;
+      text-align: center;
+    }
+
+    .signature-line span {
+      display: block;
+      border-top: 1px solid var(--line);
+      margin-top: 3rem;
+      padding-top: 0.3rem;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    #download {
+      margin-bottom: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #download:hover {
+      background: #094a8b;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <button id="download">Download PDF</button>
+
+    <div class="report-container" id="report">
+      <h1>District Monthly Report</h1>
+
+      <div class="church-info">
+        <p><strong>District:</strong> {{report.district.name}}</p>
+        <p><strong>Report Month:</strong> {{report.month}} {{report.year}}</p>
+        <p><strong>Date of Meeting:</strong> </p>
+      </div>
+
+      <!-- Revenue Section -->
+      <div class="section">
+        <h2 class="section-title">Revenue</h2>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th><span>Section</span></th>
+              <th><span>Presbyter</span></th>
+              <th><span>General Fund</span></th>
+              <th><span>Sunday School</span></th>
+              <th><span>Pastors Fund</span></th>
+              <th><span>Presbyter Tithe</span></th>
+              <th><span>Pastor's Tithe</span></th>
+              <th><span>Easter Building</span></th>
+              <th><span>Kenya Kids</span></th>
+              <th><span>Special Offering</span></th>
+              <th><span>Adult Att.</span></th>
+              <th><span>Children Att.</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in reports %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+                <td>{{ report.section }}</td>
+                <td>{{ report.section.presbyter.name }}</td>
+                <td>{{ report.general_fund }}</td>
+                <td>{{ report.sunday_school }}</td>
+                <td>{{ report.pastors_fund }}</td>
+                <td>{{ report.presbyter_tithe }}</td>
+                <td>{{ report.pastors_tithe }}</td>
+                <td>{{ report.easter }}</td>
+                <td>{{ report.kenya_kids }}</td>
+                <td>{{ report.special_offering}}</td>
+                <td>{{ report.adult }}</td>
+                <td>{{ report.children }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Totals</b></td>
+                    <td></td>
+                    <td><b>{{ total_general_fund }}</b></td>
+                    <td><b>{{ total_sunday_school }}</b></td>
+                    <td><b>{{ total_pastors_fund }}</b></td>
+                    <td><b>{{ total_presbyter_tithe }}</b></td>
+                    <td><b>{{ total_pastors_tithe }}</b></td>
+                    <td><b>{{ easter_total }}</b></td>
+                    <td><b>{{ kenya_kids }}</b></td>
+                    <td><b>{{ special_offering }}</b></td>
+                    <td><b>{{ total_adult_attendance }}</b></td>
+                    <td><b>{{ total_children_attendance }}</b></td>
+                </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Expenses Section -->
+      <div class="section">
+        <h2 class="section-title">Expenses & Expenditures</h2>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Expense Name</th>
+              <th>Amount (KES)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for expense in expenses %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{expense.expense_name}}</td>
+              <td>{{expense.amount_spend}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td>Grand Total</td>
+              <td>{{total_expenses}}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Contributions -->
+      <div class="section">
+        <h2 class="section-title">Contribution to National Office</h2>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1.</td><td>10% General Fund</td><td>{{ ten_percent_general_fund }}</td></tr>
+            <tr><td>2.</td><td>5% Sunday School</td><td>{{ five_percent_sunday_school }}</td></tr>
+            <tr><td>3.</td><td>5% Hazina ya Mchungaji</td><td>{{ five_percent_pastors_tithe }}</td></tr>
+            <tr><td>4.</td><td>Half Easter Offering</td><td>{{ half_easter_offering }}</td></tr>
+            <tr><td>5.</td><td>Kenya Kids</td><td>{{ kenya_kids }}</td></tr>
+            <tr><td>6.</td><td>Sadaka Maalum</td><td>{{ special_offering }}</td></tr>
+            <tr><td>7.</td><td>Fungu la Kumi la Dist. Supt</td><td>{{ district_supt_tithe }}</td></tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td>Grand Total</td>
+              <td>{{district_total}}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Additionals</h2>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1.</td>
+                  <td>KAGDOM</td>
+                  <td>{{ total_kagdom }}</td>
+              </tr>
+              <tr>
+                  <td>2.</td>
+                  <td>District Missions</td>
+                  <td>{{ total_district_missions }}</td>
+              </tr>
+              <tr>
+                  <td>3.</td>
+                  <td>Resource Mobilisation</td>
+                  <td>{{ total_resource_mobilisation }}</td>
+              </tr>
+              <tr>
+                  <td>4.</td>
+                  <td>Church Support</td>
+                  <td>{{ total_church_support }}</td>
+              </tr>
+              <tr>
+                  <td>5.</td>
+                  <td>Church Welfare</td>
+                  <td>{{ total_church_welfare }}</td>
+              </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td>Grand Total</td>
+              <td>{{total_additionals}}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Signatures -->
+      <div class="signatures">
+        <div class="signature-line"><span>District Supt. Signature</span></div>
+        <div class="signature-line"><span>District Treasurer's Signature</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- html2pdf.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    document.getElementById("download").addEventListener("click", () => {
+      const element = document.getElementById("report");
+      const opt = {
+        margin: [10, 10, 20, 10],
+        filename: 'Monthly_Church_Report.pdf',
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { scale: 1.1, scrollX: 0, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      };
+      html2pdf().from(element).set(opt).save();
+    });
+  </script>
+</body>
+</html>

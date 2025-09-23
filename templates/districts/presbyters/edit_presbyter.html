@@ -1,0 +1,105 @@
+<div class="modal fade" id="editPresbyterModal{{presbyter.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Presbyter</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-presbyter' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="presbyter_id" id="presbyter_id" value="{{presbyter.id}}" readonly/>
+                  <div class="row mb-3">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="first_name"
+                    name="first_name"
+                    value="{{presbyter.first_name}}"
+                    required
+                  />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="last_name"
+                      name="last_name"
+                      value="{{presbyter.last_name}}"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Phone Number</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="phone_number"
+                      name="phone_number"
+                      value="{{presbyter.phone_number}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                    value="{{presbyter.email}}"
+                    />
+                  </div>
+                </div>
+               
+                <div class="row mb-3">
+                    <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">ID/Birth Cert. No</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="id_number"
+                        name="id_number"
+                        value="{{presbyter.id_number}}"
+                      />
+                  </div> 
+                  <div class="col">
+                    <label class="form-label fw-bold">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="{{presbyter.gender}}">{{presbyter.gender}}</option>
+                        {% for gender in gender_choices %}
+                            {% if gender != presbyter.gender %}
+                                <option value="{{gender}}">{{gender}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Presbyter Church</label>
+                    <select class="form-select" id="branch" name="branch" required>
+                      <option value="{{presbyter.branch.id}}">{{presbyter.branch.name}}</option>
+                        {% for branch in branches %}
+                          {% if branch.id != presbyter.branch.id %}
+                            <option value="{{branch.id}}">{{branch.name}}</option>
+                          {% endif %}
+                        {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Presbyter</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

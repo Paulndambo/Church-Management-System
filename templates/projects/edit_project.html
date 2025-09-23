@@ -71,6 +71,30 @@
                         required
                     />
                   </div>
+                </div>    
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Project Type</label>
+                     <select class="form-select" name="project_type" id="project_type" required>
+                      <option value="{{project.project_type}}">{{project.project_type}}</option>
+                      {% for project_type in project_types %}
+                      {% if project_type != project.project_type %}
+                      <option value="{{ project_type }}">{{ project_type }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Project Status</label>
+                    <select class="form-select" name="status" id="status" required>
+                      <option value="{{project.status}}">{{project.status}}</option>
+                      {% for status in project_statuses %}
+                      {% if status != project.status %}
+                        <option value="{{ status }}">{{ status }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
                 </div>              
                 <div class="text-center mt-3">
                   <button type="submit" class="btn btn-primary w-30">Edit Project</button>

@@ -1,0 +1,1 @@
+from ChurchSystem.wsgi import application
