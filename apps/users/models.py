@@ -51,7 +51,7 @@ class Visitor(AbstractBaseModel):
     photo_consent = models.CharField(max_length=255, choices=(('Accept', 'Accept'), ('Decline', 'Decline')))
     brought_by = models.ForeignKey("membership.Member", on_delete=models.SET_NULL, null=True)
     branch = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True)
-    church_service = models.ForeignKey("membership.ChurchService", on_delete=models.SET_NULL, null=True)
+    church_service = models.ForeignKey("attendances.ChurchService", on_delete=models.SET_NULL, null=True)
     
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"

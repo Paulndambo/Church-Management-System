@@ -12,7 +12,8 @@ from apps.payments.models import (
     ChurchExpense, MemberDepartmentSaving,
     ChurchLedger, ChurchDonation
 )
-from apps.membership.models import Member, Department, Branch, ChurchService
+from apps.membership.models import Member, Department, Branch
+from apps.attendances.models import ChurchService
 
 date_today = datetime.now().date()
 # Create your views here.

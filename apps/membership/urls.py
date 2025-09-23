@@ -18,14 +18,6 @@ urlpatterns = [
     path("new-branch/", views.new_branch, name="new-branch"),
     path("edit-branch/", views.edit_branch, name="edit-branch"),
     path("delete-branch/", views.delete_branch, name="delete-branch"),
-    
-    path("church-services/", views.church_services, name="church-services"),
-    path("new-church-service/", views.new_church_service, name="new-church-service"),
-    path("edit-church-service/", views.edit_church_service, name="edit-church-service"),
-    path("delete-church-service/", views.delete_church_service, name="delete-church-service"),
-
-    path("attendances/", views.ServiceAttendaceView.as_view(), name="attendances"),
-    path("new-attendance/", views.new_attendance, name="new-attendance"),
 
     path("groups/", views.MemberGroupsListView.as_view(), name="groups"),
     path("new-group/", views.new_member_group, name="new-group"),
