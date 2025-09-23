@@ -9,7 +9,8 @@ from django.db.models import Q
 from django.contrib import messages
 from django.db import transaction
 
-from apps.membership.models import Department, Branch, Member, ChurchService
+from apps.membership.models import Department, Branch, Member
+from apps.attendances.models import ChurchService
 from apps.core.constants import GENDER_CHOICES, USER_POSITIONS, STATUS_CHOICES
 
 # Create your views here.

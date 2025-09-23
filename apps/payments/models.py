@@ -36,7 +36,7 @@ class MemberTithing(AbstractBaseModel):
     
 class Offering(AbstractBaseModel):
     branch = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True)
-    service = models.ForeignKey("membership.ChurchService", on_delete=models.SET_NULL, null=True)
+    service = models.ForeignKey("attendances.ChurchService", on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     offering_date = models.DateField()
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
@@ -45,7 +45,7 @@ class Offering(AbstractBaseModel):
 class MemberOffering(AbstractBaseModel):
     member = models.ForeignKey("membership.Member", on_delete=models.SET_NULL, null=True)
     branch = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True)
-    service = models.ForeignKey("membership.ChurchService", on_delete=models.SET_NULL, null=True)
+    service = models.ForeignKey("attendances.ChurchService", on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     offering_date = models.DateField()
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
