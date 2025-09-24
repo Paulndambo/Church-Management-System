@@ -543,6 +543,69 @@ def capture_section_data(request: HttpRequest):
     return render(request, "districts/capture_section_data.html")
 
 
+
+@login_required
+@transaction.atomic
+def edit_section_data(request: HttpRequest):
+    if request.method == "POST":
+        section_report_id = request.POST.get("section_report_id")
+        report_id = request.POST.get("report_id")
+        
+        general_fund = request.POST.get("general_fund")
+        sunday_school = request.POST.get("sunday_school")
+
+        pastors_tithe = request.POST.get("pastors_tithe")
+        presbyter_tithe = request.POST.get("presbyter_tithe")
+        
+        easter = request.POST.get("easter")
+        special_offering = request.POST.get("special_offering")
+        kenya_kids = request.POST.get("kenya_kids")
+
+        children = request.POST.get("children")
+        adult = request.POST.get("adult")
+
+        kagdom = request.POST.get("kagdom")
+        church_support = request.POST.get("church_support")
+        resource_mobilisation = request.POST.get("resource_mobilisation")
+        district_missions = request.POST.get("district_missions")
+        pastors_fund = request.POST.get("pastors_fund")
+        church_welfare = request.POST.get("church_welfare")
+  
+
+        SectionReport.objects.filter(id=section_report_id).update(
+            children=children,
+            adult=adult,
+            general_fund=general_fund,
+            sunday_school=sunday_school,
+            pastors_tithe=pastors_tithe,
+            presbyter_tithe=presbyter_tithe,
+            easter=easter,
+            special_offering=special_offering,
+            kenya_kids=kenya_kids,
+            district_missions=district_missions,
+            resource_mobilisation=resource_mobilisation,
+            kagdom=kagdom,
+            church_support=church_support,
+            church_welfare=church_welfare,
+            pastors_fund=pastors_fund
+        )
+
+        return redirect("district-report-details", id=report_id)
+    return render(request, "districts/edit_section_data.html")
+
+
+@login_required
+@transaction.atomic
+def delete_section_data(request: HttpRequest):
+    if request.method == "POST":
+        id = request.POST.get("section_report_id")
+        report_id = request.POST.get("report_id")
+        section_report = SectionReport.objects.get(id=id)
+        section_report.delete()
+        return redirect("district-report-details", id=report_id)
+    return render(request, "districts/delete_section_data.html")
+
+
 @login_required
 def district_branches(request: HttpRequest):
     branches = Branch.objects.all().order_by("-created_at")
@@ -562,7 +625,6 @@ def new_district_branch(request: HttpRequest):
         location = request.POST.get("location")
         section = request.POST.get("section")
 
-         
         branch = Branch.objects.create(
             section_id=section,
             name=name,

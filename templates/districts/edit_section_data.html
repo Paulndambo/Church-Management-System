@@ -1,0 +1,212 @@
+<div class="modal fade" id="editSectionDataModal{{section_report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Capture Section Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-section-data' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" name="report_id" id="report_id" value="{{section_report.report.id}}" readonly/>
+                <input type="hidden" name="section_report_id" id="section_report_id" value="{{section_report.id}}" readonly/>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label fw-bold">Section</label>
+                        <select class="form-select" id="section" name="section" required>
+                            <option value="{{section_report.section.id}}" selected>{{section_report.section.name}}</option>
+                            {% for section in sections %}
+                                {% if section.id != section_report.section.id %}
+                                    <option value={{section.id}}>{{section.name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Kenya Kids</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="kenya_kids"
+                            name="kenya_kids"
+                            value="{{section_report.kenya_kids}}"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">General Fund</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="general_fund"
+                            name="general_fund"
+                            value="{{section_report.general_fund}}"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Sunday School</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="sunday_school"
+                            name="sunday_school"
+                            value="{{section_report.sunday_school}}"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Pastors Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="pastors_tithe"
+                            name="pastors_tithe"
+                            value="{{section_report.pastors_tithe}}"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Presbyter Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="presbyter_tithe"
+                            name="presbyter_tithe"
+                            value="{{section_report.presbyter_tithe}}"
+                            required
+                        />
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Easter</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="easter"
+                            name="easter"
+                            value="{{section_report.easter}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Special Offering</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="special_offering"
+                            name="special_offering"
+                            value="{{section_report.special_offering}}"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Children Attendance</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="children"
+                            name="children"
+                            value="{{section_report.children}}"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Adult Attendance</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="adult"
+                            name="adult"
+                            value="{{section_report.adult}}"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">KAGDOM</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="kagdom"
+                            name="kagdom"
+                            value="{{section_report.kagdom}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">District Missions</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="district_missions"
+                            name="district_missions"
+                            value="{{section_report.district_missions}}"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Pastor's Fund</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="pastors_fund"
+                            name="pastors_fund"
+                            value="{{section_report.pastors_fund}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Church Welfare</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="church_welfare"
+                            name="church_welfare"
+                            value="{{section_report.church_welfare}}"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Resource Mobilisation</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="resource_mobilisation"
+                            name="resource_mobilisation"
+                            value="{{section_report.resource_mobilisation}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Church Support</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="church_support"
+                            name="church_support"
+                            value="{{section_report.church_support}}"
+                        />
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                  <input type="submit" class="btn btn-primary w-30" value="Edit Section Data" />
+                </div>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>

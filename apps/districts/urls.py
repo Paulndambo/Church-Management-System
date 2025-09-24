@@ -40,7 +40,9 @@ urlpatterns = [
     path("new-district-expense/", views.new_expense, name="new-district-expense"),
     path("edit-district-expense/", views.edit_expense, name="edit-district-expense"), 
 
-    path("capture-data/", views.capture_section_data, name="capture-data"),  
+    path("capture-data/", views.capture_section_data, name="capture-data"),
+    path("edit-section-data/", views.edit_section_data, name="edit-section-data"), 
+    path("delete-section-data/", views.delete_section_data, name="delete-section-data"), 
 
     path("district-churches/", views.district_branches, name="district-churches"),
     path("new-district-church/", views.new_district_branch, name="new-district-church"),
