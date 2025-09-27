@@ -15,6 +15,8 @@ from apps.payments.models import (
 from apps.membership.models import Member, Department, Branch
 from apps.attendances.models import ChurchService
 
+from apps.core.constants import format_date, get_month_name, get_month_number
+
 date_today = datetime.now().date()
 # Create your views here.
 ### Department Savings
@@ -55,13 +57,19 @@ def new_department_saving(request):
         
         amount = request.POST.get("amount")
         savings_date = request.POST.get("savings_date")
+
+        date_obj = format_date(savings_date)
+        month_name = get_month_name(date_obj.month)
+        year = date_obj.year
        
         saving = DepartmentSaving.objects.create(
             department_id=department,
             branch_id=branch,
             amount=amount,
             savings_date=savings_date,
-            captured_by=request.user
+            captured_by=request.user,
+            month=month_name,
+            year=year
         )
 
         ChurchLedger.objects.create(
@@ -135,12 +143,18 @@ def new_member_tithing(request):
         member = request.POST.get("member")
         amount = request.POST.get("amount")
         tithing_date = request.POST.get("tithing_date")
+
+        date_obj = format_date(tithing_date)
+        month_name = get_month_name(date_obj.month)
+        year = date_obj.year
        
         tithe = MemberTithing.objects.create(
             member_id=member,
             amount=amount,
             tithing_date=tithing_date,
-            captured_by=request.user
+            captured_by=request.user,
+            month=month_name,
+            year=year
         )
 
         ChurchLedger.objects.create(
@@ -191,13 +205,19 @@ def new_offering(request):
         service = request.POST.get("service")
         amount = request.POST.get("amount")
         offering_date = request.POST.get("offering_date")
+
+        date_obj = format_date(offering_date)
+        month_name = get_month_name(date_obj.month)
+        year = date_obj.year
        
         offering = Offering.objects.create(
             branch_id=branch,
             service_id=service,
             amount=amount,
             offering_date=offering_date,
-            captured_by=request.user
+            captured_by=request.user,
+            month=month_name,
+            year=year
         )
         
         ChurchLedger.objects.create(
@@ -245,12 +265,18 @@ def new_expense(request):
         name = request.POST.get("name")
         amount_allocated = request.POST.get("amount_allocated")
         date_spend = request.POST.get("date_spend")
+
+        date_obj = format_date(date_spend)
+        month_name = get_month_name(date_obj.month)
+        year = date_obj.year
        
         expense = ChurchExpense.objects.create(
             name=name,
             amount_allocated=amount_allocated,
             date_spend=date_spend,
-            captured_by=request.user
+            captured_by=request.user,
+            month=month_name,
+            year=year
         )
 
         ChurchLedger.objects.create(
@@ -328,13 +354,19 @@ def new_church_donation(request):
         
         amount = request.POST.get("amount")
         donation_date = request.POST.get("donation_date")
-       
+
+        date_obj = format_date(donation_date)
+        month_name = get_month_name(date_obj.month)
+        year = date_obj.year
+
         donation = ChurchDonation.objects.create(
             donor=donor,
             purpose=purpose,
             amount=amount,
             donation_date=donation_date,
-            captured_by=request.user
+            captured_by=request.user,
+            month=month_name,
+            year=year
         )
 
         ChurchLedger.objects.create(

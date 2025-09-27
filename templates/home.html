@@ -92,47 +92,132 @@
                 </div>
             </div>
         </div>
-
+        <div class="row g-4 mb-4">
+            <div class="col-md-8">
+                <div class="chart-container">
+                    <h5 class="chart-title fw-bold">Monthly Offerings Overview</h5>
+                    <canvas id="monthlyOfferingChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="chart-container">
+                    <h5 class="chart-title fw-bold">Attendance Distribution</h5>
+                    <canvas id="serviceAttendanceChart"></canvas>
+                </div>
+            </div>
+        </div>
    
 {% endblock content %}
 
 {% block additional_scripts %}
 <script>
     
-        // Attendance Chart
-        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-        const attendanceChart = new Chart(attendanceCtx, {
-            type: 'doughnut',
+    // Attendance Chart
+    let attendanceChart;
+    let serviceAttendanceChart;
+    let monthlyOfferingsChart;
+
+    const initialData = {
+        service_attendance: {
+            labels: JSON.parse('{{ service_attendance.labels|safe }}'),
+            attendances: JSON.parse('{{ service_attendance.attendances|safe }}'),
+        },
+        monthly_offerings: {
+            labels: JSON.parse('{{ monthly_offerings.labels|safe }}'),
+            offerings: JSON.parse('{{ monthly_offerings.offerings|safe }}')
+        }
+    };
+
+      function initCharts(yearData) {
+        const serviceAttendanceCtx = document.getElementById('serviceAttendanceChart').getContext('2d');
+        const monthlyOfferingsCtx = document.getElementById('monthlyOfferingChart').getContext('2d');
+
+        if (serviceAttendanceChart) {
+            serviceAttendanceChart.destroy();
+        }
+
+        if (monthlyOfferingsChart) {
+            monthlyOfferingsChart.destroy();
+        }
+
+        serviceAttendanceChart = new Chart(serviceAttendanceCtx, {
+            type: 'pie',
             data: {
-                labels: ['Sunday Service', 'Midweek Prayer', 'Youth Group', 'Bible Study'],
+                labels: yearData.service_attendance.labels,
                 datasets: [{
-                    data: [450, 180, 95, 120],
+                    data: yearData.service_attendance.attendances,
                     backgroundColor: [
-                        '#d4af37',
-                        '#8b4513',
-                        '#2c1810',
-                        '#f4e4a6'
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                        '#FF9F40'
                     ],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
+                    hoverOffset: 4
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
                 plugins: {
                     legend: {
                         position: 'bottom',
-                        labels: {
-                            font: {
-                                family: 'Crimson Text',
-                                size: 12
-                            },
-                            padding: 15
-                        }
+                    },
+                    title: {
+                        display: false,
+                        text: 'Service Attendance Distribution'
                     }
                 }
             }
         });
+
+        // Monthly Offerings Line Chart
+        monthlyOfferingsChart = new Chart(monthlyOfferingsCtx, {
+            type: 'line',
+            data: {
+                labels: yearData.monthly_offerings.labels,
+                datasets: [{
+                    label: 'Monthly Offerings (Kes)',
+                    data: yearData.monthly_offerings.offerings,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initCharts(initialData);
+        
+        // Year filter change event
+        document.getElementById('yearFilter').addEventListener('change', function() {
+            const selectedYear = this.value;
+            
+            // Fetch data for the selected year
+            fetch(`/api/chart-data/?year=${selectedYear}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update charts
+                    initCharts(data);
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        });
+    });
+    
+    
     </script>
 {% endblock additional_scripts %}

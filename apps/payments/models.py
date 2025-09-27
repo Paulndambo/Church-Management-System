@@ -11,6 +11,8 @@ class DepartmentSaving(AbstractBaseModel):
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     savings_date = models.DateField()
     branch = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True)
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     
 
@@ -18,6 +20,8 @@ class MemberDepartmentSaving(AbstractBaseModel):
     member = models.ForeignKey("membership.Member", on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     savings_date = models.DateField()
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     
     def __str__(self) -> str:
@@ -28,6 +32,8 @@ class MemberTithing(AbstractBaseModel):
     member = models.ForeignKey("membership.Member", on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     tithing_date = models.DateField()
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     
     def __str__(self) -> str:
@@ -39,6 +45,8 @@ class Offering(AbstractBaseModel):
     service = models.ForeignKey("attendances.ChurchService", on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     offering_date = models.DateField()
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
         
 
@@ -48,6 +56,8 @@ class MemberOffering(AbstractBaseModel):
     service = models.ForeignKey("attendances.ChurchService", on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     offering_date = models.DateField()
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
         
 
@@ -55,6 +65,8 @@ class ChurchExpense(AbstractBaseModel):
     name = models.CharField(max_length=255)
     amount_allocated = models.DecimalField(max_digits=100, decimal_places=2)
     date_spend = models.DateField()
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     
     def __str__(self):
@@ -67,6 +79,8 @@ class ChurchDonation(AbstractBaseModel):
     purpose = models.TextField(null=True, blank=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     donation_date = models.DateField()
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     receipt_number = models.CharField(max_length=255, null=True, blank=True)
 

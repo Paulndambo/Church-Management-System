@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.payments.models import DepartmentSaving, ChurchLedger, MemberTithing, ChurchDonation
+from apps.payments.models import DepartmentSaving, ChurchLedger, MemberTithing, ChurchDonation, ChurchExpense, Offering
 # Register your models here.
 @admin.register(DepartmentSaving)
 class DepartmentSavingAdmin(admin.ModelAdmin):
@@ -20,3 +20,13 @@ class MemberTithingAdmin(admin.ModelAdmin):
 @admin.register(ChurchDonation)
 class ChurchDonationAdmin(admin.ModelAdmin):
     list_display = ["id", "donor", "amount", "donation_date", "captured_by"]
+
+
+@admin.register(ChurchExpense)
+class ChurchExpenseAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "amount_allocated", "date_spend", "captured_by"]
+
+
+@admin.register(Offering)
+class OfferingAdmin(admin.ModelAdmin):
+    list_display = ["id", "branch", "service", "amount", "offering_date", "captured_by"]

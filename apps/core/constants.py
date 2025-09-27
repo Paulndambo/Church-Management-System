@@ -1,4 +1,5 @@
 import calendar
+from datetime import datetime, date
 
 USER_POSITIONS = [
     "Church Member", "Pastor", "Men Department Leader", 
@@ -31,3 +32,7 @@ def get_month_number(month_name: str) -> int:
 
 def get_month_name(month_number: int) -> str:
     return calendar.month_name[month_number]
+
+
+def format_date(date_str: str) -> date:
+    return datetime.strptime(date_str, "%Y-%m-%d").date()
