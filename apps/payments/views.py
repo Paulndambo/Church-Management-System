@@ -8,9 +8,13 @@ from datetime import datetime
 from decimal import Decimal
 
 from apps.payments.models import (
-    MemberTithing, DepartmentSaving, Offering, 
-    ChurchExpense, MemberDepartmentSaving,
-    ChurchLedger, ChurchDonation
+    MemberTithing,
+    DepartmentSaving,
+    Offering,
+    ChurchExpense,
+    MemberDepartmentSaving,
+    ChurchLedger,
+    ChurchDonation,
 )
 from apps.membership.models import Member, Department, Branch
 from apps.attendances.models import ChurchService
@@ -18,6 +22,8 @@ from apps.attendances.models import ChurchService
 from apps.core.constants import format_date, get_month_name, get_month_number
 
 date_today = datetime.now().date()
+
+
 # Create your views here.
 ### Department Savings
 class DepartmentSavingsListView(LoginRequiredMixin, ListView):
@@ -54,14 +60,14 @@ def new_department_saving(request):
     if request.method == "POST":
         department = request.POST.get("department")
         branch = request.POST.get("branch")
-        
+
         amount = request.POST.get("amount")
         savings_date = request.POST.get("savings_date")
 
         date_obj = format_date(savings_date)
         month_name = get_month_name(date_obj.month)
         year = date_obj.year
-       
+
         saving = DepartmentSaving.objects.create(
             department_id=department,
             branch_id=branch,
@@ -69,7 +75,7 @@ def new_department_saving(request):
             savings_date=savings_date,
             captured_by=request.user,
             month=month_name,
-            year=year
+            year=year,
         )
 
         ChurchLedger.objects.create(
@@ -77,9 +83,12 @@ def new_department_saving(request):
             description=f"Department Saving - {saving.department.name} - {saving.branch.name}",
             amount=Decimal(amount),
             direction="Income",
-            user=request.user
+            user=request.user,
+            month=month_name,
+            year=year,
+            transaction_date=savings_date,
         )
-        
+
         return redirect("department-savings")
     return render(request, "department_savings/new_savings.html")
 
@@ -124,7 +133,7 @@ class MemberTithingsListView(LoginRequiredMixin, ListView):
         if search_query:
             queryset = queryset.filter(
                 Q(id__icontains=search_query)
-                | Q(member__user__first_name__icontains=search_query)   
+                | Q(member__user__first_name__icontains=search_query)
             )
 
         # Get sort parameter
@@ -147,14 +156,14 @@ def new_member_tithing(request):
         date_obj = format_date(tithing_date)
         month_name = get_month_name(date_obj.month)
         year = date_obj.year
-       
+
         tithe = MemberTithing.objects.create(
             member_id=member,
             amount=amount,
             tithing_date=tithing_date,
             captured_by=request.user,
             month=month_name,
-            year=year
+            year=year,
         )
 
         ChurchLedger.objects.create(
@@ -162,9 +171,12 @@ def new_member_tithing(request):
             description=f"Tithing - {tithe.member.user.get_full_name()}",
             amount=Decimal(amount),
             direction="Income",
-            user=request.user
+            user=request.user,
+            month=month_name,
+            year=year,
+            transaction_date=tithing_date,
         )
-        
+
         return redirect("tithings")
     return render(request, "tithings/new_tithing.html")
 
@@ -184,7 +196,7 @@ class OfferingsListView(LoginRequiredMixin, ListView):
             queryset = queryset.filter(
                 Q(id__icontains=search_query)
                 | Q(service__name__icontains=search_query)
-                | Q(branch__name__icontains=search_query)    
+                | Q(branch__name__icontains=search_query)
             )
 
         # Get sort parameter
@@ -209,7 +221,7 @@ def new_offering(request):
         date_obj = format_date(offering_date)
         month_name = get_month_name(date_obj.month)
         year = date_obj.year
-       
+
         offering = Offering.objects.create(
             branch_id=branch,
             service_id=service,
@@ -217,20 +229,22 @@ def new_offering(request):
             offering_date=offering_date,
             captured_by=request.user,
             month=month_name,
-            year=year
+            year=year,
         )
-        
+
         ChurchLedger.objects.create(
             name=f"{offering.service.name} {offering_date} Offering",
             description=f"Offering - {offering.service.name} - {offering.branch.name}",
             amount=Decimal(amount),
             direction="Income",
-            user=request.user
+            user=request.user,
+            month=month_name,
+            year=year,
+            transaction_date=offering_date,
         )
 
         return redirect("offerings")
     return render(request, "offerings/new_offering.html")
-
 
 
 ### Church Expenses
@@ -246,8 +260,7 @@ class ChurchExpensesListView(LoginRequiredMixin, ListView):
 
         if search_query:
             queryset = queryset.filter(
-                Q(id__icontains=search_query)
-                | Q(name__icontains=search_query)
+                Q(id__icontains=search_query) | Q(name__icontains=search_query)
             )
 
         # Get sort parameter
@@ -269,24 +282,27 @@ def new_expense(request):
         date_obj = format_date(date_spend)
         month_name = get_month_name(date_obj.month)
         year = date_obj.year
-       
+
         expense = ChurchExpense.objects.create(
             name=name,
             amount_allocated=amount_allocated,
             date_spend=date_spend,
             captured_by=request.user,
             month=month_name,
-            year=year
+            year=year,
         )
 
         ChurchLedger.objects.create(
             name=f"{expense.name} Expense",
             description=f"Expense - {expense.name}",
-            amount=-abs(Decimal(amount_allocated)),
+            amount=Decimal(amount_allocated),
             direction="Expense",
-            user=request.user
+            user=request.user,
+            month=month_name,
+            year=year,
+            transaction_date=date_spend,
         )
-        
+
         return redirect("expenses")
     return render(request, "expenses/new_expense.html")
 
@@ -316,7 +332,6 @@ class ChurchLedgerListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-    
 
 
 ### Church Ledger
@@ -343,7 +358,7 @@ class ChurchDonationsListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-    
+
 
 @login_required
 @transaction.atomic
@@ -351,7 +366,7 @@ def new_church_donation(request):
     if request.method == "POST":
         donor = request.POST.get("donor")
         purpose = request.POST.get("purpose")
-        
+
         amount = request.POST.get("amount")
         donation_date = request.POST.get("donation_date")
 
@@ -366,7 +381,7 @@ def new_church_donation(request):
             donation_date=donation_date,
             captured_by=request.user,
             month=month_name,
-            year=year
+            year=year,
         )
 
         ChurchLedger.objects.create(
@@ -374,8 +389,11 @@ def new_church_donation(request):
             description=f"Donation: {donation.purpose}",
             amount=Decimal(amount),
             direction="Income",
-            user=request.user
+            user=request.user,
+            month=month_name,
+            year=year,
+            transaction_date=donation_date,
         )
-        
+
         return redirect("donations")
     return render(request, "donations/new_donation.html")

@@ -18,7 +18,7 @@
             
             /* Church Color Palette - User Specified Colors */
             --church-primary: #2C3E50;          /* Navy Blue - main church color */
-            --church-secondary: #81C784;        /* Soft Green - secondary */
+            --church-secondary: #8b4513;        /* Soft Green - secondary */
             --church-accent: #FFC107;           /* Gold - accent */
             --church-light-accent: #FFF8E1;     /* Light Gold - highlights */
             --church-cream: #FAFAFA;            /* Off-White - background */
@@ -27,6 +27,9 @@
             --church-deep-blue: #1B2631;        /* Darker Navy - dark accents */
             --church-blue-gold: #F57F17;        /* Darker Gold - metallic accents */
             --church-stone: #EEEEEE;            /* Light Gray - neutral */
+            --church-light: #f9f7eb;
+            --church-white: #faf8f3;
+            --church-gold: #d4af37;
             
             /* Semantic Colors with Church Theme */
             --primary-color: var(--church-primary);
@@ -46,7 +49,9 @@
 
         body {
             font-family: 'Crimson Text', serif;
-            background: linear-gradient(135deg, var(--church-ivory) 0%, var(--church-cream) 100%);
+            
+            background: linear-gradient(135deg, var(--church-light) 0%, #e8ddc7 100%);
+           
             color: var(--church-dark);
             position: relative;
         }
@@ -59,10 +64,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(129, 199, 132, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(44, 62, 80, 0.02) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255, 193, 7, 0.02) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
@@ -90,6 +91,7 @@
         .border-church-primary { border-color: var(--church-primary) !important; }
         .border-church-accent { border-color: var(--church-accent) !important; }
         .border-church-stone { border-color: var(--church-stone) !important; }
+        .text-church-gold { color: var(--church-gold) !important; }
 
         /* Church-themed shadows */
         .shadow-church { box-shadow: 0 4px 20px var(--church-shadow) !important; }
@@ -231,8 +233,8 @@
         }
 
         /* Cards */
-        .card {
-           font-family: 'Cinzel', serif;
+        .card h6 {
+            font-family: 'Cinzel', serif;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
@@ -248,11 +250,12 @@
             box-shadow: 0 8px 25px var(--church-shadow-deep);
         }
 
+
         .card-stat {
-            background: linear-gradient(135deg, var(--church-cream) 0%, var(--church-ivory) 100%);
+            background: linear-gradient(135deg, var(--church-white) 0%, #f8f5f0 100%);
             border-radius: 12px;
             box-shadow: 0 4px 20px var(--church-shadow);
-            border: 2px solid var(--church-stone) !important;
+            border: none !important;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -264,14 +267,13 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--church-accent) 0%, var(--church-blue-gold) 100%);
+            height: 3px;
+            background: linear-gradient(90deg, var(--church-gold) 0%, var(--church-light-gold) 100%);
         }
 
         .card-stat:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 30px var(--church-shadow-deep);
-            border-color: var(--church-accent) !important;
+            box-shadow: 0 8px 30px var(--church-shadow);
         }
 
         .card-stat .card-body {
@@ -521,7 +523,6 @@
         }
 
         
-
         .feature-icon {
             width: 60px;
             height: 60px;
@@ -653,6 +654,14 @@
             100% { transform: translateX(250%); }
         }
 
+        .chart-container {
+            background: var(--church-white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--church-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
         /* Add church-themed decorative elements in the background */
         .wrapper::before {
             content: '';
@@ -661,7 +670,6 @@
             right: 0;
             width: 300px;
             height: 300px;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23FFC107" d="M50 0L87 25L87 75L50 100L13 75L13 25Z"/></svg>');
             background-repeat: no-repeat;
             opacity: 0.05;
             z-index: -1;
@@ -675,7 +683,6 @@
             left: 0;
             width: 200px;
             height: 200px;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%232C3E50" d="M45 0H55V40H100V60H55V100H45V60H0V40H45Z"/></svg>');
             background-repeat: no-repeat;
             opacity: 0.03;
             z-index: -1;

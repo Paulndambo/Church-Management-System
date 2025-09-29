@@ -15,18 +15,19 @@ from apps.users.models import User
 from apps.sections.models import Section
 from apps.core.constants import GENDER_CHOICES, MONTHS_LIST, YEARS_LIST
 from apps.districts.models import (
-    District, DistrictAttendance, DistrictFinance, 
-    DistrictReport, DistrictExpense,
-    DistrictMeeting, DistrictMeetingAttendace, SectionReport
+    District,
+    DistrictAttendance,
+    DistrictFinance,
+    DistrictReport,
+    DistrictExpense,
+    DistrictMeeting,
+    DistrictMeetingAttendace,
+    SectionReport,
 )
 from apps.membership.models import Branch
 
+
 # Create your views here.
-def district_home(request: HttpRequest):
-    return render(request, "districts/home.html")
-
-    
-
 class DistrictFinanceListView(LoginRequiredMixin, ListView):
     model = DistrictFinance
     template_name = "districts/finances.html"
@@ -49,7 +50,7 @@ class DistrictFinanceListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-    
+
 
 class DistrictExpenseListView(LoginRequiredMixin, ListView):
     model = DistrictExpense
@@ -85,15 +86,15 @@ def new_expense(request: HttpRequest):
         expense_name = request.POST.get("expense_name")
 
         report = DistrictReport.objects.get(id=report_id)
-        
+
         DistrictExpense.objects.create(
             report=report,
             expense_name=expense_name,
             district=report.district,
             month=report.month,
             year=report.year,
-            amount_spend=amount_spend
-        )    
+            amount_spend=amount_spend,
+        )
         return redirect("district-report-details", id=report_id)
     return render(request, "districts/expenses/new_expense.html")
 
@@ -107,18 +108,17 @@ def edit_expense(request: HttpRequest):
 
         expense = DistrictExpense.objects.get(id=expense_id)
         report = DistrictReport.objects.get(id=expense.report.id)
-        
+
         DistrictExpense.objects.filter(id=expense_id).update(
             expense_name=expense_name,
             district=report.district,
             month=report.month,
             year=report.year,
-            amount_spend=amount_spend
+            amount_spend=amount_spend,
         )
-        
+
         return redirect("district-report-details", id=report.id)
     return render(request, "districts/expenses/edit_expense.html")
-
 
 
 class SectionsListView(LoginRequiredMixin, ListView):
@@ -133,8 +133,7 @@ class SectionsListView(LoginRequiredMixin, ListView):
 
         if search_query:
             queryset = queryset.filter(
-                Q(id__icontains=search_query)
-                | Q(name__icontains=search_query)
+                Q(id__icontains=search_query) | Q(name__icontains=search_query)
             )
         # Get sort parameter
         return queryset.order_by("-created_at")
@@ -144,7 +143,7 @@ class SectionsListView(LoginRequiredMixin, ListView):
         context["districts"] = District.objects.all()
         context["presbyters"] = User.objects.filter(role="Presbyter")
         return context
-    
+
 
 @login_required
 @transaction.atomic
@@ -152,11 +151,8 @@ def new_section(request: HttpRequest):
     if request.method == "POST":
         district = request.POST.get("district")
         name = request.POST.get("name")
-        
-        Section.objects.create(
-            name=name,
-            district_id=district
-        )    
+
+        Section.objects.create(name=name, district_id=district)
         return redirect("district-sections")
     return render(request, "districts/sections/new_section.html")
 
@@ -167,12 +163,9 @@ def edit_section(request: HttpRequest):
         section_id = request.POST.get("section_id")
         district = request.POST.get("district")
         name = request.POST.get("name")
-        
-        Section.objects.filter(id=section_id).update(
-            district_id=district,
-            name=name
-        )
-        
+
+        Section.objects.filter(id=section_id).update(district_id=district, name=name)
+
         return redirect("district-sections")
     return render(request, "districts/sections/edit_section.html")
 
@@ -203,7 +196,7 @@ class PresbytersListView(LoginRequiredMixin, ListView):
         context["branches"] = Branch.objects.filter(section__has_presbyter=False)
         context["gender_choices"] = GENDER_CHOICES
         return context
-    
+
 
 @login_required
 @transaction.atomic
@@ -218,8 +211,7 @@ def new_presbyter(request: HttpRequest):
         branch = request.POST.get("branch")
         church_branch = Branch.objects.get(id=branch)
         email = f"{first_name}.{last_name}@gmail.com"
-    
-        
+
         presbyter = User.objects.create(
             first_name=first_name,
             last_name=last_name,
@@ -230,7 +222,7 @@ def new_presbyter(request: HttpRequest):
             username=email,
             gender=gender,
             branch=church_branch,
-        )    
+        )
         presbyter.branch.section.presbyter = presbyter
         presbyter.branch.section.has_presbyter = True
         presbyter.branch.section.save()
@@ -247,15 +239,14 @@ def edit_presbyter(request: HttpRequest):
         id_number = request.POST.get("id_number")
         email = request.POST.get("email")
         phone_number = request.POST.get("phone_number")
-        
+
         gender = request.POST.get("gender")
         branch = request.POST.get("branch")
 
         church_branch = Branch.objects.get(id=branch)
-        
-        
+
         email = email if email else f"{first_name}.{last_name}@gmail.com"
-        
+
         user = User.objects.get(id=presbyter_id)
         user.first_name = first_name
         user.last_name = last_name
@@ -269,7 +260,7 @@ def edit_presbyter(request: HttpRequest):
         user.branch.section.presbyter = presbyter
         user.branch.section.has_presbyter = True
         user.branch.section.save()
-        
+
         return redirect("presbyters")
     return render(request, "districts/presbyters/edit_presbyter.html")
 
@@ -318,7 +309,6 @@ def new_report(request: HttpRequest):
         )
         return redirect("district-reports")
     return render(request, "districts/new_report.html")
-        
 
 
 @login_required
@@ -339,11 +329,10 @@ def edit_report(request: HttpRequest):
     return render(request, "districts/edit_report.html")
 
 
-
 def district_report_details(request: HttpRequest, id: int):
     report = DistrictReport.objects.get(id=id)
     section_reports = SectionReport.objects.filter(report=report)
-  
+
     total_children_attendance = sum(section_reports.values_list("children", flat=True))
     total_adult_attendance = sum(section_reports.values_list("adult", flat=True))
     grand_total_attendance = total_adult_attendance + total_children_attendance
@@ -353,7 +342,9 @@ def district_report_details(request: HttpRequest, id: int):
     total_sunday_school = sum(section_reports.values_list("sunday_school", flat=True))
     total_pastors_tithe = sum(section_reports.values_list("pastors_tithe", flat=True))
     total_pastors_fund = sum(section_reports.values_list("pastors_fund", flat=True))
-    total_presbyter_tithe = sum(section_reports.values_list("presbyter_tithe", flat=True))
+    total_presbyter_tithe = sum(
+        section_reports.values_list("presbyter_tithe", flat=True)
+    )
     total_easter = sum(section_reports.values_list("easter", flat=True))
     kenya_kids = sum(section_reports.values_list("kenya_kids", flat=True))
     special_offering = sum(section_reports.values_list("special_offering", flat=True))
@@ -363,8 +354,22 @@ def district_report_details(request: HttpRequest, id: int):
     five_percent_pastors_tithe = Decimal(0.05) * total_pastors_tithe
     half_easter_offering = Decimal(0.5) * total_easter
 
-    district_total = ten_percent_general_fund + five_percent_sunday_school + five_percent_pastors_tithe + half_easter_offering + kenya_kids + special_offering
-    district_grand_total = total_general_fund + total_sunday_school + total_pastors_tithe + total_easter + kenya_kids + special_offering
+    district_total = (
+        ten_percent_general_fund
+        + five_percent_sunday_school
+        + five_percent_pastors_tithe
+        + half_easter_offering
+        + kenya_kids
+        + special_offering
+    )
+    district_grand_total = (
+        total_general_fund
+        + total_sunday_school
+        + total_pastors_tithe
+        + total_easter
+        + kenya_kids
+        + special_offering
+    )
 
     sections = Section.objects.all()
     expenses = DistrictExpense.objects.filter(report=report)
@@ -372,12 +377,21 @@ def district_report_details(request: HttpRequest, id: int):
     total_expenses = sum(expenses.values_list("amount_spend", flat=True))
 
     total_kagdom = sum(section_reports.values_list("kagdom", flat=True))
-    total_resource_mobilisation = sum(section_reports.values_list("resource_mobilisation", flat=True))
-    total_district_missions= sum(section_reports.values_list("district_missions", flat=True))
+    total_resource_mobilisation = sum(
+        section_reports.values_list("resource_mobilisation", flat=True)
+    )
+    total_district_missions = sum(
+        section_reports.values_list("district_missions", flat=True)
+    )
     total_church_support = sum(section_reports.values_list("church_support", flat=True))
     total_church_welfare = sum(section_reports.values_list("church_welfare", flat=True))
 
-    total_additionals = total_kagdom + total_resource_mobilisation + total_district_missions + total_church_support
+    total_additionals = (
+        total_kagdom
+        + total_resource_mobilisation
+        + total_district_missions
+        + total_church_support
+    )
 
     context = {
         "report": report,
@@ -408,7 +422,7 @@ def district_report_details(request: HttpRequest, id: int):
         "total_district_missions": total_district_missions,
         "total_church_support": total_church_support,
         "total_additionals": total_additionals,
-        "total_presbyter_tithe": total_presbyter_tithe
+        "total_presbyter_tithe": total_presbyter_tithe,
     }
     return render(request, "districts/report_details.html", context)
 
@@ -416,7 +430,7 @@ def district_report_details(request: HttpRequest, id: int):
 def district_report(request: HttpRequest, id: int):
     report = DistrictReport.objects.get(id=id)
     section_reports = SectionReport.objects.filter(report=report)
-  
+
     total_children_attendance = sum(section_reports.values_list("children", flat=True))
     total_adult_attendance = sum(section_reports.values_list("adult", flat=True))
     grand_total_attendance = total_adult_attendance + total_children_attendance
@@ -426,7 +440,9 @@ def district_report(request: HttpRequest, id: int):
     total_sunday_school = sum(section_reports.values_list("sunday_school", flat=True))
     total_pastors_tithe = sum(section_reports.values_list("pastors_tithe", flat=True))
     total_pastors_fund = sum(section_reports.values_list("pastors_fund", flat=True))
-    total_presbyter_tithe = sum(section_reports.values_list("presbyter_tithe", flat=True))
+    total_presbyter_tithe = sum(
+        section_reports.values_list("presbyter_tithe", flat=True)
+    )
     total_easter = sum(section_reports.values_list("easter", flat=True))
     kenya_kids = sum(section_reports.values_list("kenya_kids", flat=True))
     special_offering = sum(section_reports.values_list("special_offering", flat=True))
@@ -436,8 +452,22 @@ def district_report(request: HttpRequest, id: int):
     five_percent_pastors_tithe = Decimal(0.05) * total_pastors_tithe
     half_easter_offering = Decimal(0.5) * total_easter
 
-    district_total = ten_percent_general_fund + five_percent_sunday_school + five_percent_pastors_tithe + half_easter_offering + kenya_kids + special_offering
-    district_grand_total = total_general_fund + total_sunday_school + total_pastors_tithe + total_easter + kenya_kids + special_offering
+    district_total = (
+        ten_percent_general_fund
+        + five_percent_sunday_school
+        + five_percent_pastors_tithe
+        + half_easter_offering
+        + kenya_kids
+        + special_offering
+    )
+    district_grand_total = (
+        total_general_fund
+        + total_sunday_school
+        + total_pastors_tithe
+        + total_easter
+        + kenya_kids
+        + special_offering
+    )
 
     sections = Section.objects.all()
     expenses = DistrictExpense.objects.filter(report=report)
@@ -445,12 +475,21 @@ def district_report(request: HttpRequest, id: int):
     total_expenses = sum(expenses.values_list("amount_spend", flat=True))
 
     total_kagdom = sum(section_reports.values_list("kagdom", flat=True))
-    total_resource_mobilisation = sum(section_reports.values_list("resource_mobilisation", flat=True))
-    total_district_missions= sum(section_reports.values_list("district_missions", flat=True))
+    total_resource_mobilisation = sum(
+        section_reports.values_list("resource_mobilisation", flat=True)
+    )
+    total_district_missions = sum(
+        section_reports.values_list("district_missions", flat=True)
+    )
     total_church_support = sum(section_reports.values_list("church_support", flat=True))
     total_church_welfare = sum(section_reports.values_list("church_welfare", flat=True))
 
-    total_additionals = total_kagdom + total_resource_mobilisation + total_district_missions + total_church_support
+    total_additionals = (
+        total_kagdom
+        + total_resource_mobilisation
+        + total_district_missions
+        + total_church_support
+    )
 
     context = {
         "report": report,
@@ -481,7 +520,7 @@ def district_report(request: HttpRequest, id: int):
         "total_district_missions": total_district_missions,
         "total_church_support": total_church_support,
         "total_additionals": total_additionals,
-        "total_presbyter_tithe": total_presbyter_tithe
+        "total_presbyter_tithe": total_presbyter_tithe,
     }
     return render(request, "districts/district_report.html", context)
 
@@ -492,13 +531,13 @@ def capture_section_data(request: HttpRequest):
     if request.method == "POST":
         report_id = request.POST.get("report_id")
         section = request.POST.get("section")
-        
+
         general_fund = request.POST.get("general_fund")
         sunday_school = request.POST.get("sunday_school")
 
         pastors_tithe = request.POST.get("pastors_tithe")
         presbyter_tithe = request.POST.get("presbyter_tithe")
-        
+
         easter = request.POST.get("easter")
         special_offering = request.POST.get("special_offering")
         kenya_kids = request.POST.get("kenya_kids")
@@ -514,7 +553,7 @@ def capture_section_data(request: HttpRequest):
         church_welfare = request.POST.get("church_welfare")
 
         church_section = Section.objects.get(id=section)
-        report = DistrictReport.objects.get(id=report_id)    
+        report = DistrictReport.objects.get(id=report_id)
 
         SectionReport.objects.create(
             report=report,
@@ -536,12 +575,11 @@ def capture_section_data(request: HttpRequest):
             kagdom=kagdom,
             church_support=church_support,
             church_welfare=church_welfare,
-            pastors_fund=pastors_fund
+            pastors_fund=pastors_fund,
         )
 
         return redirect("district-report-details", id=report_id)
     return render(request, "districts/capture_section_data.html")
-
 
 
 @login_required
@@ -550,13 +588,13 @@ def edit_section_data(request: HttpRequest):
     if request.method == "POST":
         section_report_id = request.POST.get("section_report_id")
         report_id = request.POST.get("report_id")
-        
+
         general_fund = request.POST.get("general_fund")
         sunday_school = request.POST.get("sunday_school")
 
         pastors_tithe = request.POST.get("pastors_tithe")
         presbyter_tithe = request.POST.get("presbyter_tithe")
-        
+
         easter = request.POST.get("easter")
         special_offering = request.POST.get("special_offering")
         kenya_kids = request.POST.get("kenya_kids")
@@ -570,7 +608,6 @@ def edit_section_data(request: HttpRequest):
         district_missions = request.POST.get("district_missions")
         pastors_fund = request.POST.get("pastors_fund")
         church_welfare = request.POST.get("church_welfare")
-  
 
         SectionReport.objects.filter(id=section_report_id).update(
             children=children,
@@ -587,7 +624,7 @@ def edit_section_data(request: HttpRequest):
             kagdom=kagdom,
             church_support=church_support,
             church_welfare=church_welfare,
-            pastors_fund=pastors_fund
+            pastors_fund=pastors_fund,
         )
 
         return redirect("district-report-details", id=report_id)
@@ -610,10 +647,7 @@ def delete_section_data(request: HttpRequest):
 def district_branches(request: HttpRequest):
     branches = Branch.objects.all().order_by("-created_at")
     sections = Section.objects.all()
-    context = {
-        "branches": branches,
-        "sections": sections
-    }
+    context = {"branches": branches, "sections": sections}
     return render(request, "districts/branches/branches.html", context)
 
 
@@ -626,10 +660,7 @@ def new_district_branch(request: HttpRequest):
         section = request.POST.get("section")
 
         branch = Branch.objects.create(
-            section_id=section,
-            name=name,
-            location=location,
-            town=town
+            section_id=section, name=name, location=location, town=town
         )
 
         return redirect("district-churches")

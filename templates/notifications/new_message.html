@@ -1,0 +1,49 @@
+<div class="modal fade" id="newMessageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-center">Create Message</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form action="{% url 'create-message' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body">
+
+          <div class="row mb-3">
+            <div class="col">
+              <label for="title" class="form-label fw-bold">Message Title</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                required
+              />
+            </div>
+
+            <div class="col">
+              <label for="message_type" class="form-label fw-bold">Message Type</label>
+              <select class="form-select" id="message_type" name="message_type" required>
+                <option value="SMS">SMS</option>
+                <option value="Email">Email</option>
+                <option value="WhatsApp">WhatsApp</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Type message here" id="message" name="message">
+
+            </textarea>
+            <label for="message">Type message here...</label>
+
+          </div>
+          <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary w-30">Create Message</button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

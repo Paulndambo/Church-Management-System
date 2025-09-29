@@ -30,16 +30,17 @@ class User(AbstractUser, AbstractBaseModel):
     address = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
-    branch = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True)
-   
-    
+    branch = models.ForeignKey(
+        "membership.Branch", on_delete=models.SET_NULL, null=True
+    )
+
     def __str__(self):
         return self.username
-    
+
     def name(self):
         return self.get_full_name()
-    
-    
+
+
 class Visitor(AbstractBaseModel):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -48,13 +49,21 @@ class Visitor(AbstractBaseModel):
     address = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
-    photo_consent = models.CharField(max_length=255, choices=(('Accept', 'Accept'), ('Decline', 'Decline')))
-    brought_by = models.ForeignKey("membership.Member", on_delete=models.SET_NULL, null=True)
-    branch = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True)
-    church_service = models.ForeignKey("attendances.ChurchService", on_delete=models.SET_NULL, null=True)
-    
+    photo_consent = models.CharField(
+        max_length=255, choices=(("Accept", "Accept"), ("Decline", "Decline"))
+    )
+    brought_by = models.ForeignKey(
+        "membership.Member", on_delete=models.SET_NULL, null=True
+    )
+    branch = models.ForeignKey(
+        "membership.Branch", on_delete=models.SET_NULL, null=True
+    )
+    church_service = models.ForeignKey(
+        "attendances.ChurchService", on_delete=models.SET_NULL, null=True
+    )
+
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
-    
+
     def name(self) -> str:
         return f"{self.first_name} {self.last_name}"

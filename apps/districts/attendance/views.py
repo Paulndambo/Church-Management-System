@@ -16,7 +16,8 @@ from apps.core.constants import get_month_name
 from apps.districts.models import (
     District,
     DistrictAttendance,
-    DistrictMeeting, DistrictMeetingAttendace
+    DistrictMeeting,
+    DistrictMeetingAttendace,
 )
 
 
@@ -42,7 +43,7 @@ class DistrictAttendanceListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-    
+
 
 class DistrictMeetingListView(LoginRequiredMixin, ListView):
     model = DistrictMeeting
@@ -66,7 +67,7 @@ class DistrictMeetingListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["districts"] = District.objects.all()
-        return context    
+        return context
 
 
 @login_required
@@ -77,7 +78,16 @@ def district_meeting_details(request: HttpRequest, id: int):
 
     context: Dict[str, Any] = {
         "meeting": meeting,
-        "attendants": attendants
+        "attendants": attendants,
+        "roles": [
+            "Church Member",
+            "Pastor",
+            "Treasurer",
+            "Secretary",
+            "Presbyter",
+            "District Supritendant",
+        ],
+        "statuses": ["Present", "Absent"],
     }
     return render(request, "districts/meetings/district_meeting_details.html", context)
 
@@ -92,31 +102,14 @@ def new_district_meeting(request: HttpRequest):
         date_obj = datetime.strptime(meeting_date, "%Y-%m-%d").date()
 
         meeting = DistrictMeeting.objects.create(
-            district=district,
-            meeting_date=meeting_date
+            district=district, meeting_date=meeting_date
         )
         meeting.month = get_month_name(date_obj.month)
         meeting.year = date_obj.year
         meeting.save()
 
-        sections = meeting.district.districtsections.filter(has_presbyter=True)
-
-        attendants = [
-            DistrictMeetingAttendace(
-                section=section,
-                presbyter=section.presbyter,
-                meeting=meeting,
-                month=meeting.month,
-                year=meeting.year
-            )
-            for section in sections
-        ]
-
-        DistrictMeetingAttendace.objects.bulk_create(attendants)
-
         return redirect("district-meeting-details", id=meeting.id)
     return render(request, "districts/meetings/new_meeting.html")
-
 
 
 class DistrictMeetingAttendanceListView(LoginRequiredMixin, ListView):
@@ -141,13 +134,58 @@ class DistrictMeetingAttendanceListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-    
+
+
+@login_required
+def create_meeting_attendant(request: HttpRequest):
+    if request.method == "POST":
+        meeting_id = request.POST.get("meeting_id")
+        full_name = request.POST.get("full_name")
+        status = request.POST.get("status")
+        role = request.POST.get("role")
+
+        meeting = DistrictMeeting.objects.get(id=meeting_id)
+
+        DistrictMeetingAttendace.objects.create(
+            meeting=meeting,
+            full_name=full_name,
+            status=status,
+            month=meeting.month,
+            year=meeting.year,
+            role=role,
+        )
+        return redirect("district-meeting-details", id=meeting.id)
+    return render(request, "districts/meetings/create_attendant.html")
+
+
+@login_required
+def edit_meeting_attendant(request: HttpRequest):
+    if request.method == "POST":
+        attendant_id = request.POST.get("attendant_id")
+        meeting_id = request.POST.get("meeting_id")
+        full_name = request.POST.get("full_name")
+        status = request.POST.get("status")
+        role = request.POST.get("role")
+
+        meeting = DistrictMeeting.objects.get(id=meeting_id)
+
+        DistrictMeetingAttendace.objects.filter(id=attendant_id).update(
+            meeting=meeting,
+            full_name=full_name,
+            status=status,
+            month=meeting.month,
+            year=meeting.year,
+            role=role,
+        )
+        return redirect("district-meeting-details", id=meeting.id)
+    return render(request, "districts/meetings/edit_attendant.html")
+
 
 @login_required
 @transaction.atomic
 def mark_district_meeting_attendance(request: HttpRequest, id: int):
     attendance = DistrictMeetingAttendace.objects.get(id=id)
-    attendance.present=True
+    attendance.present = True
     attendance.save()
 
     return redirect("district-meeting-details", id=attendance.meeting.id)

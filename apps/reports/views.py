@@ -12,6 +12,7 @@ from apps.reports.models import ChurchMonthlyReport
 from apps.core.constants import MONTHS_LIST, YEARS_LIST, get_month_number
 from apps.membership.models import Branch
 
+
 # Create your views here.
 ### Reports Management
 class MonthlyReportView(LoginRequiredMixin, ListView):
@@ -40,7 +41,7 @@ class MonthlyReportView(LoginRequiredMixin, ListView):
         context["years"] = YEARS_LIST
         context["branches"] = Branch.objects.all()
         return context
-    
+
 
 @login_required
 def new_monthly_report(request: HttpRequest):
@@ -48,16 +49,14 @@ def new_monthly_report(request: HttpRequest):
         branch = request.POST.get("branch")
         month_name = request.POST.get("month_name")
         year = request.POST.get("year")
-        
 
         ChurchMonthlyReport.objects.create(
             branch_id=branch,
             month_name=month_name,
             month_number=get_month_number(month_name=month_name),
-            year=year
+            year=year,
         )
 
-        
         return redirect("monthly-reports")
     return render(request, "reports/new_monthly_report.html")
 
@@ -69,16 +68,14 @@ def edit_monthly_report(request: HttpRequest):
         report_id = request.POST.get("report_id")
         month_name = request.POST.get("month_name")
         year = request.POST.get("year")
-        
 
         ChurchMonthlyReport.objects.filter(id=report_id).update(
             branch_id=branch,
             month_name=month_name,
             month_number=get_month_number(month_name=month_name),
-            year=year
+            year=year,
         )
 
-        
         return redirect("monthly-reports")
     return render(request, "reports/edit_monthly_report.html")
 
@@ -87,7 +84,5 @@ def edit_monthly_report(request: HttpRequest):
 def monthly_report_details(request: HttpRequest, report_id: int):
     report = ChurchMonthlyReport.objects.get(id=report_id)
 
-    context = {
-        'report': report
-    }
+    context = {"report": report}
     return render(request, "reports/monthly_report_details.html", context)

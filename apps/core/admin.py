@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 from apps.core.models import UserActionLog, Church
+
+
 # Register your models here.
 @admin.register(UserActionLog)
 class UserActionLog(admin.ModelAdmin):
