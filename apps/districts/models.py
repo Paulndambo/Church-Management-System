@@ -186,6 +186,7 @@ class DistrictMeetingAttendace(AbstractBaseModel):
     month = models.CharField(max_length=255, null=True)
     year = models.IntegerField(null=True)
     role = models.CharField(max_length=255, null=True)
+    recorded_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
         return self.full_name if self.full_name else ""

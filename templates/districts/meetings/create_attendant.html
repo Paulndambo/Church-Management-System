@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-center">New District Meeting</h1>
+          <h1 class="modal-title fs-5 text-center fw-bold">Mark Meeting Attendance</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <form action="{% url 'create-attendant' %}" method="POST" enctype="multipart/form-data">
@@ -32,7 +32,7 @@
                       </select>
                   </div>
                   <div class="col">
-                    <label class="form-label fw-bold">Status</label>
+                    <label class="form-label fw-bold">Present or Absent?</label>
                     <select class="form-select" id="status" name="status" required>
                         {% for status in statuses %}
                             <option value="{{status}}">{{status}}</option>
@@ -42,7 +42,7 @@
                 </div>
                 
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-primary w-30">Create Meeting Attendant</button>
+                  <button type="submit" class="btn btn-primary w-30">Submit Attendance</button>
                 </div>
               </div>
               </form>

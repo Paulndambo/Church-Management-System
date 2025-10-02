@@ -153,6 +153,7 @@ def create_meeting_attendant(request: HttpRequest):
             month=meeting.month,
             year=meeting.year,
             role=role,
+            recorded_by=request.user
         )
         return redirect("district-meeting-details", id=meeting.id)
     return render(request, "districts/meetings/create_attendant.html")
@@ -176,6 +177,7 @@ def edit_meeting_attendant(request: HttpRequest):
             month=meeting.month,
             year=meeting.year,
             role=role,
+            recorded_by=request.user
         )
         return redirect("district-meeting-details", id=meeting.id)
     return render(request, "districts/meetings/edit_attendant.html")

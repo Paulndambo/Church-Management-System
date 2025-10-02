@@ -51,7 +51,6 @@
       page-break-after: always;
       position: relative;
       overflow: hidden;
-     
     }
 
     .cover-page::before,
@@ -63,14 +62,7 @@
       text-align: center;
       position: relative;
       z-index: 1;
-      padding-top: 1rem;
-    }
-
-    .cover-logo {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 1.5rem;
-      display: block;
+      padding-top: 2rem;
     }
 
     .cover-header h1 {
@@ -90,6 +82,7 @@
 
     .cover-meta {
       background: white;
+      border: 2px solid var(--primary);
       border-radius: 12px;
       padding: 2rem;
       margin: 2rem 0;
@@ -100,15 +93,15 @@
     .meta-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem;
+      gap: 1.5rem;
       margin-bottom: 2rem;
     }
 
     .meta-item {
       background: #f8fafc;
       padding: 1rem;
-      border-radius: 4px;
-      border-left: 2px solid var(--primary);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
       border: 1px solid #e2e8f0;
     }
 
@@ -169,11 +162,10 @@
 
     /* Content Pages */
     .content-page {
-      padding: 10mm 10mm 20mm 10mm;
+      padding: 10mm;
       page-break-after: always;
       page-break-inside: avoid;
       max-width: 277mm;
-      position: relative;
     }
 
     .page-header {
@@ -256,26 +248,12 @@
     }
 
     .signatures-page {
-      padding: 10mm 10mm 20mm 10mm;
+      padding: 10mm;
       display: flex;
       flex-direction: column;
       justify-content: center;
       page-break-before: always;
       max-width: 277mm;
-      position: relative;
-    }
-
-    .page-footer {
-      position: absolute;
-      bottom: 5mm;
-      left: 10mm;
-      right: 10mm;
-      text-align: center;
-      padding-top: 8px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.75rem;
-      font-weight: 500;
     }
 
     .signatures {
@@ -374,14 +352,14 @@
       <!-- COVER PAGE -->
       <div class="cover-page">
         <div class="cover-header">
-          <img src="https://i.postimg.cc/HLGSVbPS/kag-logo1.webp" alt="KAG Logo" class="cover-logo">
-          <h3>District Monthly Report</h3>
+          <h1>District Monthly Report</h1>
+          <div class="subtitle">Financial & Attendance Summary</div>
         </div>
 
         <div class="cover-meta">
           <div class="meta-grid">
             <div class="meta-item">
-                <label>District Name</label>
+              <label>District Name</label>
               <div class="value">{{report.district.name}}</div>
             </div>
             <div class="meta-item">
@@ -394,7 +372,7 @@
             </div>
             <div class="meta-item">
               <label>Meeting Date</label>
-              <div class="value"></div>
+              <div class="value">{{meeting_date|default:"TBD"}}</div>
             </div>
           </div>
 
@@ -415,7 +393,6 @@
               <div class="label">National Office Share</div>
               <div class="amount">{{district_total|default:"0"}}</div>
             </div>
-           
           </div>
         </div>
 
@@ -434,7 +411,6 @@
         <table>
           <thead>
             <tr>
-              <th>#</th>
               <th>Section</th>
               <th>Presbyter</th>
               <th>General Fund</th>
@@ -452,53 +428,6 @@
           <tbody>
             {% for report in first_part %}
             <tr>
-              <td>{{ forloop.counter }}</td>
-              <td>{{ report.section }}</td>
-              <td>{{ report.section.presbyter.name }}</td>
-              <td>{{ report.general_fund }}</td>
-              <td>{{ report.sunday_school }}</td>
-              <td>{{ report.pastors_fund }}</td>
-              <td>{{ report.presbyter_tithe }}</td>
-              <td>{{ report.pastors_tithe }}</td>
-              <td>{{ report.easter }}</td>
-              <td>{{ report.kenya_kids }}</td>
-              <td>{{ report.special_offering}}</td>
-              <td>{{ report.adult }}</td>
-              <td>{{ report.children }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      <!-- REVENUE PAGE 2 -->
-      <div class="content-page">
-        <div class="page-header">
-          <h2>Revenue Collections (Continued)</h2>
-          <div class="page-number">Page 2</div>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Section</th>
-              <th>Presbyter</th>
-              <th>General Fund</th>
-              <th>Sunday School</th>
-              <th>Pastors Fund</th>
-              <th>Presbyter Tithe</th>
-              <th>Pastor's Tithe</th>
-              <th>Easter Building</th>
-              <th>Kenya Kids</th>
-              <th>Special Offering</th>
-              <th>Adult Att.</th>
-              <th>Children Att.</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for report in second_part %}
-            <tr>
-              <td>{{ forloop.counter }}</td>
               <td>{{ report.section }}</td>
               <td>{{ report.section.presbyter.name }}</td>
               <td>{{ report.general_fund }}</td>
@@ -516,7 +445,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3"><strong>GRAND TOTALS</strong></td>
+              <td colspan="2"><strong>GRAND TOTALS</strong></td>
               <td><strong>{{ total_general_fund }}</strong></td>
               <td><strong>{{ total_sunday_school }}</strong></td>
               <td><strong>{{ total_pastors_fund }}</strong></td>
@@ -532,11 +461,71 @@
         </table>
       </div>
 
+      <!-- 
+      <div class="content-page">
+        <div class="page-header">
+          <h2>Revenue Collections (Continued)</h2>
+          <div class="page-number">Page 2</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Presbyter</th>
+              <th>General Fund</th>
+              <th>Sunday School</th>
+              <th>Pastors Fund</th>
+              <th>Presbyter Tithe</th>
+              <th>Pastor's Tithe</th>
+              <th>Easter Building</th>
+              <th>Kenya Kids</th>
+              <th>Special Offering</th>
+              <th>Adult Att.</th>
+              <th>Children Att.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in second_part %}
+            <tr>
+              <td>{{ report.section }}</td>
+              <td>{{ report.section.presbyter.name }}</td>
+              <td>{{ report.general_fund }}</td>
+              <td>{{ report.sunday_school }}</td>
+              <td>{{ report.pastors_fund }}</td>
+              <td>{{ report.presbyter_tithe }}</td>
+              <td>{{ report.pastors_tithe }}</td>
+              <td>{{ report.easter }}</td>
+              <td>{{ report.kenya_kids }}</td>
+              <td>{{ report.special_offering}}</td>
+              <td>{{ report.adult }}</td>
+              <td>{{ report.children }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"><strong>GRAND TOTALS</strong></td>
+              <td><strong>{{ total_general_fund }}</strong></td>
+              <td><strong>{{ total_sunday_school }}</strong></td>
+              <td><strong>{{ total_pastors_fund }}</strong></td>
+              <td><strong>{{ total_presbyter_tithe }}</strong></td>
+              <td><strong>{{ total_pastors_tithe }}</strong></td>
+              <td><strong>{{ easter_total }}</strong></td>
+              <td><strong>{{ kenya_kids }}</strong></td>
+              <td><strong>{{ special_offering }}</strong></td>
+              <td><strong>{{ total_adult_attendance }}</strong></td>
+              <td><strong>{{ total_children_attendance }}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      -->
+
       <!-- EXPENSES PAGE -->
       <div class="content-page">
         <div class="page-header">
           <h2>Expenses & Expenditures</h2>
-          <div class="page-number">Page 3</div>
+          <div class="page-number">Page 2</div>
         </div>
         <table>
           <thead>
@@ -562,14 +551,13 @@
             </tr>
           </tfoot>
         </table>
-      
       </div>
 
       <!-- CONTRIBUTIONS PAGE -->
       <div class="content-page">
         <div class="page-header">
           <h2>Contribution to National Office</h2>
-          <div class="page-number">Page 4</div>
+          <div class="page-number">Page 3</div>
         </div>
         <table>
           <thead>
@@ -629,7 +617,7 @@
       <div class="content-page">
         <div class="page-header">
           <h2>Additional Collections</h2>
-          <div class="page-number">Page 5</div>
+          <div class="page-number">Page 4</div>
         </div>
         <table>
           <thead>
@@ -679,7 +667,7 @@
       <div class="signatures-page">
         <div class="page-header">
           <h2>Authorization & Approval</h2>
-          <div class="page-number">Page 6</div>
+          <div class="page-number">Page 5</div>
         </div>
         
         <div style="text-align: center; color: var(--muted); margin: 2rem 0;">
@@ -700,10 +688,9 @@
         </div>
 
         <div style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem;">
-          <b><p>This document contains confidential financial information.</p></b>
-          <b><p>© {{report.year}} - All Rights Reserved - Kenya Assemblies of God, Nairobi District</p></b>
+          <p>This document contains confidential financial information.</p>
+          <p>© {{report.year}} - All Rights Reserved</p>
         </div>
-
       </div>
 
     </div>

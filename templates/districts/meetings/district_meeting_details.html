@@ -6,14 +6,15 @@
 <div class="table-card">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3>District Meeting Attendance</h3>
+            <h3 class="fw-bold">{{meeting.meeting_date}} Baraza
+            </h3>
         </div>
         <div class="col">
             <input type="text" class="form-control" placeholder="Search..." 
             id="searchInput" value="{{ search_query }}">
         </div>
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictMeetingAttendantModal{{meeting.id}}">Record Attendant</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictMeetingAttendantModal{{meeting.id}}">Record Attendance</button>
         </div>
     </div>
 {% include "districts/meetings/create_attendant.html" %}
@@ -30,7 +31,7 @@
                     <th>Name</th>
                     <th>Role</th>
                     <th>Status</th>
-                    <th>Meeting Date</th>
+                    <th>Created By</th>
                     <th></th>
                 </tr>
             </thead>
@@ -41,10 +42,11 @@
                     <td>{{ attendance.full_name }}</td>
                     <td>{{ attendance.role }}</td>
                     <td>{{ attendance.status }}</td>
-                    <td>{{ attendance.meeting.meeting_date }}</td>
+                    <td>{{ attendance.recorded_by.name }}</td>
                     <td>
                         <div class="d-flex gap-1">
                             <a data-bs-toggle="modal" data-bs-target="#editDistrictMeetingAttendantModal{{attendance.id}}" class="btn btn-info btn-sm"><i class="fa-solid fa-pencil"></i></a>
+                            
                         </div>
                     </td>
                    {% include "districts/meetings/edit_attendant.html" %}

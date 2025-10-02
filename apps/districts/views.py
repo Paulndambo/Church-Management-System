@@ -277,13 +277,20 @@ class DistrictReportListView(LoginRequiredMixin, ListView):
 
         if search_query:
             queryset = queryset.filter(
-                Q(id__icontains=search_query)
-                | Q(section__name__icontains=search_query)
-                | Q(month__icontains=search_query)
-                | Q(year__icontains=search_query)
+                Q(year__icontains=search_query)
             )
-        # Get sort parameter
-        return queryset.order_by("-created_at")
+
+        # Define month order
+        month_order = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ]
+
+        # Convert queryset to list and sort in Python
+        queryset = list(queryset.order_by("year"))  # first sort by year
+        queryset.sort(key=lambda x: month_order.index(x.month))
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -292,6 +299,7 @@ class DistrictReportListView(LoginRequiredMixin, ListView):
         context["years"] = YEARS_LIST
         context["months"] = MONTHS_LIST
         return context
+
 
 
 @login_required
@@ -491,9 +499,19 @@ def district_report(request: HttpRequest, id: int):
         + total_church_support
     )
 
+    first_part = SectionReport.objects.order_by("-created_at").filter(report=report)[:14]
+    second_part = SectionReport.objects.order_by("-created_at").filter(report=report)[14:]
+
+    print("*****************Report Metrics********************")
+    print(f"Report 1 Length: {first_part.count()}")
+    print(f"Report 2 Length: {second_part.count()}")
+    print("*****************Report Metrics********************")
+
     context = {
         "report": report,
         "reports": section_reports,
+        "first_part": first_part,
+        "second_part": second_part,
         "total_children_attendance": total_children_attendance,
         "total_adult_attendance": total_adult_attendance,
         "grand_total_attendance": grand_total_attendance,

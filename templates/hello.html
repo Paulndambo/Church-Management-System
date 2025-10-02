@@ -1,363 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Church ERP Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <style>
-        :root {
-            --church-primary: #2c1810;
-            --church-secondary: #8b4513;
-            --church-gold: #d4af37;
-            --church-light-gold: #f4e4a6;
-            --church-white: #faf8f3;
-            --church-light: #f5f2e8;
-            --church-shadow: rgba(44, 24, 16, 0.1);
-        }
+  <meta charset="UTF-8">
+  <title>Monthly Church Report</title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 15mm;
+    }
 
-        body {
-            font-family: 'Crimson Text', serif;
-            background: linear-gradient(135deg, var(--church-light) 0%, #e8ddc7 100%);
-            color: var(--church-primary);
-        }
+    :root {
+      --muted: #555;
+      --accent: #0b66c3;
+      --line: #ccc;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
 
-        .card-stat {
-            background: linear-gradient(135deg, var(--church-white) 0%, #f8f5f0 100%);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px var(--church-shadow);
-            border: none !important;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+    body {
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
 
-        .card-stat::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--church-gold) 0%, var(--church-light-gold) 100%);
-        }
+    .report-container {
+      background: white;
+      max-width: 100%;
+      width: 297mm;
+      min-height: 210mm;
+      padding: 20mm;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
 
-        .card-stat:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px var(--church-shadow);
-        }
+    h1 {
+      text-align: center;
+      margin: 0.5rem 0;
+      color: var(--accent);
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
 
-        .stats-icon {
-            font-size: 2.5rem;
-            opacity: 0.8;
-        }
+    h2.section-title {
+      text-align: left;
+      font-size: 1.1rem;
+      margin: 1rem 0 0.5rem;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.3rem;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
 
-        .text-church-primary { color: var(--church-primary) !important; }
-        .text-church-secondary { color: var(--church-secondary) !important; }
-        .text-church-gold { color: var(--church-gold) !important; }
-        .bg-church-primary { background-color: var(--church-primary) !important; }
-        .bg-church-secondary { background-color: var(--church-secondary) !important; }
-        .bg-church-gold { background-color: var(--church-gold) !important; }
+    .church-info {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
 
-        .card h6 {
-            font-family: 'Cinzel', serif;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
+    .church-info p {
+      margin: 0.3rem 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
 
-        .card h3 {
-            font-weight: 600;
-            font-size: 2.2rem;
-        }
+    .overview-metrics {
+      width: 80%;
+      margin: 1.5rem auto;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      border: 1px solid var(--line);
+    }
 
-        .feature-card {
-            background: var(--church-white);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px var(--church-shadow);
-            border: none;
-            transition: all 0.3s ease;
-        }
+    .overview-metrics th, .overview-metrics td {
+      border: 1px solid var(--line);
+      padding: 0.5rem;
+      text-align: center;
+    }
 
-        .feature-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px var(--church-shadow);
-        }
+    .overview-metrics th {
+      background: #f1f5f9;
+      color: var(--accent);
+      font-weight: 600;
+    }
 
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .overview-metrics td {
+      background: #fafafa;
+      font-weight: 500;
+    }
 
-        .btn-church {
-            background: linear-gradient(135deg, var(--church-gold) 0%, var(--church-light-gold) 100%);
-            color: var(--church-primary);
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      page-break-inside: avoid;
+    }
 
-        .btn-church:hover {
-            background: linear-gradient(135deg, var(--church-light-gold) 0%, var(--church-gold) 100%);
-            color: var(--church-primary);
-            transform: translateY(-1px);
-        }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.4rem 0.5rem;
+      text-align: center;
+      vertical-align: middle;
+    }
 
-        .chart-container {
-            background: var(--church-white);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px var(--church-shadow);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+    th {
+      background: #f1f5f9;
+      font-weight: 600;
+      color: var(--accent);
+    }
 
-        .chart-title {
-            font-family: 'Cinzel', serif;
-            color: var(--church-primary);
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-    </style>
+    tbody tr:nth-child(odd) {
+      background: #fafafa;
+    }
+
+    tfoot td {
+      font-weight: bold;
+      background: #eaf3fc;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+      page-break-before: always;
+    }
+
+    .signatures {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 2rem;
+      page-break-before: always;
+    }
+
+    .signature-line {
+      width: 30%;
+      text-align: center;
+    }
+
+    .signature-line span {
+      display: block;
+      border-top: 1px solid var(--line);
+      margin-top: 3rem;
+      padding-top: 0.3rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    #download {
+      margin-bottom: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #download:hover {
+      background: #094a8b;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+  </style>
 </head>
 <body>
-    <div class="container-fluid p-4">
-        <!-- Stats Row -->
-        <div class="row g-4 mb-4">
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-stat h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-primary">Total Members</h6>
-                                <h3 class="text-church-primary">1,247</h3>
-                            </div>
-                            <i class="fas fa-users stats-icon text-church-gold"></i>
-                        </div>
-                        <div class="mt-2">
-                            <span class="text-success"><i class="fas fa-arrow-up"></i> 5.2%</span>
-                            <span class="text-muted ms-2">From last month</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div>
+    <button id="download">Download PDF</button>
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-stat h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-secondary">Monthly Tithes</h6>
-                                <h3 class="text-church-secondary">$45.2K</h3>
-                            </div>
-                            <i class="fas fa-hand-holding-heart stats-icon text-church-gold"></i>
-                        </div>
-                        <div class="mt-2">
-                            <span class="text-success"><i class="fas fa-arrow-up"></i> 8.1%</span>
-                            <span class="text-muted ms-2">From last month</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="report-container" id="report">
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-stat h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-primary">Attendance Rate</h6>
-                                <h3 class="text-church-primary">87%</h3>
-                            </div>
-                            <i class="fas fa-clipboard-check stats-icon text-church-gold"></i>
-                        </div>
-                        <div class="mt-2">
-                            <span class="text-danger"><i class="fas fa-arrow-down"></i> 2.3%</span>
-                            <span class="text-muted ms-2">From last month</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- Cover / Metadata Page -->
+      <h1>District Monthly Report</h1>
+      <div class="church-info">
+        <p><strong>District:</strong> {{report.district.name}}</p>
+        <p><strong>Report Month:</strong> {{report.month}} {{report.year}}</p>
+        <p><strong>Date of Meeting:</strong> _____________________</p>
+        <p><strong>Generated on:</strong> {{today_date}}</p>
+      </div>
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-stat h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-secondary">Total Offerings</h6>
-                                <h3 class="text-church-secondary">$28.7K</h3>
-                            </div>
-                            <i class="fas fa-donate stats-icon text-church-gold"></i>
-                        </div>
-                        <div class="mt-2">
-                            <span class="text-success"><i class="fas fa-arrow-up"></i> 12.4%</span>
-                            <span class="text-muted ms-2">From last month</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <!-- Overview Metrics Table -->
+      <table class="overview-metrics">
+        <thead>
+          <tr>
+            <th>Total General Fund</th>
+            <th>Total Attendance</th>
+            <th>Total Expenses</th>
+            <th>National Contribution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ total_general_fund }}</td>
+            <td>{{ total_adult_attendance|add:total_children_attendance }}</td>
+            <td>{{ total_expenses }}</td>
+            <td>{{ district_total }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-        <!-- Charts Row -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-8">
-                <div class="chart-container">
-                    <h5 class="chart-title">Monthly Financial Overview</h5>
-                    <canvas id="financialChart"></canvas>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="chart-container">
-                    <h5 class="chart-title">Attendance Distribution</h5>
-                    <canvas id="attendanceChart"></canvas>
-                </div>
-            </div>
-        </div>
+      <div class="page-break"></div>
 
-        <!-- Features Grid -->
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card feature-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="feature-icon rounded-circle bg-church-primary me-3">
-                                <i class="fas fa-pray text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-0">Prayer Requests</h5>
-                        </div>
-                        <p class="card-text">Manage and track prayer requests from congregation members.</p>
-                        <a href="#" class="btn btn-church">View Requests</a>
-                    </div>
-                </div>
-            </div>
+      <!-- Revenue Section -->
+      <div class="section">
+        <h2 class="section-title">Revenue</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Section</th>
+              <th>Presbyter</th>
+              <th>General Fund</th>
+              <th>Sunday School</th>
+              <th>Pastors Fund</th>
+              <th>Presbyter Tithe</th>
+              <th>Pastor's Tithe</th>
+              <th>Easter Building</th>
+              <th>Kenya Kids</th>
+              <th>Special Offering</th>
+              <th>Adult Att.</th>
+              <th>Children Att.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in first_part %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ report.section }}</td>
+              <td>{{ report.section.presbyter.name }}</td>
+              <td>{{ report.general_fund }}</td>
+              <td>{{ report.sunday_school }}</td>
+              <td>{{ report.pastors_fund }}</td>
+              <td>{{ report.presbyter_tithe }}</td>
+              <td>{{ report.pastors_tithe }}</td>
+              <td>{{ report.easter }}</td>
+              <td>{{ report.kenya_kids }}</td>
+              <td>{{ report.special_offering}}</td>
+              <td>{{ report.adult }}</td>
+              <td>{{ report.children }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-            <div class="col-md-4">
-                <div class="card feature-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="feature-icon rounded-circle bg-church-secondary me-3">
-                                <i class="fas fa-calendar-alt text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-0">Events & Services</h5>
-                        </div>
-                        <p class="card-text">Schedule and manage church events, services, and activities.</p>
-                        <a href="#" class="btn btn-church">Manage Events</a>
-                    </div>
-                </div>
-            </div>
+      <!-- Second Part Revenue -->
+      <div class="section">
+        <table>
+          <thead> ... same as above ... </thead>
+          <tbody>
+            {% for report in second_part %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ report.section }}</td>
+              <td>{{ report.section.presbyter.name }}</td>
+              <td>{{ report.general_fund }}</td>
+              <td>{{ report.sunday_school }}</td>
+              <td>{{ report.pastors_fund }}</td>
+              <td>{{ report.presbyter_tithe }}</td>
+              <td>{{ report.pastors_tithe }}</td>
+              <td>{{ report.easter }}</td>
+              <td>{{ report.kenya_kids }}</td>
+              <td>{{ report.special_offering}}</td>
+              <td>{{ report.adult }}</td>
+              <td>{{ report.children }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td><b>Totals</b></td>
+              <td></td>
+              <td><b>{{ total_general_fund }}</b></td>
+              <td><b>{{ total_sunday_school }}</b></td>
+              <td><b>{{ total_pastors_fund }}</b></td>
+              <td><b>{{ total_presbyter_tithe }}</b></td>
+              <td><b>{{ total_pastors_tithe }}</b></td>
+              <td><b>{{ easter_total }}</b></td>
+              <td><b>{{ kenya_kids }}</b></td>
+              <td><b>{{ special_offering }}</b></td>
+              <td><b>{{ total_adult_attendance }}</b></td>
+              <td><b>{{ total_children_attendance }}</b></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-            <div class="col-md-4">
-                <div class="card feature-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="feature-icon rounded-circle bg-church-gold me-3">
-                                <i class="fas fa-file-invoice-dollar text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-0">Financial Reports</h5>
-                        </div>
-                        <p class="card-text">Generate detailed financial reports and stewardship analytics.</p>
-                        <a href="#" class="btn btn-church">View Reports</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <!-- Expenses Section -->
+      <div class="section">
+        <h2 class="section-title">Expenses & Expenditures</h2>
+        <table>
+          <thead><tr><th>#</th><th>Expense Name</th><th>Amount (KES)</th></tr></thead>
+          <tbody>
+            {% for expense in expenses %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{expense.expense_name}}</td>
+              <td>{{expense.amount_spend}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr><td></td><td>Grand Total</td><td>{{total_expenses}}</td></tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Contributions -->
+      <div class="section">
+        <h2 class="section-title">Contribution to National Office</h2>
+        <table> ... same as before ... </table>
+      </div>
+
+      <!-- Additionals -->
+      <div class="section">
+        <h2 class="section-title">Additionals</h2>
+        <table> ... same as before ... </table>
+      </div>
+
+      <!-- Signatures -->
+      <div class="signatures">
+        <div class="signature-line"><span>District Supt. Signature</span></div>
+        <div class="signature-line"><span>District Treasurer's Signature</span></div>
+      </div>
+
     </div>
+  </div>
 
-    <script>
-        // Financial Chart
-        const financialCtx = document.getElementById('financialChart').getContext('2d');
-        const financialChart = new Chart(financialCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [
-                    {
-                        label: 'Tithes',
-                        data: [38000, 42000, 41000, 45000, 43000, 47000, 44000, 46000, 48000, 45200, 0, 0],
-                        borderColor: '#d4af37',
-                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Offerings',
-                        data: [22000, 25000, 24000, 26000, 25500, 28000, 26500, 27000, 29000, 28700, 0, 0],
-                        borderColor: '#8b4513',
-                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            font: {
-                                family: 'Cinzel'
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + (value / 1000) + 'K';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Attendance Chart
-        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-        const attendanceChart = new Chart(attendanceCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Sunday Service', 'Midweek Prayer', 'Youth Group', 'Bible Study'],
-                datasets: [{
-                    data: [450, 180, 95, 120],
-                    backgroundColor: [
-                        '#d4af37',
-                        '#8b4513',
-                        '#2c1810',
-                        '#f4e4a6'
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                family: 'Crimson Text',
-                                size: 12
-                            },
-                            padding: 15
-                        }
-                    }
-                }
-            }
-        });
-    </script>
+  <!-- html2pdf.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    document.getElementById("download").addEventListener("click", () => {
+      const element = document.getElementById("report");
+      const opt = {
+        margin: [10, 10, 20, 10],
+        filename: 'Monthly_Church_Report.pdf',
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { scale: 1.2, scrollX: 0, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      };
+      html2pdf().from(element).set(opt).save();
+    });
+  </script>
 </body>
 </html>
