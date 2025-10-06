@@ -1,0 +1,61 @@
+<div class="modal fade" id="editSectionChurchModal{{church.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">New Section Church</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-section-church' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                  <input type="hidden" name="church_id" id="church_id" value="{{church.id}}" readonly/>
+                  <div class="row mb-2">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Branch Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    value="{{church.name}}"
+                    required
+                  />
+                </div>
+             
+                </div>
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Town</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="town"
+                      name="town"
+                      value="{{church.town}}"
+                      required
+                    />
+                  </div>
+              
+                </div>
+               
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Branch Location</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="location"
+                        name="location"
+                        value="{{church.location}}"
+                        required
+                      />
+                  </div>  
+                </div>
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Section Church</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

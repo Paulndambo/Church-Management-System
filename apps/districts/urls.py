@@ -2,7 +2,6 @@ from django.urls import path
 
 from apps.districts import views
 from apps.districts.attendance.views import (
-    DistrictAttendanceListView,
     DistrictMeetingListView,
     new_district_meeting,
     DistrictMeetingAttendanceListView,
@@ -27,12 +26,6 @@ urlpatterns = [
         name="district-meeting-details",
     ),
     path("new-district-meeting/", new_district_meeting, name="new-district-meeting"),
-    # path("edit-district-meeting/", edit_district_meeting, name="edit-district-meeting"),
-    path(
-        "district-attendances/",
-        DistrictAttendanceListView.as_view(),
-        name="district-attendances",
-    ),
     path("create-attendant/", create_meeting_attendant, name="create-attendant"),
     path("edit-attendant/", edit_meeting_attendant, name="edit-attendant"),
     path(
@@ -45,16 +38,7 @@ urlpatterns = [
         mark_district_meeting_attendance,
         name="mark-district-meeting-attendance",
     ),
-    path(
-        "district-finances/",
-        views.DistrictFinanceListView.as_view(),
-        name="district-finances",
-    ),
-    path(
-        "district-sections/", views.SectionsListView.as_view(), name="district-sections"
-    ),
-    path("new-section/", views.new_section, name="new-section"),
-    path("edit-section/", views.edit_section, name="edit-section"),
+ 
     path("presbyters/", views.PresbytersListView.as_view(), name="presbyters"),
     path("new-presbyter/", views.new_presbyter, name="new-presbyter"),
     path("edit-presbyter/", views.edit_presbyter, name="edit-presbyter"),
@@ -77,9 +61,7 @@ urlpatterns = [
     ),
     path("new-district-expense/", views.new_expense, name="new-district-expense"),
     path("edit-district-expense/", views.edit_expense, name="edit-district-expense"),
-    path("capture-data/", views.capture_section_data, name="capture-data"),
-    path("edit-section-data/", views.edit_section_data, name="edit-section-data"),
-    path("delete-section-data/", views.delete_section_data, name="delete-section-data"),
+    
     path("district-churches/", views.district_branches, name="district-churches"),
     path("new-district-church/", views.new_district_branch, name="new-district-church"),
 ]

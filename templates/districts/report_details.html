@@ -10,13 +10,11 @@
         </div>
         
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureSectionDataModal{{report.id}}">Fill Section Report</button>
+
             <a href="{% url 'district-report' report.id %}" class="btn btn-warning">Print District Report</a>
         </div>
     </div>
 </div>
-
-{% include "districts/capture_section_data.html" %}
 
 <div class="table-card mb-4">
     <div class="row py-3 px-2">
@@ -24,18 +22,14 @@
             <h3>Sections Monthly Data</h3>
         </div>
     </div>
-    <!-- Table Toolbar --> 
-    <!-- Loading Bar -->
     <div class="loader" id="loader"></div>
-
     <!-- Table Container -->
-    <div class="table-container big-table px-2">
+    <div class="table-container px-2">
         <table class="table data-table table-sm table-borders-all">
             <thead>
-                <tr>
+                <tr class="table-headers-borders">
                     <th></th>
                     <th><span>Section</span></th>
-                    <th><span>Presbyter</span></th>
                     <th><span>General Fund</span></th>
                     <th><span>Sunday School</span></th>
                     <th><span>Pastors Fund</span></th>
@@ -46,33 +40,24 @@
                     <th><span>Special Offering</span></th>
                     <th><span>Adult Att.</span></th>
                     <th><span>Children Att.</span></th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
                 {% for section_report in reports %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ section_report.section }}</td>
-                    <td>{{ section_report.section.presbyter.name }}</td>
-                    <td>{{ section_report.general_fund }}</td>
-                    <td>{{ section_report.sunday_school }}</td>
-                    <td>{{ section_report.pastors_fund }}</td>
-                    <td>{{ section_report.presbyter_tithe }}</td>
-                    <td>{{ section_report.pastors_tithe }}</td>
-                    <td>{{ section_report.easter }}</td>
-                    <td>{{ section_report.kenya_kids }}</td>
-                    <td>{{ section_report.special_offering}}</td>
-                    <td>{{ section_report.adult }}</td>
-                    <td>{{ section_report.children }}</td>
-                    <td>
-                        
-                        <div class="d-flex gap-1">
-                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editSectionDataModal{{section_report.id}}"><i class="fas fa-edit"></i></a>
-                            <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteSectionDataModal{{section_report.id}}"><i class="fas fa-trash"></i></a>
-                        </div>
+                    <td>{{ section_report.section__name }}</td>
+                    <td>{{ section_report.total_general_fund }}</td>
+                    <td>{{ section_report.total_sunday_school }}</td>
+                    <td>{{ section_report.total_pastors_fund }}</td>
+                    <td>{{ section_report.total_presbyter_tithe }}</td>
+                    <td>{{ section_report.total_pastors_tithe }}</td>
+                    <td>{{ section_report.total_easter }}</td>
+                    <td>{{ section_report.total_kenya_kids }}</td>
+                    <td>{{ section_report.total_special_offering}}</td>
+                    <td>{{ section_report.total_adult }}</td>
+                    <td>{{ section_report.total_children }}</td>
                     
-                    </td>
                     {% include "districts/edit_section_data.html" %}
                     {% include "districts/delete_section_data.html" %}
                 </tr>
@@ -85,22 +70,7 @@
                 {% endfor %}
                 <tr>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
                     <td><b>Totals</b></td>
-                    <td></td>
                     <td><b>{{ total_general_fund }}</b></td>
                     <td><b>{{ total_sunday_school }}</b></td>
                     <td><b>{{ total_pastors_fund }}</b></td>

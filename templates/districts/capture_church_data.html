@@ -1,0 +1,227 @@
+<div class="modal fade" id="captureChurchDataModal{{report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Capture Church Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'capture-church-data' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" name="report_id" id="report_id" value="{{report.id}}" readonly/>
+                    
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label fw-bold">Section</label>
+                        <select class="form-select" id="church" name="church" required>
+                            {% for church in churches %}
+                                <option value={{church.id}}>{{church.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Kenya Kids</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="kenya_kids"
+                            name="kenya_kids"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">General Fund</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="general_fund"
+                            name="general_fund"
+                            required
+                            value="0"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Sunday School</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="sunday_school"
+                            name="sunday_school"
+                            value="0"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Pastors Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="pastors_tithe"
+                            name="pastors_tithe"
+                            value="0"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Presbyter Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="presbyter_tithe"
+                            name="presbyter_tithe"
+                            value="0"
+                            required
+                        />
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Easter</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="easter"
+                            name="easter"
+                            value="0"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Special Offering</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="special_offering"
+                            name="special_offering"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Children Attendance</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="children"
+                            name="children"
+                            value="0"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Adult Attendance</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="adult"
+                            name="adult"
+                            value="0"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">KAGDOM</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="kagdom"
+                            name="kagdom"
+                            value="0"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">District Missions</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="district_missions"
+                            name="district_missions"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Pastor's Fund</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="pastors_fund"
+                            name="pastors_fund"
+                            value="0"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Church Welfare</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="church_welfare"
+                            name="church_welfare"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Resource Mobilisation</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="resource_mobilisation"
+                            name="resource_mobilisation"
+                            value="0"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Church Support</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="church_support"
+                            name="church_support"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
+                 <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label fw-bold">Month</label>
+                        <select class="form-select" id="month" name="month" required>
+                            {% for month in months %}
+                                <option value={{month}}>{{month}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label class="form-label fw-bold">Year</label>
+                        <select class="form-select" id="year" name="year" required>
+                            {% for year in years %}
+                                <option value={{year}}>{{year}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                  <input type="submit" class="btn btn-primary w-30" value="Submit Church Data" />
+                </div>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>

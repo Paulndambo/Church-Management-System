@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+{% include "districts/capture_church_data.html" %}
+
+<div class="table-card mb-4">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Churches Monthly Data</h3>
+        </div>
+        <div class="col">
+            <select class="form-control" id="searchSelect">
+                <option value="">-- Select a year --</option>
+                {% for year in years %}
+                    {% for month in months %}
+                        <option value="{{month}},{{year}}" {% if search_query == year|stringformat:"s" %}selected{% endif %}>
+                            {{month}} - {{ year }}
+                        </option>
+                    {% endfor %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureChurchDataModal{{report.id}}">Fill Church Report</button>
+        </div>
+    </div>
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm table-borders-all">
+            <thead>
+                <tr class="table-headers-borders">
+                    <th></th>
+                    <th>Church</th>
+                    <th>General Fund</th>
+                    <th>Sunday School</th>
+                    <th>Pastors Fund</th>
+                    <th>Presbyter Tithe</th>
+                    <th>Pastor's Tithe</th>
+                    <th>Easter Building</th>
+                    <th>Kenya Kids</th>
+                    <th>Special Offering</th>
+                    <th>Adult Att.</th>
+                    <th>Children Att.</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for church_report in church_reports %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ church_report.church}}</td>
+                    <td>{{ church_report.general_fund }}</td>
+                    <td>{{ church_report.sunday_school }}</td>
+                    <td>{{ church_report.pastors_fund }}</td>
+                    <td>{{ church_report.presbyter_tithe }}</td>
+                    <td>{{ church_report.pastors_tithe }}</td>
+                    <td>{{ church_report.easter }}</td>
+                    <td>{{ church_report.kenya_kids }}</td>
+                    <td>{{ church_report.special_offering}}</td>
+                    <td>{{ church_report.adult }}</td>
+                    <td>{{ church_report.children }}</td>
+                    
+                    {% include "districts/edit_section_data.html" %}
+                    {% include "districts/delete_section_data.html" %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="12" class="text-center py-4">
+                        No finances found
+                    </td>
+                </tr>
+                {% endfor %}
+               
+               
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchSelect = document.getElementById('searchSelect');
+        const loader = document.getElementById('loader');
+
+        searchSelect.addEventListener('change', function() {
+            loader.classList.add('active');
+            const searchQuery = this.value;
+            window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+        });
+
+        // Utility function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock additional_scripts %}

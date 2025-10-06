@@ -453,18 +453,18 @@
             {% for report in first_part %}
             <tr>
               <td>{{ forloop.counter }}</td>
-              <td>{{ report.section }}</td>
-              <td>{{ report.section.presbyter.name }}</td>
-              <td>{{ report.general_fund }}</td>
-              <td>{{ report.sunday_school }}</td>
-              <td>{{ report.pastors_fund }}</td>
-              <td>{{ report.presbyter_tithe }}</td>
-              <td>{{ report.pastors_tithe }}</td>
-              <td>{{ report.easter }}</td>
-              <td>{{ report.kenya_kids }}</td>
-              <td>{{ report.special_offering}}</td>
-              <td>{{ report.adult }}</td>
-              <td>{{ report.children }}</td>
+              <td>{{ report.section__name }}</td>
+              <td>{{ report.section__presbyter__first_name }} {{ report.section__presbyter__last_name }}</td>
+              <td>{{ report.total_general_fund }}</td>
+              <td>{{ report.total_sunday_school }}</td>
+              <td>{{ report.total_pastors_fund }}</td>
+              <td>{{ report.total_presbyter_tithe }}</td>
+              <td>{{ report.total_pastors_tithe }}</td>
+              <td>{{ report.total_easter }}</td>
+              <td>{{ report.total_kenya_kids }}</td>
+              <td>{{ report.total_special_offering}}</td>
+              <td>{{ report.total_adult }}</td>
+              <td>{{ report.total_children }}</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -501,16 +501,16 @@
               <td>{{ forloop.counter }}</td>
               <td>{{ report.section }}</td>
               <td>{{ report.section.presbyter.name }}</td>
-              <td>{{ report.general_fund }}</td>
-              <td>{{ report.sunday_school }}</td>
-              <td>{{ report.pastors_fund }}</td>
-              <td>{{ report.presbyter_tithe }}</td>
-              <td>{{ report.pastors_tithe }}</td>
-              <td>{{ report.easter }}</td>
-              <td>{{ report.kenya_kids }}</td>
-              <td>{{ report.special_offering}}</td>
-              <td>{{ report.adult }}</td>
-              <td>{{ report.children }}</td>
+              <td>{{ report.total_general_fund }}</td>
+              <td>{{ report.total_sunday_school }}</td>
+              <td>{{ report.total_pastors_fund }}</td>
+              <td>{{ report.total_presbyter_tithe }}</td>
+              <td>{{ report.total_pastors_tithe }}</td>
+              <td>{{ report.total_easter }}</td>
+              <td>{{ report.total_kenya_kids }}</td>
+              <td>{{ report.total_special_offering}}</td>
+              <td>{{ report.total_adult }}</td>
+              <td>{{ report.total_children }}</td>
             </tr>
             {% endfor %}
           </tbody>

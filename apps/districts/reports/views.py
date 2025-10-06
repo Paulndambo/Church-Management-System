@@ -10,7 +10,7 @@ from collections import OrderedDict
 
 
 from apps.sections.models import Section
-from apps.districts.models import DistrictExpense, SectionReport
+from apps.districts.models import DistrictExpense, KAGDistrictMonthlyReport
 from apps.membership.models import Branch
 
 date_today = datetime.now().date()
@@ -57,7 +57,7 @@ def get_district_finance_metrics(year: int = date_today.year) -> Dict[str, Any]:
     ]
 
     qs = (
-        SectionReport.objects.filter(year=year)
+        KAGDistrictMonthlyReport.objects.filter(year=year)
         .annotate(
             total_amount=(
                 F("general_fund")
@@ -93,10 +93,10 @@ def get_district_finance_metrics(year: int = date_today.year) -> Dict[str, Any]:
 
 def get_district_attendance_metrics(year: int = date_today.year) -> Dict[str, Any]:
     adult_attendance = sum(
-        SectionReport.objects.filter(year=year).values_list("adult", flat=True)
+        KAGDistrictMonthlyReport.objects.filter(year=year).values_list("adult", flat=True)
     )
     children_attendance = sum(
-        SectionReport.objects.filter(year=year).values_list("children", flat=True)
+        KAGDistrictMonthlyReport.objects.filter(year=year).values_list("children", flat=True)
     )
 
     return {

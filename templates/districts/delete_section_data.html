@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'delete-section-data' %}">
+                <form method="POST" action="#">
                     {% csrf_token %}
                     <input type="number" id="section_report_id" name="section_report_id" value="{{section_report.id}}" hidden readonly required />
                     <input type="number" id="report_id" name="report_id" value="{{section_report.report.id}}" hidden readonly required />

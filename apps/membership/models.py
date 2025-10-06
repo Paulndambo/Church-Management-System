@@ -29,15 +29,12 @@ class Department(AbstractBaseModel):
 
 
 class Branch(AbstractBaseModel):
-    church = models.ForeignKey(
-        "core.Church", on_delete=models.SET_NULL, null=True, name="churchbranches"
-    )
-    section = models.ForeignKey(
-        "sections.Section", on_delete=models.SET_NULL, null=True
-    )
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True, name="churchbranches")
+    section = models.ForeignKey("sections.Section", on_delete=models.SET_NULL, null=True, related_name="sectionbranches")
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=500, null=True)
     town = models.CharField(max_length=255)
+    pastor = models.OneToOneField("users.User", on_delete=models.SET_NULL, null=True, related_name="branchpastor")
 
     def __str__(self):
         return self.name

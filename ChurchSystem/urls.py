@@ -32,6 +32,7 @@ urlpatterns = [
     path("districts/", include("apps.districts.urls")),
     path("attendances/", include("apps.attendances.urls")),
     path("notifications/", include("apps.notifications.urls")),
+    path("sections/", include("apps.sections.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,34 +15,9 @@ from typing import Dict, Any
 from apps.core.constants import get_month_name
 from apps.districts.models import (
     District,
-    DistrictAttendance,
     DistrictMeeting,
     DistrictMeetingAttendace,
 )
-
-
-class DistrictAttendanceListView(LoginRequiredMixin, ListView):
-    model = DistrictAttendance
-    template_name = "districts/attendances.html"
-    context_object_name = "attendances"
-    paginate_by = 10
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.GET.get("search", "")
-
-        if search_query:
-            queryset = queryset.filter(
-                Q(id__icontains=search_query)
-                | Q(month__icontains=search_query)
-                | Q(year__icontains=search_query)
-            )
-        # Get sort parameter
-        return queryset.order_by("-created_at")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 
 class DistrictMeetingListView(LoginRequiredMixin, ListView):

@@ -22,7 +22,7 @@
                     <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'district-sections' %}" class="nav-link"><i class="fas fa-church me-2"></i> Sections</a></li>
+                    <li><a href="{% url 'sections' %}" class="nav-link"><i class="fas fa-church me-2"></i> Sections</a></li>
                     <li><a href="{% url 'district-churches' %}" class="nav-link"><i class="fas fa-church me-2"></i> Churches</a></li>
                 </ul>
             </li>
@@ -31,11 +31,12 @@
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-user-tie icon"></i>
-                    <span class="link-text">Presbyters</span>
+                    <span class="link-text">People</span>
                     <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
                     <li><a href="{% url 'presbyters' %}" class="nav-link"><i class="fas fa-user-tie me-2"></i> Presbyters</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-user-tie me-2"></i> Pastors</a></li>
                 </ul>
             </li>
             
@@ -50,7 +51,6 @@
                 </ul>
             </li>
         
-           
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-chart-line icon"></i>
@@ -58,7 +58,7 @@
                     <i class="fas fa-angle-down ms-auto" style="font-size: 12px; opacity: 0.7;"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'district-reports' %}" class="nav-link"><i class="fas fa-chart-line me-2"></i> Reports</a></li>
+                    <li><a href="{% url 'district-reports' %}" class="nav-link"><i class="fas fa-chart-line me-2"></i> District Reports</a></li>
                 </ul>
             </li>
 

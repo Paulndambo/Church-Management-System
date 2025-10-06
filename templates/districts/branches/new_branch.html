@@ -1,14 +1,15 @@
-<div class="modal fade" id="newDistrictBranchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newSectionChurchModal{{section.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-center">New Church Branch</h1>
+          <h1 class="modal-title fs-5 text-center fw-bold">New Section Church</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-            <form action="{% url 'new-district-church' %}" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'new-section-church' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                  <div class="row mb-2">
+                  <input type="hidden" name="section_id" id="section_id" value="{{section.id}}" readonly/>
+                  <div class="row mb-3">
                 <div class="col">
                   <label for="exampleInputPassword1" class="form-label fw-bold">Branch Name</label>
                   <input
@@ -21,7 +22,7 @@
                 </div>
              
                 </div>
-                <div class="row mb-2">
+                <div class="row mb-3">
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Town</label>
                     <input
@@ -35,7 +36,7 @@
               
                 </div>
                
-                <div class="row mb-2">
+                <div class="row mb-3">
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Branch Location</label>
                       <input
@@ -47,18 +48,6 @@
                       />
                   </div>  
                 </div>
-
-                <div class="row mb-2">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Section</label>
-                      <select class="form-select" id="section" name="section">
-                        {% for section in sections %}
-                            <option value="{{section.id}}">{{section.name}}</option>
-                        {% endfor %}
-                      </select>
-                  </div>  
-                </div>
-
                 <div class="text-center mt-3">
                   <button type="submit" class="btn btn-primary w-30">Create Church</button>
                 </div>
