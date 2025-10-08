@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from apps.sections.models import Section, SectionReport
 from apps.membership.models import Branch
 from apps.districts.models import District, KAGDistrictMonthlyReport, DistrictReport
-from apps.users.models import User
+from apps.users.models import User, Pastor
 from apps.core.constants import MONTHS_LIST, YEARS_LIST
 
 # Create your views here.
@@ -41,10 +41,6 @@ class SectionsListView(LoginRequiredMixin, ListView):
 @login_required
 def section_details(request: HttpRequest, id: int):
     search_query = request.GET.get("search", "")
-
-    print("*******Search Query**************")
-    print(search_query)
-    print("*******Search Query**************")
 
     section = Section.objects.get(id=id)
     churches = section.sectionbranches.all()
@@ -89,49 +85,6 @@ def edit_section(request: HttpRequest):
         return redirect("district-sections")
     return render(request, "districts/sections/edit_section.html")
 
-@login_required
-def new_branch(request: HttpRequest):
-    if request.method == "POST":
-        section_id = request.POST.get("section_id")
-        name = request.POST.get("name")
-        town = request.POST.get("town")
-        location = request.POST.get("location")
-
-        Branch.objects.create(
-            name=name, 
-            location=location, 
-            town=town,
-            section_id=section_id
-        )
-        return redirect("section-detail", id=section_id)
-    return render(request, "districts/branches/new_branch.html")
-
-
-@login_required
-def edit_branch(request: HttpRequest):
-    if request.method == "POST":
-        branch_id = request.POST.get("church_id")
-        branch_name = request.POST.get("name")
-        town = request.POST.get("town")
-        location = request.POST.get("location")
-
-        branch = Branch.objects.get(id=branch_id)
-        branch.name = branch_name
-        branch.town = town
-        branch.location = location
-        branch.save()
-        return redirect("section-detail", id=branch.section.id)
-    return render(request, "districts/branches/edit_branch.html")
-
-
-@login_required
-def delete_branch(request: HttpRequest):
-    if request.method == "POST":
-        branch_id = request.POST.get("branch_id")
-        branch = Branch.objects.get(id=branch_id)
-        branch.delete()
-        return redirect("branches")
-    return render(request, "districts/branches/delete_branch.html")
 
 
 @login_required
@@ -275,9 +228,8 @@ def capture_church_data(request: HttpRequest):
 @transaction.atomic
 def edit_section_data(request: HttpRequest):
     if request.method == "POST":
-        section_report_id = request.POST.get("section_report_id")
         report_id = request.POST.get("report_id")
-
+        section_id = request.POST.get("section_id")
         general_fund = request.POST.get("general_fund")
         sunday_school = request.POST.get("sunday_school")
 
@@ -298,7 +250,7 @@ def edit_section_data(request: HttpRequest):
         pastors_fund = request.POST.get("pastors_fund")
         church_welfare = request.POST.get("church_welfare")
 
-        SectionReport.objects.filter(id=section_report_id).update(
+        report = KAGDistrictMonthlyReport.objects.filter(id=report_id).update(
             children=children,
             adult=adult,
             general_fund=general_fund,
@@ -316,6 +268,76 @@ def edit_section_data(request: HttpRequest):
             pastors_fund=pastors_fund,
         )
 
-        return redirect("district-report-details", id=report_id)
+        return redirect("section-detail", id=section_id)
     return render(request, "districts/edit_section_data.html")
 
+
+class PastorsListView(LoginRequiredMixin, ListView):
+    model = Pastor
+    template_name = "districts/pastors/pastors.html"
+    context_object_name = "pastors"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("search", "")
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(id__icontains=search_query) | Q(first_name__icontains=search_query)
+            )
+        # Get sort parameter
+        return queryset.order_by("-created_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["branches"] = Branch.objects.all()
+        return context
+    
+
+@login_required
+@transaction.atomic
+def new_pastor(request: HttpRequest):
+    if request.method == "POST":
+        branch = request.POST.get("branch")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        gender = request.POST.get("gender")
+        phone_number = request.POST.get("phone_number")
+        email = request.POST.get("email")
+
+
+        Pastor.objects.create(
+            church_id=branch,
+            first_name=first_name,
+            last_name=last_name,
+            gender=gender,
+            phone_number=phone_number,
+            email=email
+        )
+        return redirect("district-pastors")
+    return render(request, "districts/pastors/new_pastor.html")
+
+
+@login_required
+def edit_pastor(request: HttpRequest):
+    if request.method == "POST":
+        pastor_id = request.POST.get("pastor_id")
+        branch = request.POST.get("branch")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        gender = request.POST.get("gender")
+        phone_number = request.POST.get("phone_number")
+        email = request.POST.get("email")
+
+
+        Pastor.objects.filter(id=pastor_id).update(
+            church_id=branch,
+            first_name=first_name,
+            last_name=last_name,
+            gender=gender,
+            phone_number=phone_number,
+            email=email
+        )
+        return redirect("district-pastors")
+    return render(request, "districts/pastors/edit_pastor.html")

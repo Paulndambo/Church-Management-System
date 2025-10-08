@@ -49,43 +49,10 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Chairperson</label>
-                    <select class="form-select" id="chairperson" name="chairperson">
-                        <option value={{group.chairperson.id}}>{{group.chairperson.user.name}}</option>
-                        {% for member in members %}
-                            {% if group.chairperson.id != member.id %}
-                                <option value={{member.id}}>{{member.user.name}}</option>
-                            {% endif %}
-                         {% endfor %}
-                      </select>
-                  </div>
-                  <div class="col">
-                      <label for="exampleInputPassword1" class="form-label fw-bold">Secretary</label>
-                      <select class="form-select" id="secretary" name="secretary">
-                         <option value={{group.secretary.id}}>{{group.secretary.user.name}}</option>
-                        {% for member in members %}
-                            {% if group.secretary.id != member.id %}
-                                <option value={{member.id}}>{{member.user.name}}</option>
-                            {% endif %}
-                        {% endfor %}
-                      </select>
-                    </div>
-                </div>
+                
 
                 <div class="row mb-3">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Group Treasurer</label>
-                    <select class="form-select" id="treasurer" name="treasurer">
-                        <option value={{group.treasurer.id}}>{{group.treasurer.user.name}}</option>
-                        {% for member in members %}
-                            {% if group.treasurer.id != member.id %}
-                                <option value={{member.id}}>{{member.user.name}}</option>
-                            {% endif %}
-                        {% endfor %}
-                      </select>
-                  </div>
+                 
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Group Status</label>
                     <select class="form-select" id="status" name="status" required>
@@ -99,7 +66,7 @@
                   </div>
                 </div>             
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-primary w-30">Edit Church Group</button>
+                  <button type="submit" class="btn btn-primary w-30">Edit Bible Study Group</button>
                 </div>
               </div>
               </form>

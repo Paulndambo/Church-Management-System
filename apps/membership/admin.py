@@ -6,7 +6,7 @@ from apps.membership.models import Branch, Department, Member
 # Register your models here.
 @admin.register(Branch)
 class BranchAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "section", "town", "location", "created_at"]
+    list_display = ["id", "name", "pastor", "section", "town", "location", "created_at"]
 
 
 @admin.register(Department)

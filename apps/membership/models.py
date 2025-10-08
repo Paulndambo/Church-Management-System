@@ -2,6 +2,7 @@ import calendar
 from django.db import models
 from django.utils.timezone import now as date_today
 from apps.core.models import AbstractBaseModel
+from apps.users.models import Pastor
 
 # Create your models here.
 POSITION_CHOICES = (
@@ -41,6 +42,9 @@ class Branch(AbstractBaseModel):
 
     def branch_members(self):
         return self.branchmembers.count()
+    
+    def pastor(self):
+        return Pastor.objects.filter(church=self).first()
 
 
 class Member(AbstractBaseModel):
@@ -66,27 +70,6 @@ class MemberGroup(AbstractBaseModel):
     name = models.CharField(max_length=255)
     branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True, blank=True)
     date_started = models.DateField(null=True, blank=True)
-    chairperson = models.ForeignKey(
-        Member,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="chaired_groups",
-    )
-    secretary = models.ForeignKey(
-        Member,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="secretary_groups",
-    )
-    treasurer = models.ForeignKey(
-        Member,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="treasurer_groups",
-    )
     status = models.CharField(
         max_length=50,
         choices=(("Active", "Active"), ("Inactive", "Inactive")),
@@ -101,9 +84,7 @@ class MemberGroup(AbstractBaseModel):
 
 
 class GroupMember(AbstractBaseModel):
-    group = models.ForeignKey(
-        MemberGroup, on_delete=models.CASCADE, related_name="groupmembers"
-    )
+    group = models.ForeignKey(MemberGroup, on_delete=models.CASCADE, related_name="groupmembers")
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     role = models.CharField(max_length=255, default="Member")
     date_joined = models.DateField(default=date_today)

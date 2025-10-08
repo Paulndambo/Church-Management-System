@@ -67,3 +67,16 @@ class Visitor(AbstractBaseModel):
 
     def name(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+
+class Pastor(AbstractBaseModel):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255, null=True)
+    email = models.EmailField(null=True)
+    is_active = models.BooleanField(default=True)
+    church = models.OneToOneField("membership.Branch", on_delete=models.SET_NULL, null=True, related_name="churchpastor")
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"

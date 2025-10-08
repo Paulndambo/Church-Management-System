@@ -54,6 +54,7 @@ class ServiceAttendanceMetric(AbstractBaseModel):
         choices=(("Male", "Male"), ("Female", "Female"), ("Both", "Both")),
         default="Both",
     )
+    recorded_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, related_name="attendancerecorders")
 
     def __str__(self):
         return f"{self.service.name} - {self.month} {self.year}"

@@ -122,6 +122,7 @@ def record_service_attendance(request: HttpRequest) -> Any:
         service_id = request.POST.get("service")
         service_date = request.POST.get("service_date")
         total_present = request.POST.get("total_present")
+        gender = request.POST.get("gender")
 
         date_obj = datetime.strptime(service_date, "%Y-%m-%d").date()
 
@@ -129,7 +130,7 @@ def record_service_attendance(request: HttpRequest) -> Any:
         service = ChurchService.objects.get(id=service_id)
 
         metric_log = ServiceAttendanceMetric.objects.filter(
-            branch=branch, service=service, service_date=date_obj
+            branch=branch, service=service, service_date=date_obj, gender=gender
         ).first()
 
         if metric_log:
@@ -141,6 +142,8 @@ def record_service_attendance(request: HttpRequest) -> Any:
                 service=service,
                 total_present=total_present,
                 service_date=date_obj,
+                gender=gender,
+                recorded_by=request.user
             )
             metric_log.month = calendar.month_name[date_obj.month]
             metric_log.year = date_obj.year
@@ -157,6 +160,7 @@ def record_service_attendance(request: HttpRequest) -> Any:
                 "service_name": service.name,
                 "service_date": service_date,
                 "total_present": total_present,
+                "recorded_by": request.user.username
             },
         )
         return redirect("service-attendances")
@@ -205,7 +209,7 @@ def new_attendance(request: HttpRequest):
         service = ChurchService.objects.get(id=service)
 
         attendance = ServiceAttendance.objects.create(
-            member=member, service=service, status=status
+            member=member, service=service, status=status, gender=member.user.gender
         )
 
         metric_log = ServiceAttendanceMetric.objects.filter(
@@ -225,6 +229,8 @@ def new_attendance(request: HttpRequest):
                 service=service,
                 total_present=total_present,
                 service_date=attendance.created_at.date(),
+                gender=member.user.gender,
+                recorded_by=request.user
             )
             metric_log.month = calendar.month_name[metric_log.service_date.month]
             metric_log.year = metric_log.service_date.year
@@ -240,6 +246,7 @@ def new_attendance(request: HttpRequest):
                 "service_id": service.id,
                 "service_name": service.name,
                 "status": status,
+                "recorded_by": request.user.username
             },
         )
         return redirect("member-attendances")

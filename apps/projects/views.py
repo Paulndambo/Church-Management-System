@@ -1,4 +1,5 @@
 from decimal import Decimal
+from datetime import datetime
 
 from django.shortcuts import render, redirect
 from django.db import transaction
@@ -11,9 +12,10 @@ from apps.projects.models import Project, ProjectContribution, ProjectPledge
 from apps.partners.models import ChurchPartner
 from apps.membership.models import Member
 from apps.payments.models import ChurchLedger
+from apps.core.constants import get_month_name, get_month_number
 
 # Create your views here.
-
+date_today = datetime.now().date()
 
 # Church Projects
 class ProjectsListView(LoginRequiredMixin, ListView):
@@ -162,15 +164,21 @@ def new_pledge(request):
         pledge_type = request.POST.get("pledge_type")
         # Add logic to handle different pledge types
 
+        month = get_month_name(date_today.month)
+
         if pledge_type == "partner_pledge":
             ProjectPledge.objects.create(
                 project_id=project,
                 partner_id=partner if partner else None,
                 amount_pledged=amount_pledged,
+                month=month,
+                year=date_today.year
             )
         elif pledge_type == "member_pledge":
             ProjectPledge.objects.create(
-                project_id=project, member_id=member, amount_pledged=amount_pledged
+                project_id=project, member_id=member, amount_pledged=amount_pledged,
+                month=month,
+                year=date_today.year
             )
 
         return redirect("pledges")
@@ -203,12 +211,16 @@ def redeem_pledge(request):
         pledge = ProjectPledge.objects.get(id=pledge_id)
         pledge.amount_redeemed += Decimal(amount)
 
+        month = get_month_name(date_today.month)
+
         contribution = ProjectContribution.objects.create(
             project=pledge.project,
             member=pledge.member if pledge.member else None,
             partner=pledge.partner if pledge.partner else None,
             pledge=pledge,
             amount=amount,
+            month=month,
+            year=date_today.year
         )
 
         pledge.project.amount_raised += Decimal(amount)
@@ -221,6 +233,8 @@ def redeem_pledge(request):
             amount=Decimal(amount),
             direction="Income",
             user=request.user,
+            month=month,
+            year=date_today.year
         )
 
         return redirect("pledges")

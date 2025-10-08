@@ -1,40 +1,47 @@
-<div class="modal fade" id="captureChurchDataModal{{report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editChurchDataModal{{church_report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5 text-center fw-bold">Capture Church Data</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-            <form action="{% url 'capture-church-data' %}" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'edit-church-data' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                <input type="hidden" name="report_id" id="report_id" value="{{report.id}}" readonly/>
-                    
+                <input type="hidden" name="report_id" id="report_id" value="{{church_report.id}}" readonly/>
+                <input type="hidden" name="section_id" id="section_id" value="{{church_report.section.id}}" readonly/>
                 <div class="row mb-3">
                     <div class="col">
                         <label class="form-label fw-bold">Church</label>
-                        <select class="form-select" id="church" name="church" required>
+                        <select class="form-select" id="church" name="church" required disabled>
                             {% for church in churches %}
                                 <option value="{{church.id}}">{{church.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
-                 
                     <div class="col">
                         <label class="form-label fw-bold">Month</label>
                         <select class="form-select" id="month" name="month" required>
+                            <option value="{{church_report.month}}">{{church_report.month}}</option>
                             {% for month in months %}
-                                <option value="{{month}}">{{month}}</option>
+                                {% if month != church_report.month %}
+                                    <option value="{{month}}">{{month}}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
+                  
                 </div>
+                
                 <div class="row mb-3">
-                <div class="col">
+                      <div class="col">
                         <label class="form-label fw-bold">Year</label>
                         <select class="form-select" id="year" name="year" required>
+                            <option value="{{church_report.year}}">{{church_report.year}}</option>
                             {% for year in years %}
-                                <option value="{{year}}">{{year}}</option>
+                                {% if year != church_report.year %}
+                                    <option value="{{year}}">{{yearh}}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -45,7 +52,7 @@
                             class="form-control"
                             id="kenya_kids"
                             name="kenya_kids"
-                            value="0"
+                            value="{{church_report.kenya_kids}}"
                         />
                     </div>
                 </div>
@@ -59,7 +66,7 @@
                             id="general_fund"
                             name="general_fund"
                             required
-                            value="0"
+                            value="{{church_report.general_fund}}"
                         />
                     </div>
                     <div class="col">
@@ -69,7 +76,7 @@
                             class="form-control"
                             id="sunday_school"
                             name="sunday_school"
-                            value="0"
+                            value="{{church_report.sunday_school}}"
                             required
                         />
                     </div>
@@ -83,7 +90,7 @@
                             class="form-control"
                             id="pastors_tithe"
                             name="pastors_tithe"
-                            value="0"
+                            value="{{church_report.pastors_tithe}}"
                             required
                         />
                     </div>
@@ -94,7 +101,7 @@
                             class="form-control"
                             id="presbyter_tithe"
                             name="presbyter_tithe"
-                            value="0"
+                            value="{{church_report.presbyter_tithe}}"
                             required
                         />
                     </div>
@@ -108,7 +115,7 @@
                             class="form-control"
                             id="easter"
                             name="easter"
-                            value="0"
+                            value="{{church_report.easter}}"
                         />
                     </div>
                     <div class="col">
@@ -118,7 +125,7 @@
                             class="form-control"
                             id="special_offering"
                             name="special_offering"
-                            value="0"
+                            value="{{church_report.special_offering}}"
                         />
                     </div>
                 </div>
@@ -131,7 +138,7 @@
                             class="form-control"
                             id="children"
                             name="children"
-                            value="0"
+                            value="{{church_report.children}}"
                             required
                         />
                     </div>
@@ -142,7 +149,7 @@
                             class="form-control"
                             id="adult"
                             name="adult"
-                            value="0"
+                            value="{{church_report.adult}}"
                             required
                         />
                     </div>
@@ -156,7 +163,7 @@
                             class="form-control"
                             id="kagdom"
                             name="kagdom"
-                            value="0"
+                            value="{{church_report.kagdom}}"
                         />
                     </div>
                     <div class="col">
@@ -166,7 +173,7 @@
                             class="form-control"
                             id="district_missions"
                             name="district_missions"
-                            value="0"
+                            value="{{church_report.district_missions}}"
                         />
                     </div>
                 </div>
@@ -179,7 +186,7 @@
                             class="form-control"
                             id="pastors_fund"
                             name="pastors_fund"
-                            value="0"
+                            value="{{church_report.pastors_fund}}"
                         />
                     </div>
                     <div class="col">
@@ -189,7 +196,7 @@
                             class="form-control"
                             id="church_welfare"
                             name="church_welfare"
-                            value="0"
+                            value="{{church_report.church_welfare}}"
                         />
                     </div>
                 </div>
@@ -202,7 +209,8 @@
                             class="form-control"
                             id="resource_mobilisation"
                             name="resource_mobilisation"
-                            value="0"
+                            value="{{church_report.resource_mobilisation}}"
+                            
                         />
                     </div>
                     <div class="col">
@@ -212,11 +220,10 @@
                             class="form-control"
                             id="church_support"
                             name="church_support"
-                            value="0"
+                            value="{{church_report.church_support}}"
                         />
                     </div>
                 </div>
-
                 <div class="text-center mt-3">
                   <input type="submit" class="btn btn-primary w-30" value="Submit Church Data" />
                 </div>

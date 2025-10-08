@@ -13,7 +13,7 @@
             id="searchInput" value="{{ search_query }}">
         </div>
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictBranchModal">New Church</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictChurchModal">New Church</button>
           </div>
     </div>
  
@@ -29,6 +29,7 @@
                     <th>Section</th>
                     <th>Town</th>
                     <th>Created On</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -39,6 +40,10 @@
                     <td>{{ branch.section }}</td>
                     <td>{{ branch.town }}</td>
                     <td>{{  branch.created_at}}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editBranchModal{{branch.id}}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    {% include "districts/branches/edit_branch.html" %}
                 </tr>
                 {% empty %}
                 <tr>

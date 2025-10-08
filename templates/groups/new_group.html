@@ -43,34 +43,9 @@
                     </div>
                 </div>
 
+            
                 <div class="row mb-3">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Chairperson</label>
-                    <select class="form-select" id="chairperson" name="chairperson">
-                        {% for member in members %}
-                            <option value={{member.id}}>{{member.user.name}}</option>
-                         {% endfor %}
-                      </select>
-                  </div>
-                  <div class="col">
-                      <label for="exampleInputPassword1" class="form-label fw-bold">Secretary</label>
-                      <select class="form-select" id="secretary" name="secretary">
-                        {% for member in members %}
-                            <option value={{member.id}}>{{member.user.name}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Group Treasurer</label>
-                    <select class="form-select" id="treasurer" name="treasurer">
-                        {% for member in members %}
-                            <option value={{member.id}}>{{member.user.name}}</option>
-                        {% endfor %}
-                      </select>
-                  </div>
+                  
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Group Status</label>
                     <select class="form-select" id="status" name="status" required>
@@ -83,7 +58,7 @@
                 
                            
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-primary w-30">Create Church Group</button>
+                  <button type="submit" class="btn btn-primary w-30">Create Bible Study Group</button>
                 </div>
               </div>
               </form>

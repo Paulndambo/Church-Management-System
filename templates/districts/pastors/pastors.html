@@ -6,17 +6,18 @@
 <div class="table-card">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3>Church Branches</h3>
+            <h3>KAG Pastors</h3>
         </div>
         <div class="col">
             <input type="text" class="form-control" placeholder="Search..." 
             id="searchInput" value="{{ search_query }}">
         </div>
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newBranchModal">New Branch</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPastorModal">New Pastor</button>
           </div>
     </div>
- 
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
     <div class="loader" id="loader"></div>
 
     <!-- Table Container -->
@@ -26,34 +27,31 @@
                 <tr>
                     <th></th>
                     <th>Name</th>
-                    <th>Town</th>
-                    <th>Created On</th>
-                    <th>Actions</th>
+                    <th>Gender</th>
+                    <th>Phone Number</th>
+                    <th>Church</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                {% for branch in branches %}
+                {% for pastor in pastors %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ branch.name }}</td>
-                    <td>{{ branch.town }}</td>
-                    <td>{{  branch.created_at}}</td>
+                    <td>{{ pastor.first_name }} {{ pastor.last_name }}</td>
+                    <td>{{ pastor.gender }}</td>
+                    <td>{{ pastor.phone_number }}</td>
+                    <td>{{ pastor.church }}</td>
                     <td>
                         <div class="d-flex gap-1">
-                            
-                            <a class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editBranchModal{{branch.id}}"><i class="fas fa-edit"></i></a>
-                            <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteBranchModal{{branch.id}}"><i class="fas fa-trash"></i></a>
-                           
-                            
+                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPastorModal{{pastor.id}}"><i class="fas fa-edit"></i></a>
                         </div>
                     </td>
-                    {% include "branches/delete_branch.html" %}
-                    {% include "branches/edit_branch.html" %}
+                   {% include "districts/pastors/edit_pastor.html" %}
                 </tr>
                 {% empty %}
                 <tr>
                     <td colspan="8" class="text-center py-4">
-                        No branches found
+                        No presbyters found
                     </td>
                 </tr>
                 {% endfor %}
@@ -61,13 +59,21 @@
         </table>
     </div>
 
-    <!-- Table Footer with Pagination -->
-    <div class="table-footer">
-        
+  <div class="table-footer">
+    <div class="page-info">
+        Showing 
+        {{ page_obj.start_index }} 
+        to 
+        {{ page_obj.end_index }} 
+        of 
+        {{ paginator.count }} 
+        entries
     </div>
-</div>
-{% include "branches/new_branch.html" %}
 
+</div>
+</div>
+
+{% include "districts/pastors/new_pastor.html" %}
 {% endblock content %}
 
 {% block additional_scripts %}
@@ -86,30 +92,6 @@
                 const searchQuery = this.value;
                 window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
             }, 500);
-        });
-
-        // Sort functionality
-        document.querySelectorAll('th[data-sort]').forEach(header => {
-            header.addEventListener('click', function() {
-                const sortField = this.dataset.sort;
-                const currentIcon = this.querySelector('i');
-                let direction = 'asc';
-
-                if (currentIcon.classList.contains('fa-sort-up')) {
-                    direction = 'desc';
-                }
-
-                window.location.href = `?sort=${sortField}&direction=${direction}`;
-            });
-        });
-
-        // Delete functionality
-        let studentToDelete = null;
-        
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                studentToDelete = this.dataset.id;
-            });
         });
 
         document.getElementById('confirmDelete').addEventListener('click', function() {

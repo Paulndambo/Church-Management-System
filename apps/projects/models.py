@@ -61,6 +61,8 @@ class ProjectPledge(AbstractBaseModel):
         max_digits=255, decimal_places=2, default=Decimal("0")
     )
     full_redeemed = models.BooleanField(default=False)
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
 
     def __str__(self):
         return self.project.name
@@ -92,6 +94,8 @@ class ProjectContribution(AbstractBaseModel):
     )
     pledge = models.ForeignKey(ProjectPledge, on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal("0"))
+    month = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
 
     def __str__(self):
         return self.project.name

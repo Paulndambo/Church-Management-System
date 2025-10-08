@@ -64,4 +64,5 @@ urlpatterns = [
     
     path("district-churches/", views.district_branches, name="district-churches"),
     path("new-district-church/", views.new_district_branch, name="new-district-church"),
+    path("edit-district-church/", views.edit_district_branch, name="edit-district-church"),
 ]

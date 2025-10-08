@@ -28,8 +28,7 @@
                 <tr>
                     <th></th>
                     <th>Service</th>
-                    <th>Month</th>
-                    <th>Date</th>
+                    <th>Gender</th>
                     <th>Present</th>
                     <th>Recorded At</th>
                 </tr>
@@ -39,8 +38,7 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ attendance.service.name }}</td>
-                    <td>{{ attendance.month }}(<b>{{attendance.year}}</b>)</td>
-                    <td>{{ attendance.service_date }}</td>
+                    <td>{{ attendance.gender }}</td>
                     <td>{{ attendance.total_present }}</td>
                     <td>{{ attendance.created_at }}</td>
                 </tr>

@@ -138,10 +138,38 @@
     let departmentSavingsDistributionChart;
     let genderDistributionChart;
 
+    function getRandomColor() {
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        return `rgba(${r}, ${g}, ${b}, 1)`;
+    }
+
+    // Define distinct colors for each dataset label
+    const colorMap = {
+        "Male": {
+            borderColor: "rgba(54, 162, 235, 1)",       // Blue
+            backgroundColor: "rgba(54, 162, 235, 0.2)", // Light blue fill
+        },
+        "Female": {
+            borderColor: "rgba(255, 99, 132, 1)",       // Red
+            backgroundColor: "rgba(255, 99, 132, 0.2)", // Light red fill
+        },
+        "Overall Attendance": {
+            borderColor: "rgba(75, 192, 192, 1)",       // Teal
+            backgroundColor: "rgba(0, 0, 0, 0)",        // No fill
+        },
+    };
+     
+
     const initialData = {
         service_attendance: {
             labels: JSON.parse('{{ service_attendance.labels|safe }}'),
             attendances: JSON.parse('{{ service_attendance.attendances|safe }}'),
+        },
+        general_attendance_metrics: {
+            labels: JSON.parse('{{ general_attendance_metrics.labels|safe }}'),
+            datasets: JSON.parse('{{ general_attendance_metrics.datasets|safe }}'),
         },
         net_financials: {
             labels: JSON.parse('{{ net_financials.labels|safe }}'),
@@ -279,7 +307,6 @@
                 }
             }
         });
-
         // Department Savings Overview Line Chart
         departmentSavingsOverviewChart = new Chart(departmentSavingsOverviewCtx, {
             type: 'line',
@@ -365,30 +392,81 @@
             }
         });
 
-        // Attendance Overview Line Chart
+      // Attendance Overview Line Chart
         attendanceOverviewChart = new Chart(attendanceOverviewCtx, {
             type: 'line',
             data: {
-                labels: yearData.attendances.labels,
-                datasets: [{
-                    label: 'Attendance Count',
-                    data: yearData.attendances.counts,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    fill: true,
-                    tension: 0.1
-                }]
+                labels: yearData.general_attendance_metrics.labels,
+                datasets: yearData.general_attendance_metrics.datasets.map(dataset => {
+                    const colors = colorMap[dataset.label] || {
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    };
+
+                    const isOverall = dataset.label === "Overall Attendance";
+
+                    return {
+                        label: dataset.label,
+                        data: dataset.data,
+                        borderColor: colors.borderColor,
+                        backgroundColor: colors.backgroundColor,
+                        borderWidth: isOverall ? 3 : 2,
+                        borderDash: isOverall ? [5, 5] : [],
+                        tension: 0.3,
+                        fill: !isOverall,      // Fill only for gender lines
+                        pointRadius: isOverall ? 4 : 3,
+                        pointStyle: isOverall ? 'rectRot' : 'circle',
+                    };
+                })
             },
             options: {
                 responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                stacked: false,
+                plugins: {
+                    title: {
+                        display: false,
+                        text: 'Monthly Attendance by Gender and Overall',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                        },
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
-                    }
-                }
-            }
+                        beginAtZero: true,
+                        title: {
+                            display: false,
+                            text: 'Attendance Count',
+                        },
+                        grid: {
+                            color: 'rgba(200,200,200,0.2)',
+                        },
+                    },
+                    x: {
+                        title: {
+                            display: false,
+                            text: 'Month',
+                        },
+                    },
+                },
+            },
         });
-
         // Income vs Expense Line Chart
         incomeExpenseChart = new Chart(incomeExpenseCtx, {
             type: 'line',

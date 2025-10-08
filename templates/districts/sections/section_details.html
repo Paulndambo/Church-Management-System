@@ -37,6 +37,7 @@
                 <tr class="table-headers-borders">
                     <th></th>
                     <th>Church</th>
+                    <th>Pastor</th>
                     <th>General Fund</th>
                     <th>Sunday School</th>
                     <th>Pastors Fund</th>
@@ -47,6 +48,7 @@
                     <th>Special Offering</th>
                     <th>Adult Att.</th>
                     <th>Children Att.</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -54,6 +56,7 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ church_report.church}}</td>
+                    <td>{{ church_report.church.pastor}}</td>
                     <td>{{ church_report.general_fund }}</td>
                     <td>{{ church_report.sunday_school }}</td>
                     <td>{{ church_report.pastors_fund }}</td>
@@ -64,9 +67,12 @@
                     <td>{{ church_report.special_offering}}</td>
                     <td>{{ church_report.adult }}</td>
                     <td>{{ church_report.children }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editChurchDataModal{{church_report.id}}"><i class="fas fa-edit"></i></a>
+                    </td>
                     
-                    {% include "districts/edit_section_data.html" %}
-                    {% include "districts/delete_section_data.html" %}
+                    {% include "districts/edit_church_data.html" %}
+                   
                 </tr>
                 {% empty %}
                 <tr>

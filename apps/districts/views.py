@@ -488,12 +488,30 @@ def new_district_branch(request: HttpRequest):
         location = request.POST.get("location")
         section = request.POST.get("section")
 
-        branch = Branch.objects.create(
+        Branch.objects.create(
             section_id=section, name=name, location=location, town=town
         )
 
         return redirect("district-churches")
     return render(request, "districts/branches/new_branch.html")
+
+
+@login_required
+def edit_district_branch(request: HttpRequest):
+    if request.method == "POST":
+        branch_id = request.POST.get("branch_id")
+        section = request.POST.get("section_id")
+        name = request.POST.get("name")
+        town = request.POST.get("town")
+        location = request.POST.get("location")
+        section = request.POST.get("section")
+
+        Branch.objects.filter(id=branch_id).update(
+            section_id=section, name=name, location=location, town=town
+        )
+
+        return redirect("district-churches")
+    return render(request, "districts/branches/edit_branch.html")
 
 
 def get_section_summary(report_id: int):

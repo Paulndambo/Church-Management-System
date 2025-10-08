@@ -52,7 +52,7 @@ def edit_department(request: HttpRequest):
         department_id = request.POST.get("department_id")
         department_name = request.POST.get("name")
 
-        department = Department.objects.filter(id=department_id).update(
+        Department.objects.filter(id=department_id).update(
             name=department_name
         )
 
@@ -308,40 +308,13 @@ def new_member_group(request: HttpRequest):
         name = request.POST.get("name")
         date_started = request.POST.get("date_started")
         branch = request.POST.get("branch")
-        chairperson = request.POST.get("chairperson")
-        secretary = request.POST.get("secretary")
-        treasurer = request.POST.get("treasurer")
         status = request.POST.get("status")
 
-        new_group = MemberGroup.objects.create(
+        MemberGroup.objects.create(
             name=name,
             date_started=date_started,
             branch_id=branch,
-            chairperson_id=chairperson,
-            secretary_id=secretary,
-            treasurer_id=treasurer,
             status=status,
-        )
-
-        GroupMember.objects.create(
-            group=new_group,
-            member_id=chairperson,
-            role="Chairperson",
-            date_joined=date_started,
-        )
-
-        GroupMember.objects.create(
-            group=new_group,
-            member_id=secretary,
-            role="Secretary",
-            date_joined=date_started,
-        )
-
-        GroupMember.objects.create(
-            group=new_group,
-            member_id=treasurer,
-            role="Treasurer",
-            date_joined=date_started,
         )
 
         return redirect("groups")
@@ -356,79 +329,14 @@ def edit_member_group(request: HttpRequest):
         name = request.POST.get("name")
         date_started = request.POST.get("date_started")
         branch = request.POST.get("branch")
-        chairperson = request.POST.get("chairperson")
-        secretary = request.POST.get("secretary")
-        treasurer = request.POST.get("treasurer")
         status = request.POST.get("status")
-
-        membership_group = MemberGroup.objects.get(id=group_id)
-        GroupMember.objects.filter(
-            group_id=group_id, member=membership_group.chairperson
-        ).update(role="Member")
-        GroupMember.objects.filter(
-            group_id=group_id, member=membership_group.secretary
-        ).update(role="Member")
-        GroupMember.objects.filter(
-            group_id=group_id, member=membership_group.treasurer
-        ).update(role="Member")
-
-        membership_group.chairperson = None
-        membership_group.secretary = None
-        membership_group.treasurer = None
-        membership_group.save()
 
         MemberGroup.objects.filter(id=group_id).update(
             name=name,
             date_started=date_started,
             branch_id=branch,
-            chairperson_id=chairperson,
-            secretary_id=secretary,
-            treasurer_id=treasurer,
             status=status,
         )
-
-        chairperson = GroupMember.objects.filter(
-            group_id=group_id, member_id=chairperson
-        ).first()
-        if not chairperson:
-            GroupMember.objects.create(
-                group_id=group_id,
-                member_id=chairperson,
-                role="Chairperson",
-                date_joined=date_started,
-            )
-        else:
-            chairperson.role = "Chairperson"
-            chairperson.save()
-
-        secretary = GroupMember.objects.filter(
-            group_id=group_id, member_id=secretary
-        ).first()
-        if not secretary:
-            GroupMember.objects.create(
-                group_id=group_id,
-                member_id=secretary,
-                role="Secretary",
-                date_joined=date_started,
-            )
-        else:
-            secretary.role = "Secretary"
-            secretary.save()
-
-        treasurer = GroupMember.objects.filter(
-            group_id=group_id, member_id=treasurer
-        ).first()
-        if not treasurer:
-            GroupMember.objects.create(
-                group_id=group_id,
-                member_id=treasurer,
-                role="Treasurer",
-                date_joined=date_started,
-            )
-        else:
-            treasurer.role = "Treasurer"
-            treasurer.save()
-
         return redirect("groups")
     return render(request, "groups/edit_group.html")
 
@@ -499,5 +407,5 @@ def edit_group_member(request: HttpRequest):
         group_member.status = status
         group_member.date_joined = date_joined
         group_member.save()
-        return redirect("group-details", id=group_id)
+        return redirect("group-detail", id=group_member.group.id)
     return render(request, "groups/edit_group_member.html")

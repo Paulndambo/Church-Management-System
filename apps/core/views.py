@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any, Dict
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Q
-
+import calendar
 import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
@@ -59,6 +59,7 @@ def home(request):
     total_expenses = sum(income_expense_data["expense"])
     net_balance = total_incomes - total_expenses
 
+    general_attendance_metrics = get_monthly_gender_and_overall_attendance_metrics(year=date_today.year)
 
     context = {
         "total_members": total_members,
@@ -70,6 +71,10 @@ def home(request):
         "service_attendance": {
             "labels": json.dumps(service_attendance_data["labels"]),
             "attendances": json.dumps(service_attendance_data["attendances"]),
+        },
+        "general_attendance_metrics": {
+            "labels": json.dumps(general_attendance_metrics["labels"]),
+            "datasets": json.dumps(general_attendance_metrics["datasets"])
         },
         "net_financials": {
             "labels": json.dumps(["Total Income", "Total Expenses", "Net Balance"]),
@@ -171,6 +176,94 @@ def get_attendance_service_metrics(year: int = date_today.year) -> Dict[str, Any
         "attendances": [x["total_attendance"] for x in services_data],
     }
 
+
+def get_gender_attendance_service_metrics(year: int = date_today.year) -> Dict[str, Any]:
+    service_data = (
+        ServiceAttendanceMetric.objects.filter(year=year)
+        .values("gender", "month")
+        .annotate(total_attendance=Sum("total_present"))
+        .order_by("month", "gender")
+    )
+
+    # Prepare data grouped by gender
+    months = sorted(set(x["month"] for x in service_data))
+    genders = sorted(set(x["gender"] for x in service_data))
+    
+    # Initialize dict to accumulate monthly totals per gender
+    gender_month_data = {g: [0] * len(months) for g in genders}
+
+    for x in service_data:
+        month_index = months.index(x["month"])
+        gender_month_data[x["gender"]][month_index] = x["total_attendance"]
+
+    return {
+        "labels": months,  # x-axis
+        "datasets": [
+            {
+                "label": gender,
+                "data": gender_month_data[gender]
+            }
+            for gender in genders
+        ],
+    }
+
+
+def get_monthly_gender_and_overall_attendance_metrics(year: int = date_today.year) -> Dict[str, Any]:
+    # Query attendance grouped by month and gender
+    service_data = (
+        ServiceAttendanceMetric.objects.filter(year=year)
+        .values("gender", "month")  # month can be stored as integer or name
+        .annotate(total_attendance=Sum("total_present"))
+        .order_by("month", "gender")
+    )
+
+    # Handle both numeric and string months
+    month_order = list(calendar.month_name)[1:]  # ['January', 'February', ..., 'December']
+
+    # Extract unique months from data and sort using calendar order
+    months = sorted(
+        {x["month"] for x in service_data},
+        key=lambda m: month_order.index(m) if isinstance(m, str) else int(m) - 1
+    )
+
+    genders = sorted(set(x["gender"] for x in service_data))
+
+    # Initialize data structure
+    gender_month_data = {g: [0] * len(months) for g in genders}
+    overall_month_data = [0] * len(months)
+
+    # Fill gender totals and compute overall per month
+    for x in service_data:
+        month = x["month"]
+        month_index = month_order.index(month) if isinstance(month, str) else int(month) - 1
+        # Only fill if month exists in selected months (avoids KeyError)
+        if month_index < len(months):
+            total = x["total_attendance"]
+            gender = x["gender"]
+
+            gender_month_data[gender][month_index] = total
+            overall_month_data[month_index] += total
+
+    # Format data for charting
+    datasets = [
+        {
+            "label": gender,
+            "data": gender_month_data[gender],
+        }
+        for gender in genders
+    ]
+
+    # Add overall dataset
+    datasets.append({
+        "label": "Overall Attendance",
+        "data": overall_month_data,
+        "borderDash": [5, 5],
+    })
+
+    return {
+        "labels": months,  # ordered month names
+        "datasets": datasets,
+    }
 
 def get_monthly_offerings(year: int = date_today.year) -> Dict[str, Any]:
     monthly_data = (
