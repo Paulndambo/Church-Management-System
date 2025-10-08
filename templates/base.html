@@ -775,6 +775,7 @@
     <div class="wrapper">
         {% if request.user.role == "District Supritendant" %}
         {% include "includes/district_sidebar.html" %}
+        {% elif request.user.role == "Church Usher" %}
         {% else %}
         {% include "includes/sidebar.html" %}
         {% endif %}

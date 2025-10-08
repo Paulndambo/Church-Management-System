@@ -14,6 +14,7 @@ USER_ROLES = (
     ("Church Treasurer", "Church Treasurer"),
     ("District Supritendant", "District Supritendant"),
     ("Presbyter", "Presbyter"),
+    ("Church Usher", "Church Usher"),
 )
 
 GENDER_CHOICES = (

@@ -163,6 +163,8 @@ def record_service_attendance(request: HttpRequest) -> Any:
                 "recorded_by": request.user.username
             },
         )
+        if request.user.role == "Church Usher":
+            return redirect("usher-home")
         return redirect("service-attendances")
 
     return render(request, "attendances/record_service_attendance.html")

@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.http import HttpRequest, HttpResponse
 
-from apps.membership.models import Member
+from apps.membership.models import Member, Branch
 from apps.payments.models import (
     MemberTithing,
     Offering,
@@ -18,7 +18,7 @@ from apps.payments.models import (
     ChurchDonation,
 )
 from apps.projects.models import ProjectContribution, ProjectPledge, Project
-from apps.attendances.models import ServiceAttendanceMetric
+from apps.attendances.models import ServiceAttendanceMetric, ChurchService
 from apps.users.models import User
 
 date_today = datetime.now().date()
@@ -26,9 +26,22 @@ date_today = datetime.now().date()
 
 # Create your views here.
 @login_required
+def usher_home(request):
+    attendances = ServiceAttendanceMetric.objects.filter(created_at__date=date_today).order_by("-created_at")[:5]
+
+    context = {
+        "attendances": attendances,
+        "branches": Branch.objects.all(),
+        "services": ChurchService.objects.all()
+    }
+    return render(request, "user_home.html", context)
+
+@login_required
 def home(request):
     if request.user.role == "District Supritendant":
         return redirect("district-home")
+    elif request.user.role == "Church Usher":
+        return redirect("usher-home")
     total_members = Member.objects.count()
     total_department_savings = sum(
         DepartmentSaving.objects.values_list("amount", flat=True)
