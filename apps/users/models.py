@@ -62,6 +62,8 @@ class Visitor(AbstractBaseModel):
     church_service = models.ForeignKey(
         "attendances.ChurchService", on_delete=models.SET_NULL, null=True
     )
+    times_attended = models.IntegerField(default=1)
+    converted = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"

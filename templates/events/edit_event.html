@@ -1,0 +1,72 @@
+<div class="modal fade" id="editEventModal{{event.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Church Event</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-event' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" value="{{event.id}}" id="event_id" name="event_id" readonly />
+                  <div class="row mb-3">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Event Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    value="{{event.name}}"
+                    required
+                  />
+                </div>
+                </div>
+               
+                <div class="row mb-3">
+  <div class="col">
+    <label class="form-label fw-bold">Starts On</label>
+    <input
+      type="datetime-local"
+      class="form-control"
+      id="starts_on"
+      name="starts_on"
+      value="{{ event.starts_on|date:'Y-m-d\\TH:i' }}"
+      required
+    />
+  </div>  
+  <div class="col">
+    <label class="form-label fw-bold">Ends On</label>
+    <input
+      type="datetime-local"
+      class="form-control"
+      id="ends_on"
+      name="ends_on"
+      value="{{ event.ends_on|date:'Y-m-d\\TH:i' }}"
+      required
+    />
+  </div>  
+</div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Event Type</label>
+                      <select class="form-select" id="event_type" name="event_type" required>
+                        <option value="{{event.event_type}}">{{event.event_type}}</option>
+                        {% for event_type in event_types %}
+                            {% if event_type != event.event_type %}
+                                <option value="{{event_type}}">{{event_type}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+  
+                <div class="text-center mt-3">
+                  <input type="submit" class="btn btn-primary w-30" value="Edit Church Event Details" />
+                </div>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>

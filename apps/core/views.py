@@ -36,6 +36,7 @@ def usher_home(request):
     }
     return render(request, "user_home.html", context)
 
+
 @login_required
 def home(request):
     if request.user.role == "District Supritendant":

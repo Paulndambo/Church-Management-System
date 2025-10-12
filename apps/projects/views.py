@@ -1,6 +1,7 @@
 from decimal import Decimal
 from datetime import datetime
 
+from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.db.models import Q
@@ -96,6 +97,28 @@ def edit_project(request):
     return render(request, "projects/edit_project.html")
 
 
+@login_required
+def project_details(request: HttpRequest, id: int):
+    project = Project.objects.get(id=id)
+
+    contributions = ProjectContribution.objects.filter(project=project)
+    pledges = ProjectPledge.objects.filter(project=project).order_by("-created_at")
+
+    total_contributions = sum(list(contributions.values_list("amount", flat=True)))
+    total_pledges = sum(list(pledges.values_list("amount_pledged", flat=True)))
+
+    members = Member.objects.all()       
+
+    context = {
+        "project": project,
+        "pledges": pledges,
+        "total_contributions": total_contributions,
+        "total_pledges": total_pledges,
+        "members": members
+    }
+    return render(request, "projects/project_details.html", context)
+
+
 ## Church Project Contributions
 class ProjectContributionsListView(LoginRequiredMixin, ListView):
     model = ProjectContribution
@@ -157,14 +180,17 @@ class ProjectPledgesListView(LoginRequiredMixin, ListView):
 @transaction.atomic
 def new_pledge(request):
     if request.method == "POST":
-        project = request.POST.get("project")
+        project = request.POST.get("project_id")
         member = request.POST.get("member")
         partner = request.POST.get("partner")
         amount_pledged = request.POST.get("amount_pledged")
         pledge_type = request.POST.get("pledge_type")
-        # Add logic to handle different pledge types
 
         month = get_month_name(date_today.month)
+
+        print("***********Project ID***************")
+        print(f"Project ID: {project}")
+        print("***********Project ID***************")
 
         if pledge_type == "partner_pledge":
             ProjectPledge.objects.create(
@@ -181,7 +207,7 @@ def new_pledge(request):
                 year=date_today.year
             )
 
-        return redirect("pledges")
+        return redirect("project-detail", id=project)
     return render(request, "projects/pledges/new_pledge.html")
 
 
@@ -190,14 +216,20 @@ def new_pledge(request):
 def edit_pledge(request):
     if request.method == "POST":
         pledge_id = request.POST.get("pledge_id")
-        project = request.POST.get("project")
         amount_pledged = request.POST.get("amount_pledged")
 
-        ProjectPledge.objects.filter(id=pledge_id).update(
-            project_id=project, amount_pledged=amount_pledged
-        )
+        pledge = ProjectPledge.objects.get(id=pledge_id)
+        pledge.amount_pledged=amount_pledged
+        pledge.save()
 
-        return redirect("pledges")
+        if Decimal(pledge.amount_redeemed) >= Decimal(pledge.amount_pledged):
+            pledge.full_redeemed = True
+            pledge.save()
+        else:
+            pledge.full_redeemed = False
+            pledge.save()
+
+        return redirect("project-detail", id=pledge.project.id)
     return render(request, "projects/pledges/edit_pledge.html")
 
 
@@ -227,6 +259,13 @@ def redeem_pledge(request):
         pledge.project.save()
         pledge.save()
 
+        if Decimal(pledge.amount_redeemed) >= Decimal(pledge.amount_pledged):
+            pledge.full_redeemed = True
+            pledge.save()
+        else:
+            pledge.full_redeemed = False
+            pledge.save()
+
         ChurchLedger.objects.create(
             name="Project Pledge Redemption",
             description=f"{contribution.member.user.name} Redeemed pledge for project {pledge.project.name}",
@@ -237,5 +276,5 @@ def redeem_pledge(request):
             year=date_today.year
         )
 
-        return redirect("pledges")
+        return redirect("project-detail", id=pledge.project.id)
     return render(request, "projects/pledges/redeem_pledge.html")

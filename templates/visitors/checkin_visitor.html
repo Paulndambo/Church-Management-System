@@ -1,0 +1,25 @@
+<div class="modal fade" id="checkinVisitorModal{{visitor.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Check-In Visitor</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'checkin-visitor' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" value="{{visitor.id}}" name="visitor_id" id="visitor_id" readonly required />
+                <div class="row mb-3">
+                <div class="col">
+                    <p>Check-In <b>{{visitor.name}}</b> as a visitor!</p>
+                  </div>
+                </div>
+               
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Check-In Church Visitor</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

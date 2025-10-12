@@ -1,5 +1,5 @@
 <div class="modal fade" id="editPledgeModal{{pledge.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5 text-center fw-bold">Edit Pledge</h1>
@@ -8,21 +8,8 @@
             <form action="{% url 'edit-pledge' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <input type="hidden" value="{{pledge.id}}" name="pledge_id" id="pledge_id" readonly required />
-                
-                <div class="row mb-3">
-                  <div class="col">
-                      <label for="exampleInputPassword1" class="form-label fw-bold">Project</label>
-                      <select class="form-select" id="project" name="project" required>
-                        <option value="{{pledge.project.id}}">{{pledge.project.name}}</option>
-                        {% for project in projects %}
-                            {% if project.id != pledge.project.id %}
-                                <option value={{project.id}}>{{project.name}}</option>
-                            {% endif %}
-                         {% endfor %}
-                      </select>
-                    </div>
-                </div> 
+                  <input type="hidden" value="{{pledge.id}}" name="pledge_id" id="pledge_id" readonly required />
+               
                 <div class="row mb-3">
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Amount Pledging</label>

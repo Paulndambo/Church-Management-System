@@ -76,6 +76,9 @@ class ProjectPledge(AbstractBaseModel):
         elif self.partner:
             return self.partner.name
         return "N/A"
+    
+    def status(self):
+        return "Fully Redeemed" if self.full_redeemed else "Pending"
 
 
 class ProjectContribution(AbstractBaseModel):

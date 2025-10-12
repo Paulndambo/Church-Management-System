@@ -211,7 +211,7 @@ def new_attendance(request: HttpRequest):
         service = ChurchService.objects.get(id=service)
 
         attendance = ServiceAttendance.objects.create(
-            member=member, service=service, status=status, gender=member.user.gender
+            member=member, service=service, status=status
         )
 
         metric_log = ServiceAttendanceMetric.objects.filter(

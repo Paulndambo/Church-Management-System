@@ -1,0 +1,57 @@
+<div class="modal fade" id="newTicketTypeModal{{event.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">New {{event.name}} Ticket Package</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-event-ticket-type' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" value="{{event.id}}" id="event" name="event" readonly />
+                <div class="row mb-3">
+                    <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Package Name</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="title"
+                        name="title"
+                        required
+                    />
+                    </div>
+                </div>
+               
+                <div class="row mb-3">
+                   <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Ticket Cost</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="cost"
+                        name="cost"
+                        value="0"
+                        required
+                      />
+                  </div>  
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Number of Tickets</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="total_tickets"
+                        name="total_tickets"
+                        value="0"
+                        required
+                      />
+                  </div>  
+                </div>
+
+                <div class="text-center mt-3">
+                  <input type="submit" class="btn btn-primary w-30" value="Create Ticket Package" />
+                </div>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>

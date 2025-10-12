@@ -12,6 +12,7 @@ from django.db import transaction
 from apps.membership.models import Department, Branch, Member
 from apps.attendances.models import ChurchService
 from apps.core.constants import GENDER_CHOICES, USER_POSITIONS, STATUS_CHOICES
+from django.contrib import messages
 
 
 # Create your views here.
@@ -27,11 +28,14 @@ def login_user(request):
             login(request, user)
             if user.role == "District Superintendent":
                 next_url = request.GET.get("next", "district-home")
-                return redirect(next_url)  # Redirect to the next URL or home page.
+                return redirect(next_url)
             next_url = request.GET.get("next", "home")
-            return redirect(next_url)  # Redirect to the next URL or home page.
+            return redirect(next_url)
         else:
-            return redirect("login")
+            messages.error(request, "Invalid username or password. Please try again.")
+            next_url = request.GET.get("next", "")
+            return render(request, "accounts/login.html", {"next": next_url})
+    
     next_url = request.GET.get("next", "")
     return render(request, "accounts/login.html", {"next": next_url})
 
@@ -87,7 +91,6 @@ def new_visitor(request):
 
         branch = request.POST.get("branch")
         church_service = request.POST.get("church_service")
-        brought_by = request.POST.get("brought_by")
         photo_consent = request.POST.get("photo_consent")
 
         Visitor.objects.create(
@@ -100,7 +103,6 @@ def new_visitor(request):
             country=country,
             branch_id=branch,
             church_service_id=church_service,
-            brought_by_id=brought_by,
             photo_consent=photo_consent,
         )
 
@@ -122,7 +124,6 @@ def edit_visitor(request):
 
         branch = request.POST.get("branch")
         church_service = request.POST.get("church_service")
-        brought_by = request.POST.get("brought_by")
         photo_consent = request.POST.get("photo_consent")
 
         visitor = Visitor.objects.get(id=visitor_id)
@@ -137,7 +138,6 @@ def edit_visitor(request):
         visitor.city = city
         visitor.country = country
         visitor.photo_consent = photo_consent
-        visitor.brought_by_id = brought_by
         visitor.save()
 
         return redirect("visitors")
@@ -155,3 +155,15 @@ def delete_visitor(request):
         visitor.delete()
         return redirect("visitors")
     return render(request, "visitors/delete_visitor.html")
+
+
+@login_required
+def checkin_visitor(request):
+    visitor_id = request.POST.get("visitor_id")
+
+    visitor = Visitor.objects.get(id=visitor_id)
+    visitor.times_attended += 1
+    visitor.save()
+
+    return redirect("visitors")
+    return render(request, "visitors/checkin_visitor.html")

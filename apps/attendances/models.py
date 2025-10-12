@@ -1,6 +1,9 @@
 from django.db import models
 from apps.core.models import AbstractBaseModel
+import calendar
+from datetime import datetime
 
+date_today = datetime.now().date()
 
 # Create your models here.
 class ChurchService(AbstractBaseModel):
@@ -34,12 +37,7 @@ class ServiceAttendance(AbstractBaseModel):
             f"{self.member.user.get_full_name()} - {self.service.name} on {date_today}"
         )
 
-    def save(self, *args, **kwargs) -> None:
-        if not self.month:
-            self.month = calendar.month_name[date_today().month]
-        if not self.year:
-            self.year = date_today().year
-        return super().save(*args, **kwargs)
+
 
 
 class ServiceAttendanceMetric(AbstractBaseModel):

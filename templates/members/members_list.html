@@ -6,15 +6,15 @@
 <div class="table-card">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3>Church Members</h3>
+            <h3 class="fw-bold">Church Members</h3>
         </div>
         <div class="col">
             <input type="text" class="form-control" placeholder="Search..." 
             id="searchInput" value="{{ search_query }}">
         </div>
-        <div class="col">
+        <div class="col d-flex gap-1">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newMembershipModal">New Member</button>
-        
+            <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#uploadMembersModal">Upload Members</button>
           </div>
     </div>
     <!-- Table Toolbar --> 
