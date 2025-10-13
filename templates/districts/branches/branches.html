@@ -65,7 +65,15 @@
 
     <!-- Table Footer with Pagination -->
     <div class="table-footer">
-        
+        <div class="page-info">
+        Showing 
+        {{ page_obj.start_index }} 
+        to 
+        {{ page_obj.end_index }} 
+        of 
+        {{ paginator.count }} 
+        entries
+    </div>
     </div>
 </div>
 {% include "districts/branches/new_branch.html" %}

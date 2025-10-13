@@ -46,9 +46,11 @@
                     <td>
                         <div class="d-flex gap-1">
                             <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPastorAssociateModal{{pastor.id}}"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePastorModal{{pastor.id}}"><i class="fas fa-trash"></i></a>
                         </div>
                     </td>
                    {% include "districts/pastors/edit_pastor_associate.html" %}
+                   {% include "districts/pastors/delete_pastor.html" %}
                 </tr>
                 {% empty %}
                 <tr>

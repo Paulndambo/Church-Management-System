@@ -11,7 +11,7 @@ from apps.sections.models import Section, SectionReport
 from apps.membership.models import Branch
 from apps.districts.models import District, KAGDistrictMonthlyReport, DistrictReport
 from apps.users.models import User, Pastor
-from apps.core.constants import MONTHS_LIST, YEARS_LIST
+from apps.core.constants import MONTHS_LIST, YEARS_LIST, GENDER_CHOICES
 
 # Create your views here.
 class SectionsListView(LoginRequiredMixin, ListView):
@@ -292,6 +292,7 @@ class PastorsListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["branches"] = Branch.objects.all()
+        context["genders"] = GENDER_CHOICES
         return context
     
 
@@ -345,6 +346,25 @@ def edit_pastor(request: HttpRequest):
     return render(request, "districts/pastors/edit_pastor.html")
 
 
+@login_required
+def delete_pastor(request):
+    if request.method == "POST":
+        pastor_id = request.POST.get("pastor_id")
+        role = request.POST.get("role")
+
+        pastor = Pastor.objects.get(id=pastor_id)
+        pastor.delete()
+
+        print("***************Pastor Role*****************")
+        print(f"Role: {role}")
+        print("***************Pastor Role*****************")
+
+        if role == "Lead Pastor":
+            return redirect("district-pastors")
+        
+        return redirect("district-pastor-associates")
+
+    return render(request, "districts/pastors/delete_pastor.html")
 
 
 class PastorsAssociatesListView(LoginRequiredMixin, ListView):

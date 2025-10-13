@@ -61,8 +61,15 @@ def district_meeting_details(request: HttpRequest, id: int):
             "Secretary",
             "Presbyter",
             "District Supritendant",
+            "MF Director",
+            "WWK Director",
+            "Teens Director",
+            "Youth Director",
+            "Missions Director",
+            "Children's Director",
+            "Other",
         ],
-        "statuses": ["Present", "Absent"],
+        "statuses": ["Present", "Absent", "Absent With Apology"],
     }
     return render(request, "districts/meetings/district_meeting_details.html", context)
 

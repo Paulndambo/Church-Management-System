@@ -1,0 +1,24 @@
+<div class="modal fade" id="deletePastorModal{{pastor.id}}" tabindex="-1" aria-labelledby="newTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newTransactionModalLabel">Delete {{pastor.pastor_role}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'delete-pastor' %}">
+                    {% csrf_token %}
+                    <input type="number" id="pastor_id" name="pastor_id" value="{{pastor.id}}" hidden readonly required />
+                    <input type="text" id="role" name="role" value="{{pastor.pastor_role}}" hidden readonly required />
+                    <div class="mb-3">
+                        <p>Are you sure you want to delete <b>{{pastor.pastor_role}}</b> named <b>{{pastor.name}}</b>?</p>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Close</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

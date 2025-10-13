@@ -31,7 +31,6 @@
                     <th>Name</th>
                     <th>Role</th>
                     <th>Status</th>
-                    <th>Created By</th>
                     <th></th>
                 </tr>
             </thead>
@@ -42,7 +41,6 @@
                     <td>{{ attendance.full_name }}</td>
                     <td>{{ attendance.role }}</td>
                     <td>{{ attendance.status }}</td>
-                    <td>{{ attendance.recorded_by.name }}</td>
                     <td>
                         <div class="d-flex gap-1">
                             <a data-bs-toggle="modal" data-bs-target="#editDistrictMeetingAttendantModal{{attendance.id}}" class="btn btn-info btn-sm"><i class="fa-solid fa-pencil"></i></a>

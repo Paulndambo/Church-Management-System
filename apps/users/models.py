@@ -84,3 +84,6 @@ class Pastor(AbstractBaseModel):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def name(self):
+        return f"{self.first_name} {self.last_name}"
