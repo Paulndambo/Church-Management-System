@@ -287,7 +287,7 @@ class PastorsListView(LoginRequiredMixin, ListView):
                 Q(id__icontains=search_query) | Q(first_name__icontains=search_query)
             )
         # Get sort parameter
-        return queryset.order_by("-created_at")
+        return queryset.filter(pastor_role="Lead Pastor").order_by("-created_at")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -305,7 +305,7 @@ def new_pastor(request: HttpRequest):
         gender = request.POST.get("gender")
         phone_number = request.POST.get("phone_number")
         email = request.POST.get("email")
-
+       
 
         Pastor.objects.create(
             church_id=branch,
@@ -313,7 +313,8 @@ def new_pastor(request: HttpRequest):
             last_name=last_name,
             gender=gender,
             phone_number=phone_number,
-            email=email
+            email=email,
+            pastor_role="Lead Pastor"
         )
         return redirect("district-pastors")
     return render(request, "districts/pastors/new_pastor.html")
@@ -337,7 +338,81 @@ def edit_pastor(request: HttpRequest):
             last_name=last_name,
             gender=gender,
             phone_number=phone_number,
-            email=email
+            email=email,
+            pastor_role="Lead Pastor"
         )
         return redirect("district-pastors")
     return render(request, "districts/pastors/edit_pastor.html")
+
+
+
+
+class PastorsAssociatesListView(LoginRequiredMixin, ListView):
+    model = Pastor
+    template_name = "districts/pastors/pastor_associates.html"
+    context_object_name = "pastors"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("search", "")
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(id__icontains=search_query) | Q(first_name__icontains=search_query)
+            )
+        # Get sort parameter
+        return queryset.filter(pastor_role="Pastor Associate").order_by("-created_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["branches"] = Branch.objects.all()
+        return context
+    
+
+@login_required
+@transaction.atomic
+def new_pastor_associate(request: HttpRequest):
+    if request.method == "POST":
+        branch = request.POST.get("branch")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        gender = request.POST.get("gender")
+        phone_number = request.POST.get("phone_number")
+        email = request.POST.get("email")
+    
+        Pastor.objects.create(
+            church_id=branch,
+            first_name=first_name,
+            last_name=last_name,
+            gender=gender,
+            phone_number=phone_number,
+            email=email,
+            pastor_role="Pastor Associate"
+        )
+        return redirect("district-pastor-associates")
+    return render(request, "districts/pastors/new_pastor_associate.html")
+
+
+@login_required
+def edit_pastor_associate(request: HttpRequest):
+    if request.method == "POST":
+        pastor_id = request.POST.get("pastor_id")
+        branch = request.POST.get("branch")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        gender = request.POST.get("gender")
+        phone_number = request.POST.get("phone_number")
+        email = request.POST.get("email")
+
+        Pastor.objects.filter(id=pastor_id).update(
+            church_id=branch,
+            first_name=first_name,
+            last_name=last_name,
+            gender=gender,
+            phone_number=phone_number,
+            email=email,
+            pastor_role="Pastor Associate"
+        )
+        return redirect("district-pastor-associates")
+    return render(request, "districts/pastors/edit_pastor_associate.html")

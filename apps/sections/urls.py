@@ -16,4 +16,8 @@ urlpatterns = [
     path("district-pastors/", views.PastorsListView.as_view(), name="district-pastors"),
     path("new-pastor/", views.new_pastor, name="new-pastor"),
     path("edit-pastor/", views.edit_pastor, name="edit-pastor"),
+
+    path("district-pastor-associates/", views.PastorsAssociatesListView.as_view(), name="district-pastor-associates"),
+    path("new-pastor-associate/", views.new_pastor_associate, name="new-pastor-associate"),
+    path("edit-pastor-associate/", views.edit_pastor_associate, name="edit-pastor-associate"),
 ]

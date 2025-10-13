@@ -62,7 +62,7 @@ urlpatterns = [
     path("new-district-expense/", views.new_expense, name="new-district-expense"),
     path("edit-district-expense/", views.edit_expense, name="edit-district-expense"),
     
-    path("district-churches/", views.district_branches, name="district-churches"),
+    path("district-churches/", views.DistrictBranchesListView.as_view(), name="district-churches"),
     path("new-district-church/", views.new_district_branch, name="new-district-church"),
     path("edit-district-church/", views.edit_district_branch, name="edit-district-church"),
 ]

@@ -79,7 +79,8 @@ class Pastor(AbstractBaseModel):
     phone_number = models.CharField(max_length=255, null=True)
     email = models.EmailField(null=True)
     is_active = models.BooleanField(default=True)
-    church = models.OneToOneField("membership.Branch", on_delete=models.SET_NULL, null=True, related_name="churchpastor")
+    church = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True, related_name="churchpastors")
+    pastor_role = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

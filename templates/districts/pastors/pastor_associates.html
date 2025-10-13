@@ -6,14 +6,14 @@
 <div class="table-card">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3 class="fw-bold">KAG Pastors</h3>
+            <h3 class="fw-bold">KAG Pastor Associates</h3>
         </div>
         <div class="col">
             <input type="text" class="form-control" placeholder="Search..." 
             id="searchInput" value="{{ search_query }}">
         </div>
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPastorModal">New Pastor</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPastorAssociateModal">New Pastor Associate</button>
           </div>
     </div>
     <!-- Table Toolbar --> 
@@ -45,15 +45,15 @@
                     <td>{{ pastor.pastor_role }}</td>
                     <td>
                         <div class="d-flex gap-1">
-                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPastorModal{{pastor.id}}"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPastorAssociateModal{{pastor.id}}"><i class="fas fa-edit"></i></a>
                         </div>
                     </td>
-                   {% include "districts/pastors/edit_pastor.html" %}
+                   {% include "districts/pastors/edit_pastor_associate.html" %}
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="8" class="text-center py-4">
-                        No presbyters found
+                    <td colspan="7" class="text-center py-4">
+                        No pastor associates found
                     </td>
                 </tr>
                 {% endfor %}
@@ -75,7 +75,7 @@
 </div>
 </div>
 
-{% include "districts/pastors/new_pastor.html" %}
+{% include "districts/pastors/new_pastor_associate.html" %}
 {% endblock content %}
 
 {% block additional_scripts %}
@@ -95,44 +95,7 @@
                 window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
             }, 500);
         });
-
-        document.getElementById('confirmDelete').addEventListener('click', function() {
-            if (studentToDelete) {
-                loader.classList.add('active');
-                
-                fetch(`/students/${studentToDelete}/delete/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.reload();
-                    }
-                })
-                .finally(() => {
-                    loader.classList.remove('active');
-                });
-            }
-        });
-
-        // Utility function to get CSRF token
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
+        
     });
 </script>
 {% endblock additional_scripts %}

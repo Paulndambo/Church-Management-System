@@ -44,7 +44,7 @@ class Branch(AbstractBaseModel):
         return self.branchmembers.count()
     
     def pastor(self):
-        return Pastor.objects.filter(church=self).first()
+        return Pastor.objects.filter(church=self, pastor_role="Lead Pastor").first()
 
 
 class Member(AbstractBaseModel):

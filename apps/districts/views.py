@@ -472,12 +472,34 @@ def delete_section_data(request: HttpRequest):
     return render(request, "districts/delete_section_data.html")
 
 
-@login_required
-def district_branches(request: HttpRequest):
-    branches = Branch.objects.all().order_by("-created_at")
-    sections = Section.objects.all()
-    context = {"branches": branches, "sections": sections}
-    return render(request, "districts/branches/branches.html", context)
+class DistrictBranchesListView(LoginRequiredMixin, ListView):
+    model = Branch
+    template_name = "districts/branches/branches.html"
+    context_object_name = "branches"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("search", "")
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(section__name__icontains=search_query)
+            )
+
+        # Convert queryset to list and sort in Python
+        queryset = queryset.order_by("-created_at")  # first sort by year
+       
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["sections"] = Section.objects.all()
+        context["districts"] = District.objects.all()
+        context["years"] = YEARS_LIST
+        context["months"] = MONTHS_LIST
+        return context
 
 
 @login_required
