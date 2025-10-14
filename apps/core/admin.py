@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.core.models import UserActionLog, Church
+from apps.core.models import UserActionLog, Church, Country
 
 
 # Register your models here.
@@ -12,3 +12,9 @@ class UserActionLog(admin.ModelAdmin):
 @admin.register(Church)
 class ChurchAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "created_at"]
+
+
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "currency", "currency_code", "created_at"]

@@ -15,40 +15,42 @@
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
-            <!-- Memberships Section -->
+
+            <!-- Memberships -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-people-group icon"></i>
+                    <i class="fas fa-users icon"></i>
                     <span class="link-text">Memberships</span>
                     <i class="fas fa-angle-down ms-auto small opacity-75"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'branches' %}" class="nav-link"><i class="fas fa-map-location-dot me-2"></i> Branches</a></li>
-                    <li><a href="{% url 'members' %}" class="nav-link"><i class="fas fa-user me-2"></i> Members</a></li>
+                    <li><a href="{% url 'branches' %}" class="nav-link"><i class="fas fa-map-marker-alt me-2"></i> Branches</a></li>
+                    <li><a href="{% url 'members' %}" class="nav-link"><i class="fas fa-user-friends me-2"></i> Members</a></li>
                     <li><a href="{% url 'groups' %}" class="nav-link"><i class="fas fa-book-bible me-2"></i> Bible Study Groups</a></li>
-                    <li><a href="{% url 'partners' %}" class="nav-link"><i class="fas fa-handshake-angle me-2"></i> Church Partners</a></li>
-                    <li><a href="{% url 'departments' %}" class="nav-link"><i class="fas fa-network-wired me-2"></i> Departments</a></li>
+                    <li><a href="{% url 'partners' %}" class="nav-link"><i class="fas fa-handshake me-2"></i> Church Partners</a></li>
+                    <li><a href="{% url 'departments' %}" class="nav-link"><i class="fas fa-layer-group me-2"></i> Departments</a></li>
                 </ul>
             </li>
 
-            <!-- Finance Section -->
+            <!-- Finance -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-sack-dollar icon"></i>
+                    <i class="fas fa-hand-holding-dollar icon"></i>
                     <span class="link-text">Finance</span>
                     <i class="fas fa-angle-down ms-auto small opacity-75"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'offerings' %}" class="nav-link"><i class="fas fa-hand-holding-heart me-2"></i> Offerings</a></li>
-                    <li><a href="{% url 'tithings' %}" class="nav-link"><i class="fas fa-donate me-2"></i> Members Tithings</a></li>
+                    <li><a href="{% url 'offerings' %}" class="nav-link"><i class="fas fa-heart me-2"></i> Offerings</a></li>
+                    <li><a href="{% url 'tithings' %}" class="nav-link"><i class="fas fa-coins me-2"></i> Members Tithings</a></li>
                     <li><a href="{% url 'expenses' %}" class="nav-link"><i class="fas fa-file-invoice-dollar me-2"></i> Expenses</a></li>
                     <li><a href="{% url 'department-savings' %}" class="nav-link"><i class="fas fa-piggy-bank me-2"></i> Department Savings</a></li>
                     <li><a href="{% url 'donations' %}" class="nav-link"><i class="fas fa-gift me-2"></i> Donations</a></li>
-                    <li><a href="{% url 'church-ledger' %}" class="nav-link"><i class="fas fa-book me-2"></i> Church Ledger</a></li>
+                    <li><a href="{% url 'money-accounts' %}" class="nav-link"><i class="fas fa-file-invoice me-2"></i> Money Accounts</a></li>
+                    <li><a href="{% url 'church-ledger' %}" class="nav-link"><i class="fas fa-book-open me-2"></i> Church Ledger</a></li>
                 </ul>
             </li>
 
-            <!-- Church Projects -->
+            <!-- Projects -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-diagram-project icon"></i>
@@ -56,18 +58,15 @@
                     <i class="fas fa-angle-down ms-auto small opacity-75"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'projects' %}" class="nav-link"><i class="fas fa-clipboard-list me-2"></i> Projects</a></li>
+                    <li><a href="{% url 'projects' %}" class="nav-link"><i class="fas fa-list-check me-2"></i> Projects</a></li>
                     <li><a href="{% url 'contributions' %}" class="nav-link"><i class="fas fa-hand-holding-usd me-2"></i> Contributions</a></li>
-                    <!--
-                    <li><a href="{% url 'pledges' %}" class="nav-link"><i class="fas fa-file-signature me-2"></i> Pledges</a></li>
-                    -->
                 </ul>
             </li>
 
-            <!-- Attendance & Services -->
+            <!-- Attendance -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-clipboard-user icon"></i>
+                    <i class="fas fa-users-viewfinder icon"></i>
                     <span class="link-text">Attendance</span>
                     <i class="fas fa-angle-down ms-auto small opacity-75"></i>
                 </a>
@@ -92,39 +91,73 @@
                 </ul>
             </li>
 
-            <!-- Events -->
+            <!-- Scheduling -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-calendar icon"></i>
-                    <span class="link-text">Events</span>
+                    <i class="fas fa-clock icon"></i>
+                    <span class="link-text">Scheduling</span>
                     <i class="fas fa-angle-down ms-auto small opacity-75"></i>
                 </a>
                 <ul class="collapse submenu">
+                    <li><a href="#" class="nav-link"><i class="fas fa-handshake-simple me-2"></i> Meetings</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-calendar-plus me-2"></i> Appointments</a></li>
                     <li><a href="{% url 'events' %}" class="nav-link"><i class="fas fa-bell me-2"></i> Church Events</a></li>
+                </ul>
+            </li>
+
+            <!-- Account -->
+        
+            <!-- Loans -->
+            <li>
+                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-money-check-dollar icon"></i>
+                    <span class="link-text">Loans</span>
+                    <i class="fas fa-angle-down ms-auto small opacity-75"></i>
+                </a>
+                <ul class="collapse submenu">
+                    <li><a href="#" class="nav-link"><i class="fas fa-file-invoice me-2"></i> Loans</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-file-pen me-2"></i> Loan Applications</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-wallet me-2"></i> Loan Payments</a></li>
+                </ul>
+            </li>
+
+            <!-- Sacco -->
+            <li>
+                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-building-columns icon"></i>
+                    <span class="link-text">Sacco</span>
+                    <i class="fas fa-angle-down ms-auto small opacity-75"></i>
+                </a>
+                <ul class="collapse submenu">
+                    <li><a href="#" class="nav-link"><i class="fas fa-users-line me-2"></i> Sacco Members</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-scale-balanced me-2"></i> Shares</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-hand-holding-hand me-2"></i> Contributions</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-percent me-2"></i> Dividends</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-sack-dollar me-2"></i> Sacco Loans</a></li>
                 </ul>
             </li>
 
             <!-- Messages -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-envelope-open-text icon"></i>
+                    <i class="fas fa-comments icon"></i>
                     <span class="link-text">Messages</span>
                     <i class="fas fa-angle-down ms-auto small opacity-75"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="{% url 'notifications' %}" class="nav-link"><i class="fas fa-paper-plane me-2"></i> Messages</a></li>
+                    <li><a href="{% url 'notifications' %}" class="nav-link"><i class="fas fa-envelope me-2"></i> Messages</a></li>
                 </ul>
             </li>
 
-            <!-- Profile & Settings -->
+            <!-- Profile -->
             <li>
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-user-gear icon"></i>
+                    <i class="fas fa-user-circle icon"></i>
                     <span class="link-text">Profile</span>
                     <i class="fas fa-angle-down ms-auto small opacity-75"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="#" class="nav-link"><i class="fas fa-sliders me-2"></i> Settings</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-gear me-2"></i> Settings</a></li>
                     <li><a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-right-from-bracket me-2"></i> Logout</a></li>
                 </ul>
             </li>

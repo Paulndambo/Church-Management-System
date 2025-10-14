@@ -1,0 +1,46 @@
+<div class="modal fade" id="transferMoneyModal{{account.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Transfer Money from: {{account.account_name}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'transfer-money' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" value="{{account.id}}" id="source_account" name="source_account" readonly />
+                <div class="row mb-4">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Receiving Account</label>
+                    <select class="form-select" id="destination_account" name="destination_account">
+                        {% for money_account in money_accounts %}
+                            {% if money_account.id != account.id %}
+                                <option value="{{money_account.id}}">{{money_account.account_name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                  </div>
+                
+                </div> 
+                <div class="row mb-4">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Amount</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount"
+                      name="amount"
+                      max="{{account.balance}}"
+                      required
+                    />
+                  </div>
+                </div>  
+                
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Transfer Money</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

@@ -60,3 +60,41 @@ class EventAttendance(AbstractBaseModel):
 
     def __str__(self):
         return self.event.name
+    
+
+
+class Appointment(AbstractBaseModel):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    email = models.EmailField(null=True)
+    gender = models.CharField(max_length=255)
+    town = models.CharField(max_length=255, null=True)
+    country = models.CharField(max_length=255, default="Kenya")
+    appointment_date = models.DateTimeField()
+    approved = models.BooleanField(default=False)
+    closed = models.BooleanField(default=False)
+    recorded_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+    
+    def name(self):
+        return f"{self.first_name} {self.last_name}"
+    
+
+
+class ChurchMeeting(AbstractBaseModel):
+    title = models.CharField(max_length=255)
+    meeting_date = models.DateTimeField()
+    meeting_location = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+    
+
+class ChurchMeetingAttendance(AbstractBaseModel):
+    meeting = models.ForeignKey(ChurchMeeting, on_delete=models.CASCADE)
+    member = models.ForeignKey("membership.Member", on_delete=models.CASCADE)
+    status = models.CharField(max_length=255)
+    recorded_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)

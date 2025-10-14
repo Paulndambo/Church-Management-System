@@ -34,13 +34,23 @@ class UserActionLog(AbstractBaseModel):
 
     def __str__(self):
         return f"{self.user.username}"
+    
+
+class Country(AbstractBaseModel):
+    name = models.CharField(max_length=255)
+    currency = models.CharField(max_length=255)
+    currency_code = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
 
 
 class Church(AbstractBaseModel):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=500, null=True)
     town = models.CharField(max_length=255)
-    country = models.CharField(max_length=255, default="Kenya")
+    #country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
     phone = models.CharField(max_length=20, null=True)
     email = models.EmailField(null=True)
     website = models.URLField(null=True)

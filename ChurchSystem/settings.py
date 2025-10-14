@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "apps.sections",
     "apps.attendances",
     "apps.notifications",
+    "apps.finances",
 ]
 
 MIDDLEWARE = [

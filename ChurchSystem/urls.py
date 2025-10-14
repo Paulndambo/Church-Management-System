@@ -34,6 +34,7 @@ urlpatterns = [
     path("notifications/", include("apps.notifications.urls")),
     path("sections/", include("apps.sections.urls")),
     path("events/", include("apps.events.urls")),
+    path("finances/", include("apps.finances.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
