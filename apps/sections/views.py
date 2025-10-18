@@ -45,6 +45,8 @@ def section_details(request: HttpRequest, id: int):
     section = Section.objects.get(id=id)
     churches = section.sectionbranches.all()
 
+    pastors = Pastor.objects.filter(church__section=section)
+
     church_reports = KAGDistrictMonthlyReport.objects.filter(section=section)
 
     section_churches_count = Branch.objects.filter(section=section).count()
@@ -56,7 +58,8 @@ def section_details(request: HttpRequest, id: int):
         "churches": churches,
         "months": MONTHS_LIST,
         "years": YEARS_LIST,
-        "church_reports": reports_to_show
+        "church_reports": reports_to_show,
+        "pastors": pastors
     }
     return render(request, "districts/sections/section_details.html", context)
 
@@ -167,6 +170,9 @@ def capture_church_data(request: HttpRequest):
         general_fund = request.POST.get("general_fund")
         sunday_school = request.POST.get("sunday_school")
 
+        total_collected = request.POST.get("total_collected")
+        pastor = request.POST.get("pastor")
+
         pastors_tithe = request.POST.get("pastors_tithe")
         presbyter_tithe = request.POST.get("presbyter_tithe")
 
@@ -199,6 +205,8 @@ def capture_church_data(request: HttpRequest):
         KAGDistrictMonthlyReport.objects.create(
             report=report,
             church=church,
+            pastor_id=pastor,
+            total_collected=total_collected,
             district=church.section.district,
             section=church.section,
             year=report.year,
@@ -233,6 +241,11 @@ def edit_section_data(request: HttpRequest):
         general_fund = request.POST.get("general_fund")
         sunday_school = request.POST.get("sunday_school")
 
+        total_collected = request.POST.get("total_collected")
+        pastor = request.POST.get("pastor")
+
+        church_id = request.POST.get("church_id")
+
         pastors_tithe = request.POST.get("pastors_tithe")
         presbyter_tithe = request.POST.get("presbyter_tithe")
 
@@ -250,9 +263,12 @@ def edit_section_data(request: HttpRequest):
         pastors_fund = request.POST.get("pastors_fund")
         church_welfare = request.POST.get("church_welfare")
 
-        report = KAGDistrictMonthlyReport.objects.filter(id=report_id).update(
+        KAGDistrictMonthlyReport.objects.filter(id=report_id).update(
             children=children,
             adult=adult,
+            church_id=church_id,
+            pastor_id=pastor,
+            total_collected=total_collected,
             general_fund=general_fund,
             sunday_school=sunday_school,
             pastors_tithe=pastors_tithe,
@@ -347,7 +363,7 @@ def edit_pastor(request: HttpRequest):
 
 
 @login_required
-def delete_pastor(request):
+def delete_pastor(request: HttpRequest):
     if request.method == "POST":
         pastor_id = request.POST.get("pastor_id")
         role = request.POST.get("role")

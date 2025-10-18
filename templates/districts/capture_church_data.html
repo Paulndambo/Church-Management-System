@@ -19,7 +19,18 @@
                             {% endfor %}
                         </select>
                     </div>
-                 
+
+                    <div class="col">
+                        <label class="form-label fw-bold">Church Pastor</label>
+                        <select class="form-select" id="pastor" name="pastor" required>
+                            {% for pastor in pastors %}
+                                <option value="{{pastor.id}}">{{pastor.name}}({{pastor.pastor_role}})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
                     <div class="col">
                         <label class="form-label fw-bold">Month</label>
                         <select class="form-select" id="month" name="month" required>
@@ -27,6 +38,18 @@
                                 <option value="{{month}}">{{month}}</option>
                             {% endfor %}
                         </select>
+                    </div>
+                 
+                    <div class="col">
+                        <label class="form-label fw-bold">Total Collected</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="total_collected"
+                                name="total_collected"
+                                value="0"
+                            />
+                        
                     </div>
                 </div>
                 <div class="row mb-3">

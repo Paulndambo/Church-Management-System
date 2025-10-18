@@ -10,12 +10,13 @@
                 <div class="modal-body">
                 <input type="hidden" name="report_id" id="report_id" value="{{church_report.id}}" readonly/>
                 <input type="hidden" name="section_id" id="section_id" value="{{church_report.section.id}}" readonly/>
+                <input type="hidden" name="church_id" id="church_id" value="{{church_report.church.id}}" readonly/>
                 <div class="row mb-3">
                     <div class="col">
                         <label class="form-label fw-bold">Church</label>
-                        <select class="form-select" id="church" name="church" required disabled>
+                        <select class="form-select" id="church" name="church" required>
                             {% for church in churches %}
-                                <option value="{{church.id}}">{{church.name}}</option>
+                                <option value="{{church.id}}">{{church.name}}({{church.section}})</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -30,7 +31,33 @@
                             {% endfor %}
                         </select>
                     </div>
-                  
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label fw-bold">Pastor</label>
+                        <select class="form-select" id="pastor" name="pastor" required>
+                            <option value="{{church_report.pastor.id}}">{{church_report.pastor.name}}({{church_report.pastor.pastor_role}})</option>
+                            {% for pastor in pastors %}
+                                {% if pastor.id != church_report.pastor.id %}
+                                    <option value="{{pastor.id}}">{{pastor.name}}({{pastor.pastor_role}})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                 
+                    <div class="col">
+                        <label class="form-label fw-bold">Total Collected</label>
+                        
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="total_collected"
+                                name="total_collected"
+                                value="{{church_report.total_collected}}"
+                            />
+                   
+                    </div>
                 </div>
                 
                 <div class="row mb-3">

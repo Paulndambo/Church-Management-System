@@ -64,7 +64,7 @@
                     <label for="exampleInputPassword1" class="form-label fw-bold">Church</label>
                     <select class="form-select pastor-branch-select" id="branch" name="branch" required>
                         {% for branch in branches %}
-                          <option value="{{branch.id}}">{{branch.name}}</option>
+                          <option value="{{branch.id}}">{{branch.name}}({{branch.section}})</option>
                         {% endfor %}
                     </select>
                   </div>

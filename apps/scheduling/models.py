@@ -1,0 +1,103 @@
+from django.db import models
+
+from apps.core.models import AbstractBaseModel
+# Create your models here.
+class Appointment(AbstractBaseModel):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    email = models.EmailField(null=True)
+    gender = models.CharField(max_length=255)
+    town = models.CharField(max_length=255, null=True)
+    country = models.CharField(max_length=255, default="Kenya")
+    appointment_date = models.DateTimeField()
+    approved = models.BooleanField(default=False)
+    closed = models.BooleanField(default=False)
+    recorded_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+    
+    def name(self):
+        return f"{self.first_name} {self.last_name}"
+    
+
+
+class ChurchMeeting(AbstractBaseModel):
+    title = models.CharField(max_length=255)
+    meeting_date = models.DateTimeField()
+    meeting_location = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+    
+
+class ChurchMeetingAttendance(AbstractBaseModel):
+    meeting = models.ForeignKey(ChurchMeeting, on_delete=models.CASCADE)
+    member = models.ForeignKey("membership.Member", on_delete=models.CASCADE)
+    status = models.CharField(max_length=255)
+    recorded_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+
+
+REQUEST_TYPES = [
+    ("Member", "Member"),
+    ("Non-Member", "Non-Member"),
+]
+
+REQUEST_STATUSES = [
+    ("Pending", "Pending"),
+    ("Approved", "Approved"),
+    ("Complete", "Complete"),
+    ("Declined", "Declined"),
+]
+
+
+class BaptismRequest(AbstractBaseModel):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES)
+    status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
+
+    def __str__(self):
+        return self.first_name
+    
+
+class MarriageRequest(AbstractBaseModel):
+    groom_first_name = models.CharField(max_length=255)
+    groom_last_name = models.CharField(max_length=255)
+    bride_first_name = models.CharField(max_length=255)
+    bride_last_name = models.CharField(max_length=255)
+    wedding_date = models.DateField(max_length=255)
+    wedding_location = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
+
+    def __str__(self):
+        return self.groom_first_name
+
+
+class BurialRequest(AbstractBaseModel):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    request_type = models.CharField(max_length=255)
+    status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
+
+    def __str__(self):
+        return self.first_name
+    
+
+
+class PrayerRequest(AbstractBaseModel):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES)
+    status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
+
+    def __str__(self):
+        return self.first_name

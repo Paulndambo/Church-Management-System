@@ -48,6 +48,7 @@
                     <th>Special Offering</th>
                     <th>Adult Att.</th>
                     <th>Children Att.</th>
+                    <th>Total</th>
                     <th></th>
                 </tr>
             </thead>
@@ -56,7 +57,7 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ church_report.church}}</td>
-                    <td>{{ church_report.church.pastor}}</td>
+                    <td>{{ church_report.pastor}}</td>
                     <td>{{ church_report.general_fund }}</td>
                     <td>{{ church_report.sunday_school }}</td>
                     <td>{{ church_report.pastors_fund }}</td>
@@ -67,6 +68,7 @@
                     <td>{{ church_report.special_offering}}</td>
                     <td>{{ church_report.adult }}</td>
                     <td>{{ church_report.children }}</td>
+                    <td>{{ church_report.total_collected}}</td>
                     <td>
                         <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editChurchDataModal{{church_report.id}}"><i class="fas fa-edit"></i></a>
                     </td>

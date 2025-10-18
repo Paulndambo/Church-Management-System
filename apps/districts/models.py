@@ -77,6 +77,8 @@ class KAGDistrictMonthlyReport(AbstractBaseModel):
     church_welfare = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     children = models.IntegerField(default=0)
     adult = models.IntegerField(default=0)
+    total_collected = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
+    pastor = models.ForeignKey("users.Pastor", on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
         return self.district.name

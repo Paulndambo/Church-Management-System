@@ -63,10 +63,10 @@
                     <label for="exampleInputPassword1" class="form-label fw-bold">Church</label>
                     <br>
                     <select class="form-select edit-pastor-select" id="branch" name="branch">
-                        <option value="{{pastor.church.id}}">{{pastor.church.name}}</option>
+                        <option value="{{pastor.church.id}}">{{pastor.church.name}}({{pastor.church.section}})</option>
                         {% for branch in branches %}
                             {% if branch.id != pastor.church.id %}
-                                <option value="{{branch.id}}">{{branch.name}}</option>
+                                <option value="{{branch.id}}">{{branch.name}}({{branch.section}})</option>
                             {% endif %}
                         {% endfor %}
                     </select>
