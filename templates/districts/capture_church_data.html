@@ -13,7 +13,7 @@
                 <div class="row mb-3">
                     <div class="col">
                         <label class="form-label fw-bold">Church</label>
-                        <select class="form-select" id="church" name="church" required>
+                        <select class="form-select select-add-church-name" id="church" name="church" required>
                             {% for church in churches %}
                                 <option value="{{church.id}}">{{church.name}}</option>
                             {% endfor %}
@@ -22,7 +22,7 @@
 
                     <div class="col">
                         <label class="form-label fw-bold">Church Pastor</label>
-                        <select class="form-select" id="pastor" name="pastor" required>
+                        <select class="form-select select-pastor-name" id="pastor" name="pastor" required>
                             {% for pastor in pastors %}
                                 <option value="{{pastor.id}}">{{pastor.name}}({{pastor.pastor_role}})</option>
                             {% endfor %}
@@ -248,3 +248,122 @@
       </div>
     </div>
   </div>
+
+
+<script>
+$(document).ready(function() {
+    // Initialize Select2 for edit modal when modal is shown
+    $('#captureChurchDataModal{{report.id}}').on('shown.bs.modal', function() {
+        var modalElement = $(this);
+        var selectElement = modalElement.find('.select-pastor-name');
+        
+        // Only initialize if not already initialized
+        if (!selectElement.data('select2')) {
+            selectElement.select2({
+                placeholder: 'Search and select a church...',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: modalElement.find('.modal-body'),
+                language: {
+                    noResults: function() {
+                        return "No churches found";
+                    }
+                }
+            });
+        }
+    });
+
+    // Destroy Select2 when modal is hidden
+    $('#captureChurchDataModal{{report.id}}').on('hidden.bs.modal', function() {
+        $(this).find('.select-pastor-name').select2('destroy');
+    });
+});
+
+
+$(document).ready(function() {
+    // Initialize Select2 for edit modal when modal is shown
+    $('#captureChurchDataModal{{report.id}}').on('shown.bs.modal', function() {
+        var modalElement = $(this);
+        var selectElement = modalElement.find('.select-add-church-name');
+        
+        // Only initialize if not already initialized
+        if (!selectElement.data('select2')) {
+            selectElement.select2({
+                placeholder: 'Search and select a church...',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: modalElement.find('.modal-body'),
+                language: {
+                    noResults: function() {
+                        return "No churches found";
+                    }
+                }
+            });
+        }
+    });
+
+    // Destroy Select2 when modal is hidden
+    $('#captureChurchDataModal{{report.id}}').on('hidden.bs.modal', function() {
+        $(this).find('.select-add-church-name').select2('destroy');
+    });
+});
+</script>
+
+<style>
+/* Fix Select2 styling in modals */
+.select2-container--open {
+    z-index: 1070 !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.375rem !important;
+    background-color: #fff !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 0.75rem !important;
+    line-height: 36px !important;
+    color: #212529 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 8px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    margin-top: 8px !important;
+}
+
+.select2-container--default .select2-dropdown {
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.375rem !important;
+}
+
+.select2-container--default .select2-results__option {
+    padding: 8px 12px !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #0d6efd !important;
+}
+
+.select2-search__field {
+    padding: 6px !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #dee2e6 !important;
+}
+</style>

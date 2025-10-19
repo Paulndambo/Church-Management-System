@@ -30,6 +30,7 @@
             <thead>
                 <tr>
                     <th></th>
+                    <th>Section</th>
                     <th>District</th>
                     <th>Month</th>
                     <th>Created On</th>
@@ -40,6 +41,7 @@
                 {% for report in reports %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
+                    <td>{{ report.section }}</td>
                     <td>{{ report.district }}</td>
                     <td>{{ report.month }}({{ report.year }})</td>
                     <td>{{ report.created_at }}</td>

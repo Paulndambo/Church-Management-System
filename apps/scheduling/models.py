@@ -49,16 +49,23 @@ REQUEST_STATUSES = [
     ("Approved", "Approved"),
     ("Complete", "Complete"),
     ("Declined", "Declined"),
+    ("Cancelled", "Cancelled"),
 ]
 
+GENDER_CHOICES=[
+    ("Male", "Male"),
+    ("Female", "Female"),
+]
 
 class BaptismRequest(AbstractBaseModel):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICES, null=True)
     phone_number = models.CharField(max_length=255)
-    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES)
+    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES, default="Member")
     status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
+    request_date = models.DateField(max_length=255, null=True)
+    phone_number = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.first_name
@@ -72,19 +79,28 @@ class MarriageRequest(AbstractBaseModel):
     wedding_date = models.DateField(max_length=255)
     wedding_location = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
+    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES, default="Member")
     status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
 
     def __str__(self):
         return self.groom_first_name
+    
 
+    def groom(self):
+        return f"{self.groom_first_name} {self.groom_last_name}"
+
+    def bride(self):
+        return f"{self.bride_first_name} {self.bride_last_name}"
 
 class BurialRequest(AbstractBaseModel):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICES, null=True)
     phone_number = models.CharField(max_length=255)
-    request_type = models.CharField(max_length=255)
+    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES, default="Member")
     status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
+    request_date = models.DateField(max_length=255, null=True)
+    phone_number = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.first_name
@@ -94,10 +110,12 @@ class BurialRequest(AbstractBaseModel):
 class PrayerRequest(AbstractBaseModel):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICES, null=True)
     phone_number = models.CharField(max_length=255)
-    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES)
+    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES, default="Member")
     status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
+    request_date = models.DateField(max_length=255, null=True)
+    phone_number = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.first_name
