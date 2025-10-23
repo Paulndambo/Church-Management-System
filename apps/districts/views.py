@@ -508,13 +508,13 @@ def new_district_branch(request: HttpRequest):
         name = request.POST.get("name")
         town = request.POST.get("town")
         location = request.POST.get("location")
-        section = request.POST.get("section")
+        section_id = request.POST.get("section_id")
 
         Branch.objects.create(
-            section_id=section, name=name, location=location, town=town
+            section_id=section_id, name=name, location=location, town=town
         )
 
-        return redirect("district-churches")
+        return redirect("section-detail", id=section_id)
     return render(request, "districts/branches/new_branch.html")
 
 
@@ -522,18 +522,29 @@ def new_district_branch(request: HttpRequest):
 def edit_district_branch(request: HttpRequest):
     if request.method == "POST":
         branch_id = request.POST.get("branch_id")
-        section = request.POST.get("section_id")
+        section_id = request.POST.get("section_id")
         name = request.POST.get("name")
         town = request.POST.get("town")
         location = request.POST.get("location")
-        section = request.POST.get("section")
+        
 
         Branch.objects.filter(id=branch_id).update(
-            section_id=section, name=name, location=location, town=town
+            section_id=section_id, name=name, location=location, town=town
         )
 
-        return redirect("district-churches")
+        return redirect("section-detail", id=section_id)
     return render(request, "districts/branches/edit_branch.html")
+
+
+@login_required
+def delete_district_branch(request: HttpRequest):
+    if request.method == "POST":
+        branch_id = request.POST.get("branch_id")
+        section_id = request.POST.get("section_id")
+        Branch.objects.filter(id=branch_id).delete()
+
+        return redirect("section-detail", id=section_id)
+    return render(request, "districts/branches/delete_branch.html")
 
 
 def get_section_summary(report_id: int):

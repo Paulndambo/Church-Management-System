@@ -1,122 +1,110 @@
-{% extends 'base.html' %}
-{% load static %}
-
+{% extends "base.html" %}
 
 {% block content %}
-{% include "districts/capture_church_data.html" %}
-
-<div class="table-card mb-4">
-    <div class="row py-3 px-2">
-        <div class="col">
-            <h3>Churches Monthly Data</h3>
+<!-- Stats Row -->
+<div class="dashboard">
+    <div class="row g-4 mb-4">
+       <div class="col-xl-6 col-md-6">
+            <div class="card card-stat h-80">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-church-primary">SECTION NAME</h6>
+                            <h3 class="text-church-secondary">{{section.name}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            <select class="form-control" id="searchSelect">
-                <option value="">-- Select a year --</option>
-                {% for year in years %}
-                    {% for month in months %}
-                        <option value="{{month}},{{year}}" {% if search_query == year|stringformat:"s" %}selected{% endif %}>
-                            {{month}} - {{ year }}
-                        </option>
-                    {% endfor %}
-                {% endfor %}
-            </select>
+        <div class="col-xl-6 col-md-6">
+            <div class="card card-stat h-80">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-church-primary">PRESBYTER</h6>
+                            <h3 class="text-church-secondary">{{section.presbyter.name}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureChurchDataModal{{report.id}}">Fill Church Report</button>
+        <div class="col-xl-6 col-md-6">
+            <div class="card card-stat h-80">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-church-primary">LEAD PASTORS</h6>
+                            <h3 class="text-church-secondary">{{lead_pastors_count}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-md-6">
+            <div class="card card-stat h-80">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-church-primary">ASSOCIATE PASTORS</h6>
+                            <h3 class="text-church-secondary">{{associate_pastors_count}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <!-- Table Toolbar --> 
-    <!-- Loading Bar -->
+
+<div class="table-card">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3 class="fw-bold">{{section.name}} Churches</h3>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictChurchModal{{section.id}}">Add Church</button>
+          </div>
+    </div>
+    {% include "districts/branches/new_branch.html" %}
+ 
     <div class="loader" id="loader"></div>
 
     <!-- Table Container -->
     <div class="table-container px-2">
-        <table class="table data-table table-sm table-borders-all">
+        <table class="table data-table table-sm">
             <thead>
-                <tr class="table-headers-borders">
+                <tr>
                     <th></th>
-                    <th>Church</th>
-                    <th>Pastor</th>
-                    <th>General Fund</th>
-                    <th>Sunday School</th>
-                    <th>Pastors Fund</th>
-                    <th>Presbyter Tithe</th>
-                    <th>Pastor's Tithe</th>
-                    <th>Easter Building</th>
-                    <th>Kenya Kids</th>
-                    <th>Special Offering</th>
-                    <th>Adult Att.</th>
-                    <th>Children Att.</th>
-                    <th>Total</th>
+                    <th>Name</th>
+                    <th>Section</th>
+                    <th>Town</th>
+                    <th>Created On</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                {% for church_report in church_reports %}
+                {% for branch in branches %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ church_report.church}}</td>
-                    <td>{{ church_report.pastor}}</td>
-                    <td>{{ church_report.general_fund }}</td>
-                    <td>{{ church_report.sunday_school }}</td>
-                    <td>{{ church_report.pastors_fund }}</td>
-                    <td>{{ church_report.presbyter_tithe }}</td>
-                    <td>{{ church_report.pastors_tithe }}</td>
-                    <td>{{ church_report.easter }}</td>
-                    <td>{{ church_report.kenya_kids }}</td>
-                    <td>{{ church_report.special_offering}}</td>
-                    <td>{{ church_report.adult }}</td>
-                    <td>{{ church_report.children }}</td>
-                    <td>{{ church_report.total_collected}}</td>
+                    <td>{{ branch.name }}</td>
+                    <td>{{ branch.section }}</td>
+                    <td>{{ branch.town }}</td>
+                    <td>{{  branch.created_at}}</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editChurchDataModal{{church_report.id}}"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editBranchModal{{branch.id}}"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDistrictBranchModal{{branch.id}}"><i class="fas fa-trash"></i></a>
                     </td>
-                    
-                    {% include "districts/edit_church_data.html" %}
-                   
+                    {% include "districts/branches/edit_branch.html" %}
+                    {% include "districts/branches/delete_branch.html" %}
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="15" class="text-center py-4">
-                        No finances found
+                    <td colspan="8" class="text-center py-4">
+                        No branches found
                     </td>
                 </tr>
                 {% endfor %}
-               
-               
             </tbody>
         </table>
     </div>
 </div>
+</div>
 {% endblock content %}
-{% block additional_scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchSelect = document.getElementById('searchSelect');
-        const loader = document.getElementById('loader');
-
-        searchSelect.addEventListener('change', function() {
-            loader.classList.add('active');
-            const searchQuery = this.value;
-            window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
-        });
-
-        // Utility function to get CSRF token
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-    });
-</script>
-{% endblock additional_scripts %}

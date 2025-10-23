@@ -1,4 +1,4 @@
-<div class="modal fade" id="newDistrictChurchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newDistrictChurchModal{{section.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,16 +8,7 @@
             <form action="{% url 'new-district-church' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                  <div class="row mb-3">
-                    <div class="col">
-                    <label class="form-label fw-bold">Section</label>
-                    <select class="form-select" id="section" name="section" required>
-                        {% for section in sections %}
-                            <option value={{section.id}}>{{section.name}}</option>
-                         {% endfor %}
-                      </select>
-                  </div>
-                </div>
+                  <input type="hidden" name="section_id" id="section_id" value="{{section.id}}" readonly />
                   <div class="row mb-3">
                 <div class="col">
                   <label for="exampleInputPassword1" class="form-label fw-bold">Branch Name</label>

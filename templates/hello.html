@@ -1,349 +1,566 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Monthly Church Report</title>
-  <style>
-    @page {
-      size: A4 landscape;
-      margin: 15mm;
-    }
-
-    :root {
-      --muted: #555;
-      --accent: #0b66c3;
-      --line: #ccc;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-
-    body {
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    .report-container {
-      background: white;
-      max-width: 100%;
-      width: 297mm;
-      min-height: 210mm;
-      padding: 20mm;
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
-
-    h1 {
-      text-align: center;
-      margin: 0.5rem 0;
-      color: var(--accent);
-      font-size: 2rem;
-      letter-spacing: 1px;
-    }
-
-    h2.section-title {
-      text-align: left;
-      font-size: 1.1rem;
-      margin: 1rem 0 0.5rem;
-      border-bottom: 2px solid var(--accent);
-      padding-bottom: 0.3rem;
-      color: var(--accent);
-      text-transform: uppercase;
-    }
-
-    .church-info {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .church-info p {
-      margin: 0.3rem 0;
-      color: var(--muted);
-      font-size: 1rem;
-    }
-
-    .overview-metrics {
-      width: 80%;
-      margin: 1.5rem auto;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-      border: 1px solid var(--line);
-    }
-
-    .overview-metrics th, .overview-metrics td {
-      border: 1px solid var(--line);
-      padding: 0.5rem;
-      text-align: center;
-    }
-
-    .overview-metrics th {
-      background: #f1f5f9;
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .overview-metrics td {
-      background: #fafafa;
-      font-weight: 500;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.5rem;
-      font-size: 0.8rem;
-      page-break-inside: avoid;
-    }
-
-    th, td {
-      border: 1px solid var(--line);
-      padding: 0.4rem 0.5rem;
-      text-align: center;
-      vertical-align: middle;
-    }
-
-    th {
-      background: #f1f5f9;
-      font-weight: 600;
-      color: var(--accent);
-    }
-
-    tbody tr:nth-child(odd) {
-      background: #fafafa;
-    }
-
-    tfoot td {
-      font-weight: bold;
-      background: #eaf3fc;
-    }
-
-    .section {
-      margin-bottom: 2rem;
-      page-break-before: always;
-    }
-
-    .signatures {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 2rem;
-      page-break-before: always;
-    }
-
-    .signature-line {
-      width: 30%;
-      text-align: center;
-    }
-
-    .signature-line span {
-      display: block;
-      border-top: 1px solid var(--line);
-      margin-top: 3rem;
-      padding-top: 0.3rem;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    #download {
-      margin-bottom: 1rem;
-      padding: 0.6rem 1.2rem;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #download:hover {
-      background: #094a8b;
-    }
-
-    .page-break {
-      page-break-before: always;
-    }
-  </style>
+    <title>Sample Table | KANISA CLOUD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --church-primary: #2C3E50;
+            --church-secondary: #8b4513;
+            --church-accent: #FFC107;
+            --church-light-accent: #FFF8E1;
+            --church-cream: #FAFAFA;
+            --church-ivory: #FFFFFF;
+            --church-dark: #333333;
+            --church-deep-blue: #1B2631;
+            --church-blue-gold: #F57F17;
+            --church-stone: #EEEEEE;
+            --church-gold: #e9d9ab;
+            --card-shadow: 0 0.15rem 1.75rem 0 rgba(44, 62, 80, 0.15);
+            --church-shadow: rgba(44, 62, 80, 0.1);
+            --church-shadow-deep: rgba(51, 51, 51, 0.2);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--church-gold);
+            color: var(--church-dark);
+            padding: 2rem;
+        }
+        .page-header {
+            background: linear-gradient(135deg, var(--church-primary) 0%, var(--church-deep-blue) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        .table {
+            margin-bottom: 0;
+            color: var(--church-dark);
+        }
+        .table thead {
+            background: linear-gradient(135deg, var(--church-primary) 0%, var(--church-deep-blue) 100%);
+            color: white;
+        }
+        .table thead th {
+            border: none;
+            padding: 1rem 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        .table thead th:first-child {
+            border-top-left-radius: 8px;
+        }
+        .table thead th:last-child {
+            border-top-right-radius: 8px;
+        }
+        .table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--church-stone);
+        }
+        .table tbody tr:hover {
+            background-color: var(--church-light-accent);
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px var(--church-shadow);
+        }
+        .table tbody tr:last-child {
+            border-bottom: none;
+        }
+        .table tbody td {
+            padding: 1rem 0.75rem;
+            vertical-align: middle;
+            color: var(--church-dark);
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(250, 250, 250, 0.5);
+        }
+        .table .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            margin: 0 2px;
+        }
+        .table .action-buttons {
+            display: flex;
+            gap: 0.25rem;
+            justify-content: center;
+        }
+        .badge {
+            padding: 0.35em 0.65em;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-warning {
+            background-color: var(--church-accent);
+            color: var(--church-primary);
+        }
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .badge-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .badge-primary {
+            background-color: var(--church-primary);
+            color: white;
+        }
+        .table-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--church-stone);
+        }
+        .pagination-info {
+            color: var(--church-dark);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .pagination {
+            margin: 0;
+        }
+        .pagination .page-item {
+            margin: 0 2px;
+        }
+        .pagination .page-link {
+            border: 2px solid var(--church-stone);
+            color: var(--church-primary);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .pagination .page-link:hover {
+            background-color: var(--church-accent);
+            border-color: var(--church-accent);
+            color: var(--church-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--church-shadow);
+        }
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(135deg, var(--church-accent) 0%, var(--church-blue-gold) 100%);
+            border-color: var(--church-accent);
+            color: var(--church-primary);
+            font-weight: 600;
+        }
+        .pagination .page-item.disabled .page-link {
+            background-color: var(--church-stone);
+            border-color: var(--church-stone);
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--church-primary) 0%, var(--church-deep-blue) 100%);
+            border-color: var(--church-primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--church-deep-blue) 0%, var(--church-primary) 100%);
+            border-color: var(--church-accent);
+            color: var(--church-light-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--church-shadow);
+        }
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            border-color: #17a2b8;
+            color: white;
+        }
+        .btn-info:hover {
+            background: linear-gradient(135deg, #138496 0%, #17a2b8 100%);
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border-color: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c82333 0%, #dc3545 100%);
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .table thead {
+                display: none;
+            }
+            .table tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                border: 2px solid var(--church-stone);
+                border-radius: 8px;
+                padding: 1rem;
+                background: white;
+            }
+            .table tbody td {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+                border: none;
+                text-align: right;
+            }
+            .table tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--church-primary);
+                text-align: left;
+                margin-right: 1rem;
+            }
+            .table .action-buttons {
+                justify-content: flex-end;
+                margin-top: 0.5rem;
+            }
+            .table-pagination {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div>
-    <button id="download">Download PDF</button>
+    <div class="container-fluid">
+        <div class="page-header">
+            <h1 class="mb-0"><i class="fas fa-users me-2"></i>Church Members</h1>
+            <p class="mb-0 mt-2">Manage and view all registered church members</p>
+        </div>
 
-    <div class="report-container" id="report">
+        <!-- Example 1: Members Table with All Features -->
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Active Members</h4>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add Member
+                </button>
+            </div>
+            
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Section</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="#">1</td>
+                        <td data-label="Name">John Mwangi</td>
+                        <td data-label="Email">john.mwangi@email.com</td>
+                        <td data-label="Phone">+254 712 345 678</td>
+                        <td data-label="Section">Huruma</td>
+                        <td data-label="Status"><span class="badge badge-success">Active</span></td>
+                        <td data-label="Joined">Jan 15, 2024</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-info btn-sm" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="#">2</td>
+                        <td data-label="Name">Mary Wanjiru</td>
+                        <td data-label="Email">mary.wanjiru@email.com</td>
+                        <td data-label="Phone">+254 723 456 789</td>
+                        <td data-label="Section">Kayole</td>
+                        <td data-label="Status"><span class="badge badge-success">Active</span></td>
+                        <td data-label="Joined">Feb 20, 2024</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-info btn-sm" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="#">3</td>
+                        <td data-label="Name">Peter Ochieng</td>
+                        <td data-label="Email">peter.ochieng@email.com</td>
+                        <td data-label="Phone">+254 734 567 890</td>
+                        <td data-label="Section">Athi</td>
+                        <td data-label="Status"><span class="badge badge-warning">Pending</span></td>
+                        <td data-label="Joined">Mar 10, 2024</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-info btn-sm" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="#">4</td>
+                        <td data-label="Name">Grace Akinyi</td>
+                        <td data-label="Email">grace.akinyi@email.com</td>
+                        <td data-label="Phone">+254 745 678 901</td>
+                        <td data-label="Section">Embakasi</td>
+                        <td data-label="Status"><span class="badge badge-success">Active</span></td>
+                        <td data-label="Joined">Apr 05, 2024</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-info btn-sm" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="#">5</td>
+                        <td data-label="Name">David Kamau</td>
+                        <td data-label="Email">david.kamau@email.com</td>
+                        <td data-label="Phone">+254 756 789 012</td>
+                        <td data-label="Section">Juja</td>
+                        <td data-label="Status"><span class="badge badge-danger">Inactive</span></td>
+                        <td data-label="Joined">May 12, 2024</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-info btn-sm" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="#">6</td>
+                        <td data-label="Name">Sarah Njeri</td>
+                        <td data-label="Email">sarah.njeri@email.com</td>
+                        <td data-label="Phone">+254 767 890 123</td>
+                        <td data-label="Section">Thome</td>
+                        <td data-label="Status"><span class="badge badge-success">Active</span></td>
+                        <td data-label="Joined">Jun 18, 2024</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-info btn-sm" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="#">7</td>
+                        <td data-label="Name">James Omondi</td>
+                        <td data-label="Email">james.omondi@email.com</td>
+                        <td data-label="Phone">+254 778 901 234</td>
+                        <td data-label="Section">Utawala</td>
+                        <td data-label="Status"><span class="badge badge-info">New</span></td>
+                        <td data-label="Joined">Jul 22, 2024</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-info btn-sm" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="#">8</td>
+                        <td data-label="Name">Ruth Muthoni</td>
+                        <td data-label="Email">ruth.muthoni@email.com</td>
+                        <td data-label="Phone">+254 789 012 345</td>
+                        <td data-label="Section">Mlolongo</td>
+                        <td data-label="Status"><span class="badge badge-success">Active</span></td>
+                        <td data-label="Joined">Aug 30, 2024</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-info btn-sm" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-      <!-- Cover / Metadata Page -->
-      <h1>District Monthly Report</h1>
-      <div class="church-info">
-        <p><strong>District:</strong> {{report.district.name}}</p>
-        <p><strong>Report Month:</strong> {{report.month}} {{report.year}}</p>
-        <p><strong>Date of Meeting:</strong> _____________________</p>
-        <p><strong>Generated on:</strong> {{today_date}}</p>
-      </div>
+            <!-- Pagination -->
+            <div class="table-pagination">
+                <div class="pagination-info">
+                    Showing 1 to 8 of 45 entries
+                </div>
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="fas fa-angle-left"></i> Previous
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">5</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+                                Next <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
 
-      <!-- Overview Metrics Table -->
-      <table class="overview-metrics">
-        <thead>
-          <tr>
-            <th>Total General Fund</th>
-            <th>Total Attendance</th>
-            <th>Total Expenses</th>
-            <th>National Contribution</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ total_general_fund }}</td>
-            <td>{{ total_adult_attendance|add:total_children_attendance }}</td>
-            <td>{{ total_expenses }}</td>
-            <td>{{ district_total }}</td>
-          </tr>
-        </tbody>
-      </table>
+        <!-- Example 2: Simple Table (Without Striping) -->
+        <div class="table-container">
+            <h4 class="mb-3">Attendance Summary</h4>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Service</th>
+                        <th>Adults</th>
+                        <th>Children</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Date">Oct 20, 2024</td>
+                        <td data-label="Service">Sunday Service</td>
+                        <td data-label="Adults">156</td>
+                        <td data-label="Children">42</td>
+                        <td data-label="Total">198</td>
+                        <td data-label="Status"><span class="badge badge-success">Recorded</span></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Date">Oct 17, 2024</td>
+                        <td data-label="Service">Midweek Service</td>
+                        <td data-label="Adults">87</td>
+                        <td data-label="Children">23</td>
+                        <td data-label="Total">110</td>
+                        <td data-label="Status"><span class="badge badge-success">Recorded</span></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Date">Oct 13, 2024</td>
+                        <td data-label="Service">Sunday Service</td>
+                        <td data-label="Adults">143</td>
+                        <td data-label="Children">38</td>
+                        <td data-label="Total">181</td>
+                        <td data-label="Status"><span class="badge badge-success">Recorded</span></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Date">Oct 10, 2024</td>
+                        <td data-label="Service">Midweek Service</td>
+                        <td data-label="Adults">92</td>
+                        <td data-label="Children">19</td>
+                        <td data-label="Total">111</td>
+                        <td data-label="Status"><span class="badge badge-success">Recorded</span></td>
+                    </tr>
+                </tbody>
+            </table>
 
-      <div class="page-break"></div>
-
-      <!-- Revenue Section -->
-      <div class="section">
-        <h2 class="section-title">Revenue</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Section</th>
-              <th>Presbyter</th>
-              <th>General Fund</th>
-              <th>Sunday School</th>
-              <th>Pastors Fund</th>
-              <th>Presbyter Tithe</th>
-              <th>Pastor's Tithe</th>
-              <th>Easter Building</th>
-              <th>Kenya Kids</th>
-              <th>Special Offering</th>
-              <th>Adult Att.</th>
-              <th>Children Att.</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for report in first_part %}
-            <tr>
-              <td>{{ forloop.counter }}</td>
-              <td>{{ report.section }}</td>
-              <td>{{ report.section.presbyter.name }}</td>
-              <td>{{ report.general_fund }}</td>
-              <td>{{ report.sunday_school }}</td>
-              <td>{{ report.pastors_fund }}</td>
-              <td>{{ report.presbyter_tithe }}</td>
-              <td>{{ report.pastors_tithe }}</td>
-              <td>{{ report.easter }}</td>
-              <td>{{ report.kenya_kids }}</td>
-              <td>{{ report.special_offering}}</td>
-              <td>{{ report.adult }}</td>
-              <td>{{ report.children }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Second Part Revenue -->
-      <div class="section">
-        <table>
-          <thead> ... same as above ... </thead>
-          <tbody>
-            {% for report in second_part %}
-            <tr>
-              <td>{{ forloop.counter }}</td>
-              <td>{{ report.section }}</td>
-              <td>{{ report.section.presbyter.name }}</td>
-              <td>{{ report.general_fund }}</td>
-              <td>{{ report.sunday_school }}</td>
-              <td>{{ report.pastors_fund }}</td>
-              <td>{{ report.presbyter_tithe }}</td>
-              <td>{{ report.pastors_tithe }}</td>
-              <td>{{ report.easter }}</td>
-              <td>{{ report.kenya_kids }}</td>
-              <td>{{ report.special_offering}}</td>
-              <td>{{ report.adult }}</td>
-              <td>{{ report.children }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td><b>Totals</b></td>
-              <td></td>
-              <td><b>{{ total_general_fund }}</b></td>
-              <td><b>{{ total_sunday_school }}</b></td>
-              <td><b>{{ total_pastors_fund }}</b></td>
-              <td><b>{{ total_presbyter_tithe }}</b></td>
-              <td><b>{{ total_pastors_tithe }}</b></td>
-              <td><b>{{ easter_total }}</b></td>
-              <td><b>{{ kenya_kids }}</b></td>
-              <td><b>{{ special_offering }}</b></td>
-              <td><b>{{ total_adult_attendance }}</b></td>
-              <td><b>{{ total_children_attendance }}</b></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <!-- Expenses Section -->
-      <div class="section">
-        <h2 class="section-title">Expenses & Expenditures</h2>
-        <table>
-          <thead><tr><th>#</th><th>Expense Name</th><th>Amount (KES)</th></tr></thead>
-          <tbody>
-            {% for expense in expenses %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <td>{{expense.expense_name}}</td>
-              <td>{{expense.amount_spend}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr><td></td><td>Grand Total</td><td>{{total_expenses}}</td></tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <!-- Contributions -->
-      <div class="section">
-        <h2 class="section-title">Contribution to National Office</h2>
-        <table> ... same as before ... </table>
-      </div>
-
-      <!-- Additionals -->
-      <div class="section">
-        <h2 class="section-title">Additionals</h2>
-        <table> ... same as before ... </table>
-      </div>
-
-      <!-- Signatures -->
-      <div class="signatures">
-        <div class="signature-line"><span>District Supt. Signature</span></div>
-        <div class="signature-line"><span>District Treasurer's Signature</span></div>
-      </div>
-
+            <div class="table-pagination">
+                <div class="pagination-info">
+                    Showing 1 to 4 of 12 entries
+                </div>
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#"><i class="fas fa-angle-left"></i></a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#"><i class="fas fa-angle-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- html2pdf.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script>
-    document.getElementById("download").addEventListener("click", () => {
-      const element = document.getElementById("report");
-      const opt = {
-        margin: [10, 10, 20, 10],
-        filename: 'Monthly_Church_Report.pdf',
-        image: { type: 'jpeg', quality: 0.95 },
-        html2canvas: { scale: 1.2, scrollX: 0, scrollY: 0 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-      };
-      html2pdf().from(element).set(opt).save();
-    });
-  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@ class SectionsListView(LoginRequiredMixin, ListView):
     model = Section
     template_name = "districts/sections/sections.html"
     context_object_name = "sections"
-    paginate_by = 10
+    paginate_by = 9
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -43,9 +43,10 @@ def section_details(request: HttpRequest, id: int):
     search_query = request.GET.get("search", "")
 
     section = Section.objects.get(id=id)
-    churches = section.sectionbranches.all()
+    churches = Branch.objects.filter(section=section)
 
-    pastors = Pastor.objects.filter(church__section=section)
+    lead_pastors_count = Pastor.objects.filter(church__section=section).filter(pastor_role="Lead Pastor").count()
+    associate_pastors_count = Pastor.objects.filter(church__section=section).filter(pastor_role="Pastor Associate").count()
 
     church_reports = KAGDistrictMonthlyReport.objects.filter(section=section)
 
@@ -55,11 +56,12 @@ def section_details(request: HttpRequest, id: int):
 
     context = {
         "section": section,
-        "churches": churches,
+        "branches": churches,
         "months": MONTHS_LIST,
         "years": YEARS_LIST,
         "church_reports": reports_to_show,
-        "pastors": pastors
+        "lead_pastors_count": lead_pastors_count,
+        "associate_pastors_count": associate_pastors_count,
     }
     return render(request, "districts/sections/section_details.html", context)
 
@@ -163,6 +165,7 @@ def branch_details(request: HttpRequest, id: int):
 def capture_church_data(request: HttpRequest):
     if request.method == "POST":
         church_id = request.POST.get("church")
+        report_id = request.POST.get("report_id")
 
         year = request.POST.get("year")
         month = request.POST.get("month")
@@ -190,6 +193,13 @@ def capture_church_data(request: HttpRequest):
         pastors_fund = request.POST.get("pastors_fund")
         church_welfare = request.POST.get("church_welfare")
 
+        print("**************Details*****************")
+        #print(f"Section ID: {section_id}")
+        print(f"Year: {year}")
+        print(f"Month: {month}")
+        print("**************Details*****************")
+
+        section_report = SectionReport.objects.get(id=report_id)
         church = Branch.objects.get(id=church_id)
         
 
@@ -199,7 +209,7 @@ def capture_church_data(request: HttpRequest):
             report = DistrictReport.objects.create(
                 district=church.section.district,
                 month=month,
-                year=year
+                year=section_report.year
             )
 
         KAGDistrictMonthlyReport.objects.create(
@@ -209,8 +219,9 @@ def capture_church_data(request: HttpRequest):
             total_collected=total_collected,
             district=church.section.district,
             section=church.section,
-            year=report.year,
-            month=report.month,
+            section_report=section_report,
+            year=section_report.year,
+            month=month,
             children=children,
             adult=adult,
             general_fund=general_fund,
@@ -228,7 +239,7 @@ def capture_church_data(request: HttpRequest):
             pastors_fund=pastors_fund,
         )
 
-        return redirect("section-detail", id=church.section.id)
+        return redirect("section-report-detail", id=report_id)
     return render(request, "districts/capture_church_data.html")
 
 
@@ -240,7 +251,8 @@ def edit_section_data(request: HttpRequest):
         section_id = request.POST.get("section_id")
         general_fund = request.POST.get("general_fund")
         sunday_school = request.POST.get("sunday_school")
-
+        year = request.POST.get("year")
+        month = request.POST.get("month")
         total_collected = request.POST.get("total_collected")
         pastor = request.POST.get("pastor")
 
@@ -263,6 +275,15 @@ def edit_section_data(request: HttpRequest):
         pastors_fund = request.POST.get("pastors_fund")
         church_welfare = request.POST.get("church_welfare")
 
+        print("**************Details*****************")
+        print(f"Section ID: {section_id}")
+        print(f"Year: {year}")
+        print(f"Month: {month}")
+        print("**************Details*****************")
+
+        section_report = SectionReport.objects.filter(section__id=section_id, year=year).first()
+        
+
         KAGDistrictMonthlyReport.objects.filter(id=report_id).update(
             children=children,
             adult=adult,
@@ -279,176 +300,25 @@ def edit_section_data(request: HttpRequest):
             district_missions=district_missions,
             resource_mobilisation=resource_mobilisation,
             kagdom=kagdom,
+            year=section_report.year,
+            month=month,
             church_support=church_support,
             church_welfare=church_welfare,
             pastors_fund=pastors_fund,
         )
 
-        return redirect("section-detail", id=section_id)
+        return redirect("section-report-detail", id=section_report.id)
     return render(request, "districts/edit_section_data.html")
 
 
-class PastorsListView(LoginRequiredMixin, ListView):
-    model = Pastor
-    template_name = "districts/pastors/pastors.html"
-    context_object_name = "pastors"
-    paginate_by = 10
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.GET.get("search", "")
-
-        if search_query:
-            queryset = queryset.filter(
-                Q(id__icontains=search_query) | Q(first_name__icontains=search_query)
-            )
-        # Get sort parameter
-        return queryset.filter(pastor_role="Lead Pastor").order_by("-created_at")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["branches"] = Branch.objects.all()
-        context["genders"] = GENDER_CHOICES
-        return context
-    
-
 @login_required
 @transaction.atomic
-def new_pastor(request: HttpRequest):
+def delete_church_data(request: HttpRequest):
     if request.method == "POST":
-        branch = request.POST.get("branch")
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        gender = request.POST.get("gender")
-        phone_number = request.POST.get("phone_number")
-        email = request.POST.get("email")
-       
+        report_id = request.POST.get("report_id")
+        church_report_id = request.POST.get("church_report_id")
 
-        Pastor.objects.create(
-            church_id=branch,
-            first_name=first_name,
-            last_name=last_name,
-            gender=gender,
-            phone_number=phone_number,
-            email=email,
-            pastor_role="Lead Pastor"
-        )
-        return redirect("district-pastors")
-    return render(request, "districts/pastors/new_pastor.html")
+        KAGDistrictMonthlyReport.objects.filter(id=church_report_id).delete()
 
-
-@login_required
-def edit_pastor(request: HttpRequest):
-    if request.method == "POST":
-        pastor_id = request.POST.get("pastor_id")
-        branch = request.POST.get("branch")
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        gender = request.POST.get("gender")
-        phone_number = request.POST.get("phone_number")
-        email = request.POST.get("email")
-
-
-        Pastor.objects.filter(id=pastor_id).update(
-            church_id=branch,
-            first_name=first_name,
-            last_name=last_name,
-            gender=gender,
-            phone_number=phone_number,
-            email=email,
-            pastor_role="Lead Pastor"
-        )
-        return redirect("district-pastors")
-    return render(request, "districts/pastors/edit_pastor.html")
-
-
-@login_required
-def delete_pastor(request: HttpRequest):
-    if request.method == "POST":
-        pastor_id = request.POST.get("pastor_id")
-        role = request.POST.get("role")
-
-        pastor = Pastor.objects.get(id=pastor_id)
-        pastor.delete()
-
-        print("***************Pastor Role*****************")
-        print(f"Role: {role}")
-        print("***************Pastor Role*****************")
-
-        if role == "Lead Pastor":
-            return redirect("district-pastors")
-        
-        return redirect("district-pastor-associates")
-
-    return render(request, "districts/pastors/delete_pastor.html")
-
-
-class PastorsAssociatesListView(LoginRequiredMixin, ListView):
-    model = Pastor
-    template_name = "districts/pastors/pastor_associates.html"
-    context_object_name = "pastors"
-    paginate_by = 10
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.GET.get("search", "")
-
-        if search_query:
-            queryset = queryset.filter(
-                Q(id__icontains=search_query) | Q(first_name__icontains=search_query)
-            )
-        # Get sort parameter
-        return queryset.filter(pastor_role="Pastor Associate").order_by("-created_at")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["branches"] = Branch.objects.all()
-        return context
-    
-
-@login_required
-@transaction.atomic
-def new_pastor_associate(request: HttpRequest):
-    if request.method == "POST":
-        branch = request.POST.get("branch")
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        gender = request.POST.get("gender")
-        phone_number = request.POST.get("phone_number")
-        email = request.POST.get("email")
-    
-        Pastor.objects.create(
-            church_id=branch,
-            first_name=first_name,
-            last_name=last_name,
-            gender=gender,
-            phone_number=phone_number,
-            email=email,
-            pastor_role="Pastor Associate"
-        )
-        return redirect("district-pastor-associates")
-    return render(request, "districts/pastors/new_pastor_associate.html")
-
-
-@login_required
-def edit_pastor_associate(request: HttpRequest):
-    if request.method == "POST":
-        pastor_id = request.POST.get("pastor_id")
-        branch = request.POST.get("branch")
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        gender = request.POST.get("gender")
-        phone_number = request.POST.get("phone_number")
-        email = request.POST.get("email")
-
-        Pastor.objects.filter(id=pastor_id).update(
-            church_id=branch,
-            first_name=first_name,
-            last_name=last_name,
-            gender=gender,
-            phone_number=phone_number,
-            email=email,
-            pastor_role="Pastor Associate"
-        )
-        return redirect("district-pastor-associates")
-    return render(request, "districts/pastors/edit_pastor_associate.html")
+        return redirect("section-report-detail", id=report_id)
+    return render(request, "districts/section_reports/delete_report.html")

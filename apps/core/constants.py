@@ -37,7 +37,7 @@ MONTHS_LIST = [
     "December",
 ]
 
-YEARS_LIST = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]
+YEARS_LIST = [2025, 2026, 2027, 2028, 2029, 2030]
 
 
 def get_month_number(month_name: str) -> int:

@@ -1,4 +1,4 @@
-<div class="modal fade" id="captureChurchDataModal{{report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="captureChurchDataModal{{section_report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,7 +8,7 @@
             <form action="{% url 'capture-church-data' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                <input type="hidden" name="report_id" id="report_id" value="{{report.id}}" readonly/>
+                <input type="hidden" name="report_id" id="report_id" value="{{section_report.id}}" readonly/>
                     
                 <div class="row mb-3">
                     <div class="col">
@@ -39,7 +39,16 @@
                             {% endfor %}
                         </select>
                     </div>
-                 
+                     <div class="col">
+                        <label class="form-label fw-bold">Year</label>
+                        <select class="form-select" id="year" name="year" required>
+                            <option value="{{section_report.year}}" selected>{{section_report.year}}</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="row mb-3">
+               
                     <div class="col">
                         <label class="form-label fw-bold">Total Collected</label>
                             <input
@@ -50,16 +59,6 @@
                                 value="0"
                             />
                         
-                    </div>
-                </div>
-                <div class="row mb-3">
-                <div class="col">
-                        <label class="form-label fw-bold">Year</label>
-                        <select class="form-select" id="year" name="year" required>
-                            {% for year in years %}
-                                <option value="{{year}}">{{year}}</option>
-                            {% endfor %}
-                        </select>
                     </div>
                     <div class="col">
                         <label for="exampleInputPassword1" class="form-label fw-bold">Kenya Kids</label>
@@ -253,7 +252,7 @@
 <script>
 $(document).ready(function() {
     // Initialize Select2 for edit modal when modal is shown
-    $('#captureChurchDataModal{{report.id}}').on('shown.bs.modal', function() {
+    $('#captureChurchDataModal{{section_report.id}}').on('shown.bs.modal', function() {
         var modalElement = $(this);
         var selectElement = modalElement.find('.select-pastor-name');
         
@@ -274,7 +273,7 @@ $(document).ready(function() {
     });
 
     // Destroy Select2 when modal is hidden
-    $('#captureChurchDataModal{{report.id}}').on('hidden.bs.modal', function() {
+    $('#captureChurchDataModal{{section_report.id}}').on('hidden.bs.modal', function() {
         $(this).find('.select-pastor-name').select2('destroy');
     });
 });
@@ -282,7 +281,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     // Initialize Select2 for edit modal when modal is shown
-    $('#captureChurchDataModal{{report.id}}').on('shown.bs.modal', function() {
+    $('#captureChurchDataModal{{section_report.id}}').on('shown.bs.modal', function() {
         var modalElement = $(this);
         var selectElement = modalElement.find('.select-add-church-name');
         
@@ -303,7 +302,7 @@ $(document).ready(function() {
     });
 
     // Destroy Select2 when modal is hidden
-    $('#captureChurchDataModal{{report.id}}').on('hidden.bs.modal', function() {
+    $('#captureChurchDataModal{{section_report.id}}').on('hidden.bs.modal', function() {
         $(this).find('.select-add-church-name').select2('destroy');
     });
 });

@@ -16,8 +16,11 @@
                         <label class="form-label fw-bold">Church</label>
                         <br/>
                         <select class="form-select select-edit-church-name" id="church" name="church" required>
+                            <option value="{{church_report.church.id}}">{{church_report.church.name}}({{church_report.church.section}})</option>
                             {% for church in churches %}
-                                <option value="{{church.id}}">{{church.name}}({{church.section}})</option>
+                                {% if church.id != church_report.church.id %}
+                                    <option value="{{church.id}}">{{church.name}}({{church.section}})</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -66,12 +69,7 @@
                       <div class="col">
                         <label class="form-label fw-bold">Year</label>
                         <select class="form-select" id="year" name="year" required>
-                            <option value="{{church_report.year}}">{{church_report.year}}</option>
-                            {% for year in years %}
-                                {% if year != church_report.year %}
-                                    <option value="{{year}}">{{yearh}}</option>
-                                {% endif %}
-                            {% endfor %}
+                            <option value="{{church_report.year}}" selected>{{church_report.year}}</option>
                         </select>
                     </div>
                     <div class="col">

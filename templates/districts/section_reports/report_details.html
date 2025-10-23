@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Stats Row -->
+<div class="dashboard">
+    <div class="row g-4 mb-4">
+       <div class="col-xl-6 col-md-6">
+            <div class="card card-stat h-80">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-church-primary">SECTION NAME</h6>
+                            <h3 class="text-church-secondary">{{section_report.section.name}}, {{section_report.year}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-md-6">
+            <div class="card card-stat h-80">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-church-primary">TOTAL COLLECTION</h6>
+                            <h3 class="text-church-secondary">{{total_collected}} Kes.</h3>
+                        </div>
+                        <i class="fas fa-hand-holding-heart stats-icon text-church-gold"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--
+    <div class="row g-4 mb-4">
+        <div class="col-xl-6 col-md-6">
+            <div class="card card-stat h-80">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-church-primary">BEST PERFORMER</h6>
+                            <h3 class="text-church-secondary">{{best_performer}}</h3>
+                        </div>
+                        <i class="fas fa-hand-holding-heart stats-icon text-church-gold"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6">
+            <div class="card card-stat h-80">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-church-primary">LOWEST PERFORMER</h6>
+                            <h3 class="text-church-secondary">{{lowest_performer}}</h3>
+                        </div>
+                        <i class="fas fa-church stats-icon text-church-gold"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+<div class="table-card">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3 class="fw-bold">Monthly Church Data</h3>
+        </div>
+        <div class="col">
+            <select class="form-control" id="searchSelect">
+                <option value="">-- Select a month --</option>
+                {% for month in months %}
+                    <option value="{{ month }}" {% if search_query == month %}selected{% endif %}>
+                        {{ month }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureChurchDataModal{{section_report.id}}">Record Church Data</button>
+          </div>
+    </div>
+ {% include "districts/capture_church_data.html" %}
+    <div class="loader" id="loader"></div>
+    <div class="table-container px-2">
+        <table class="table data-table table-sm table-borders-all">
+            <thead>
+                <tr class="table-headers-borders">
+                    <th></th>
+                    <th>Month</th>
+                    <th>Church</th>
+                    <th>Pastor</th>
+                    <th>General Fund</th>
+                    <th>Sunday School</th>
+                    <th>Pastors Fund</th>
+                    <th>Presbyter Tithe</th>
+                    <th>Pastor's Tithe</th>
+                    <th>Easter Building</th>
+                    <th>Kenya Kids</th>
+                    <th>Special Offering</th>
+                    <th>Dst. Missions</th>
+                    <th>Adult Att.</th>
+                    <th>Children Att.</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for church_report in church_reports %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ church_report.month}}</td>
+                    <td>{{ church_report.church}}</td>
+                    <td>{{ church_report.pastor}}</td>
+                    <td>{{ church_report.general_fund }}</td>
+                    <td>{{ church_report.sunday_school }}</td>
+                    <td>{{ church_report.pastors_fund }}</td>
+                    <td>{{ church_report.presbyter_tithe }}</td>
+                    <td>{{ church_report.pastors_tithe }}</td>
+                    <td>{{ church_report.easter }}</td>
+                    <td>{{ church_report.kenya_kids }}</td>
+                    <td>{{ church_report.special_offering}}</td>
+                    <td>{{ church_report.district_missions}}</td>
+                    <td>{{ church_report.adult }}</td>
+                    <td>{{ church_report.children }}</td>
+                    <td>{{ church_report.total_collected}}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editChurchDataModal{{church_report.id}}"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDistrictBranchModal{{church_report.id}}"><i class="fas fa-trash"></i></a>
+                    </td>
+                    
+                    {% include "districts/edit_church_data.html" %}
+                    {% include "districts/section_reports/delete_report.html" %}
+                   
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="15" class="text-center py-4">
+                        No finances found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+      <div class="table-footer">
+    <div class="page-info">
+        Showing 
+        {{ page_obj.start_index }} 
+        to 
+        {{ page_obj.end_index }} 
+        of 
+        {{ paginator.count }} 
+        entries
+    </div>
+    {% if is_paginated %}
+    <nav>
+        <ul class="pagination mb-0">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    Previous
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+            {% endif %}
+
+            {% for num in paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    Next
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Next</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+</div>
+</div>
+
+{% endblock content %}
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchSelect = document.getElementById('searchSelect');
+        const loader = document.getElementById('loader');
+
+        searchSelect.addEventListener('change', function() {
+            loader.classList.add('active');
+            const searchQuery = this.value;
+            window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+        });
+
+        // Utility function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock additional_scripts %}

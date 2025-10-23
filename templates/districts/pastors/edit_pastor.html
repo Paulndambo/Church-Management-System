@@ -71,6 +71,17 @@
                         {% endfor %}
                     </select>
                   </div>
+                  <div class="col">
+                    <label class="form-label fw-bold">Pastor Role</label>
+                    <select class="form-select" id="pastor_role" name="pastor_role" required>
+                        <option value="{{pastor.pastor_role}}">{{pastor.pastor_role}}</option>
+                        {% for pastor_role in pastor_roles %}
+                            {% if pastor_role != pastor.pastor_role %}
+                                <option value="{{pastor_role}}">{{pastor_role}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
                 </div>
 
                 <div class="text-center mt-3">

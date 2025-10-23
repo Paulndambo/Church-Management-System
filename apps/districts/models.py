@@ -60,6 +60,7 @@ class KAGDistrictMonthlyReport(AbstractBaseModel):
     district = models.ForeignKey(District, on_delete=models.CASCADE, related_name="districtmonthlychurchreports")
     section = models.ForeignKey("sections.Section", on_delete=models.SET_NULL, null=True, related_name="sectionmonthlychurchreports")
     church = models.ForeignKey("membership.Branch", on_delete=models.SET_NULL, null=True, related_name="churchmonthlyreports")
+    section_report = models.ForeignKey("sections.SectionReport", on_delete=models.SET_NULL, null=True)
     general_fund = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     sunday_school = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     pastors_tithe = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))

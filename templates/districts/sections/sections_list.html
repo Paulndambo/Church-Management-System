@@ -6,19 +6,15 @@
 <div class="table-card">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3>District Reports</h3>
+            <h3>KAG Sections</h3>
         </div>
         <div class="col">
-            <select class="form-control" id="searchSelect">
-                <option value="">-- Select a year --</option>
-                {% for year in years %}
-                    <option value="{{ year }}" {% if search_query == year|stringformat:"s" %}selected{% endif %}>
-                        {{ year }}
-                    </option>
-                {% endfor %}
-            </select>
+            <input type="text" class="form-control" placeholder="Search..." 
+            id="searchInput" value="{{ search_query }}">
         </div>
-        
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newChurchSectionModal">Add Section</button>
+          </div>
     </div>
     <!-- Table Toolbar --> 
     <!-- Loading Bar -->
@@ -30,28 +26,26 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Section</th>
+                    <th>Name</th>
                     <th>District</th>
-                    <th>Month</th>
-                    <th>Created On</th>
+                    <th>Presbyter</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                {% for report in reports %}
+                {% for section in sections %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ report.section }}</td>
-                    <td>{{ report.district }}</td>
-                    <td>{{ report.month }}({{ report.year }})</td>
-                    <td>{{ report.created_at }}</td>
+                    <td>{{ section.name }}</td>
+                    <td>{{ section.district }}</td>
+                    <td>{{ section.presbyter.name }}</td>
                     <td>
                         <div class="d-flex gap-1">
-                            <a href="{% url 'district-report-details' report.id %}" class="btn btn-info btn-sm">Fill {{report.month}} Report</a>
-                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editDistrictReportModal{{report.id}}"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'section-detail' section.id %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editChurchSectionModal{{section.id}}"><i class="fas fa-edit"></i></a>
                         </div>
                     </td>
-                   {% include "districts/edit_report.html" %}
+                   {% include "districts/sections/edit_section.html" %}
                 </tr>
                 {% empty %}
                 <tr>
@@ -114,19 +108,71 @@
 </div>
 </div>
 
-{% include "districts/new_report.html" %}
+{% include "districts/sections/new_section.html" %}
 {% endblock content %}
 
 {% block additional_scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchSelect = document.getElementById('searchSelect');
+        const searchInput = document.getElementById('searchInput');
         const loader = document.getElementById('loader');
+        let searchTimeout;
 
-        searchSelect.addEventListener('change', function() {
+        // Search functionality
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(searchTimeout);
             loader.classList.add('active');
-            const searchQuery = this.value;
-            window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+
+            searchTimeout = setTimeout(() => {
+                const searchQuery = this.value;
+                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+            }, 500);
+        });
+
+        // Sort functionality
+        document.querySelectorAll('th[data-sort]').forEach(header => {
+            header.addEventListener('click', function() {
+                const sortField = this.dataset.sort;
+                const currentIcon = this.querySelector('i');
+                let direction = 'asc';
+
+                if (currentIcon.classList.contains('fa-sort-up')) {
+                    direction = 'desc';
+                }
+
+                window.location.href = `?sort=${sortField}&direction=${direction}`;
+            });
+        });
+
+        // Delete functionality
+        let studentToDelete = null;
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                studentToDelete = this.dataset.id;
+            });
+        });
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            if (studentToDelete) {
+                loader.classList.add('active');
+                
+                fetch(`/students/${studentToDelete}/delete/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    }
+                })
+                .finally(() => {
+                    loader.classList.remove('active');
+                });
+            }
         });
 
         // Utility function to get CSRF token

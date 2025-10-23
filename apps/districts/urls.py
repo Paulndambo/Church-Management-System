@@ -65,4 +65,5 @@ urlpatterns = [
     path("district-churches/", views.DistrictBranchesListView.as_view(), name="district-churches"),
     path("new-district-church/", views.new_district_branch, name="new-district-church"),
     path("edit-district-church/", views.edit_district_branch, name="edit-district-church"),
+    path("delete-district-church/", views.delete_district_branch, name="delete-district-church"),
 ]

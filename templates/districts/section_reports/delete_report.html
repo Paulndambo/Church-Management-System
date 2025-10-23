@@ -1,0 +1,24 @@
+<div class="modal fade" id="deleteDistrictBranchModal{{church_report.id}}" tabindex="-1" aria-labelledby="newTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newTransactionModalLabel">Delete {{church_report.church.name}} for {{church_report.month}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'delete-church-data' %}">
+                    {% csrf_token %}
+                    <input type="number" id="church_report_id" name="church_report_id" value="{{church_report.id}}" hidden readonly required />
+                    <input type="number" id="report_id" name="report_id" value="{{church_report.section_report.id}}" hidden readonly required />
+                    <div class="mb-3">
+                        <p>Are you sure you want to delete church report for <b>{{church_report.church.name}}</b> for <b>{{church_report.month}}(({{church_report.year}}))</b>?</p>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Close</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
