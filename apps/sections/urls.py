@@ -27,6 +27,6 @@ urlpatterns = [
 
     path("section-reports/", reports_views.SectionReportsListView.as_view(), name="section-reports"),
     path("new-section-reports/", reports_views.new_section_reports, name="new-section-reports"),
-    #path("section-reports/<int:id>/details/", reports_views.section_report_details, name="section-report-detail"),
-    path("section-reports/<int:id>/details/", reports_views.SectionReportDetailView.as_view(), name="section-report-detail"),
+    path("section-reports/<int:id>/details/", reports_views.section_report_details, name="section-report-detail"),
+    path("monthly-report/<int:id>/details/", reports_views.MonthReportDetailView.as_view(), name="monthly-report-detail"),
 ]

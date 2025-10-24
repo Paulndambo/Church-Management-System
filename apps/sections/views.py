@@ -7,7 +7,7 @@ from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from apps.sections.models import Section, SectionReport
+from apps.sections.models import Section, SectionReport, SectionMonthlyReport
 from apps.membership.models import Branch
 from apps.districts.models import District, KAGDistrictMonthlyReport, DistrictReport
 from apps.users.models import User, Pastor
@@ -165,11 +165,8 @@ def branch_details(request: HttpRequest, id: int):
 def capture_church_data(request: HttpRequest):
     if request.method == "POST":
         church_id = request.POST.get("church")
-        report_id = request.POST.get("report_id")
-
-        year = request.POST.get("year")
-        month = request.POST.get("month")
-        
+        month_report_id = request.POST.get("month_report_id")
+    
         general_fund = request.POST.get("general_fund")
         sunday_school = request.POST.get("sunday_school")
 
@@ -192,24 +189,20 @@ def capture_church_data(request: HttpRequest):
         district_missions = request.POST.get("district_missions")
         pastors_fund = request.POST.get("pastors_fund")
         church_welfare = request.POST.get("church_welfare")
+        dsp_tithe = request.POST.get("dsp_tithe")
 
-        print("**************Details*****************")
-        #print(f"Section ID: {section_id}")
-        print(f"Year: {year}")
-        print(f"Month: {month}")
-        print("**************Details*****************")
-
-        section_report = SectionReport.objects.get(id=report_id)
+        monthly_report = SectionMonthlyReport.objects.get(id=month_report_id)
+        section_report = SectionReport.objects.get(id=monthly_report.section_report.id)
         church = Branch.objects.get(id=church_id)
         
 
-        report = DistrictReport.objects.filter(year=year, month=month).first()
+        report = DistrictReport.objects.filter(year=monthly_report.year, month=monthly_report.month).first()
 
         if not report:
             report = DistrictReport.objects.create(
                 district=church.section.district,
-                month=month,
-                year=section_report.year
+                month=monthly_report.month,
+                year=monthly_report.year
             )
 
         KAGDistrictMonthlyReport.objects.create(
@@ -220,8 +213,8 @@ def capture_church_data(request: HttpRequest):
             district=church.section.district,
             section=church.section,
             section_report=section_report,
-            year=section_report.year,
-            month=month,
+            year=monthly_report.year,
+            month=monthly_report.month,
             children=children,
             adult=adult,
             general_fund=general_fund,
@@ -237,9 +230,10 @@ def capture_church_data(request: HttpRequest):
             church_support=church_support,
             church_welfare=church_welfare,
             pastors_fund=pastors_fund,
+            dsp_tithe=dsp_tithe,
         )
 
-        return redirect("section-report-detail", id=report_id)
+        return redirect("monthly-report-detail", id=monthly_report.id)
     return render(request, "districts/capture_church_data.html")
 
 
@@ -248,11 +242,8 @@ def capture_church_data(request: HttpRequest):
 def edit_section_data(request: HttpRequest):
     if request.method == "POST":
         report_id = request.POST.get("report_id")
-        section_id = request.POST.get("section_id")
         general_fund = request.POST.get("general_fund")
         sunday_school = request.POST.get("sunday_school")
-        year = request.POST.get("year")
-        month = request.POST.get("month")
         total_collected = request.POST.get("total_collected")
         pastor = request.POST.get("pastor")
 
@@ -274,14 +265,14 @@ def edit_section_data(request: HttpRequest):
         district_missions = request.POST.get("district_missions")
         pastors_fund = request.POST.get("pastors_fund")
         church_welfare = request.POST.get("church_welfare")
+        dsp_tithe = request.POST.get("dsp_tithe")
 
-        print("**************Details*****************")
-        print(f"Section ID: {section_id}")
-        print(f"Year: {year}")
-        print(f"Month: {month}")
-        print("**************Details*****************")
+        report = KAGDistrictMonthlyReport.objects.get(id=report_id)
 
-        section_report = SectionReport.objects.filter(section__id=section_id, year=year).first()
+        section_report = SectionReport.objects.filter(section__id=report.section.id).first()
+        monthly_report = SectionMonthlyReport.objects.filter(
+            section_report=section_report, month=report.month, year=report.year
+        ).first()
         
 
         KAGDistrictMonthlyReport.objects.filter(id=report_id).update(
@@ -289,6 +280,7 @@ def edit_section_data(request: HttpRequest):
             adult=adult,
             church_id=church_id,
             pastor_id=pastor,
+            dsp_tithe=dsp_tithe,
             total_collected=total_collected,
             general_fund=general_fund,
             sunday_school=sunday_school,
@@ -300,14 +292,12 @@ def edit_section_data(request: HttpRequest):
             district_missions=district_missions,
             resource_mobilisation=resource_mobilisation,
             kagdom=kagdom,
-            year=section_report.year,
-            month=month,
             church_support=church_support,
             church_welfare=church_welfare,
             pastors_fund=pastors_fund,
         )
 
-        return redirect("section-report-detail", id=section_report.id)
+        return redirect("monthly-report-detail", id=monthly_report.id)
     return render(request, "districts/edit_section_data.html")
 
 
@@ -315,10 +305,16 @@ def edit_section_data(request: HttpRequest):
 @transaction.atomic
 def delete_church_data(request: HttpRequest):
     if request.method == "POST":
-        report_id = request.POST.get("report_id")
         church_report_id = request.POST.get("church_report_id")
 
-        KAGDistrictMonthlyReport.objects.filter(id=church_report_id).delete()
+        church_report = KAGDistrictMonthlyReport.objects.get(id=church_report_id)
 
-        return redirect("section-report-detail", id=report_id)
+        monthly_report = SectionMonthlyReport.objects.get(
+            section_report=church_report.section_report,
+            month=church_report.month,
+            year=church_report.year
+        )
+        
+        church_report.delete()
+        return redirect("monthly-report-detail", id=monthly_report.id)
     return render(request, "districts/section_reports/delete_report.html")

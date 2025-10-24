@@ -30,6 +30,7 @@
                 <tr class="table-headers-borders">
                     <th></th>
                     <th><span>Section</span></th>
+                    <th><span>Presbyter</span></th>
                     <th><span>General Fund</span></th>
                     <th><span>Sunday School</span></th>
                     <th><span>Pastors Fund</span></th>
@@ -47,6 +48,7 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ section_report.section__name }}</td>
+                    <td>{{ section_report.section__presbyter__first_name }} {{ section_report.section__presbyter__last_name }}</td>
                     <td>{{ section_report.total_general_fund }}</td>
                     <td>{{ section_report.total_sunday_school }}</td>
                     <td>{{ section_report.total_pastors_fund }}</td>
@@ -239,7 +241,7 @@
                         <tr>
                             <td>7.</td>
                             <td>Fungu la Kumi la Dist. Supt</td>
-                            <td>{{ district_supt_tithe }}</td>
+                            <td>{{ total_dsp_tithe }}</td>
                         </tr>
                         <tr>
                             <td></td>

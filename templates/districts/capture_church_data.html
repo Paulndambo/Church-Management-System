@@ -1,4 +1,4 @@
-<div class="modal fade" id="captureChurchDataModal{{section_report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="captureChurchDataModal{{month_report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,7 +8,7 @@
             <form action="{% url 'capture-church-data' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                <input type="hidden" name="report_id" id="report_id" value="{{section_report.id}}" readonly/>
+                <input type="hidden" name="month_report_id" id="month_report_id" value="{{month_report.id}}" readonly/>
                     
                 <div class="row mb-3">
                     <div class="col">
@@ -32,24 +32,6 @@
 
                 <div class="row mb-3">
                     <div class="col">
-                        <label class="form-label fw-bold">Month</label>
-                        <select class="form-select" id="month" name="month" required>
-                            {% for month in months %}
-                                <option value="{{month}}">{{month}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                     <div class="col">
-                        <label class="form-label fw-bold">Year</label>
-                        <select class="form-select" id="year" name="year" required>
-                            <option value="{{section_report.year}}" selected>{{section_report.year}}</option>
-                        </select>
-                    </div>
-                    
-                </div>
-                <div class="row mb-3">
-               
-                    <div class="col">
                         <label class="form-label fw-bold">Total Collected</label>
                             <input
                                 type="number"
@@ -58,7 +40,6 @@
                                 name="total_collected"
                                 value="0"
                             />
-                        
                     </div>
                     <div class="col">
                         <label for="exampleInputPassword1" class="form-label fw-bold">Kenya Kids</label>
@@ -239,6 +220,19 @@
                     </div>
                 </div>
 
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">District Spt. Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="dsp_tithe"
+                            name="dsp_tithe"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
                 <div class="text-center mt-3">
                   <input type="submit" class="btn btn-primary w-30" value="Submit Church Data" />
                 </div>
@@ -252,7 +246,7 @@
 <script>
 $(document).ready(function() {
     // Initialize Select2 for edit modal when modal is shown
-    $('#captureChurchDataModal{{section_report.id}}').on('shown.bs.modal', function() {
+    $('#captureChurchDataModal{{month_report.id}}').on('shown.bs.modal', function() {
         var modalElement = $(this);
         var selectElement = modalElement.find('.select-pastor-name');
         
@@ -273,7 +267,7 @@ $(document).ready(function() {
     });
 
     // Destroy Select2 when modal is hidden
-    $('#captureChurchDataModal{{section_report.id}}').on('hidden.bs.modal', function() {
+    $('#captureChurchDataModal{{month_report.id}}').on('hidden.bs.modal', function() {
         $(this).find('.select-pastor-name').select2('destroy');
     });
 });
@@ -281,7 +275,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     // Initialize Select2 for edit modal when modal is shown
-    $('#captureChurchDataModal{{section_report.id}}').on('shown.bs.modal', function() {
+    $('#captureChurchDataModal{{month_report.id}}').on('shown.bs.modal', function() {
         var modalElement = $(this);
         var selectElement = modalElement.find('.select-add-church-name');
         
@@ -302,7 +296,7 @@ $(document).ready(function() {
     });
 
     // Destroy Select2 when modal is hidden
-    $('#captureChurchDataModal{{section_report.id}}').on('hidden.bs.modal', function() {
+    $('#captureChurchDataModal{{month_report.id}}').on('hidden.bs.modal', function() {
         $(this).find('.select-add-church-name').select2('destroy');
     });
 });

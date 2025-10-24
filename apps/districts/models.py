@@ -65,6 +65,7 @@ class KAGDistrictMonthlyReport(AbstractBaseModel):
     sunday_school = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     pastors_tithe = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     presbyter_tithe = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
+    dsp_tithe = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     easter = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     special_offering = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))
     kenya_kids = models.DecimalField(max_digits=100, decimal_places=2, default=Decimal('0'))

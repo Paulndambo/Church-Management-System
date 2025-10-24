@@ -24,21 +24,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col">
-                        <label class="form-label fw-bold">Month</label>
-                        <select class="form-select" id="month" name="month" required>
-                            <option value="{{church_report.month}}">{{church_report.month}}</option>
-                            {% for month in months %}
-                                {% if month != church_report.month %}
-                                    <option value="{{month}}">{{month}}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col">
+                  <div class="col">
                         <label class="form-label fw-bold">Pastor</label>
                         <br/>
                         <select class="form-select select-edit-pastor-name" id="pastor" name="pastor" required>
@@ -50,7 +36,9 @@
                             {% endfor %}
                         </select>
                     </div>
-                 
+                </div>
+
+                <div class="row mb-3">
                     <div class="col">
                         <label class="form-label fw-bold">Total Collected</label>
                         
@@ -63,16 +51,7 @@
                             />
                    
                     </div>
-                </div>
-                
-                <div class="row mb-3">
-                      <div class="col">
-                        <label class="form-label fw-bold">Year</label>
-                        <select class="form-select" id="year" name="year" required>
-                            <option value="{{church_report.year}}" selected>{{church_report.year}}</option>
-                        </select>
-                    </div>
-                    <div class="col">
+                     <div class="col">
                         <label for="exampleInputPassword1" class="form-label fw-bold">Kenya Kids</label>
                         <input
                             type="number"
@@ -83,7 +62,7 @@
                         />
                     </div>
                 </div>
-
+                
                 <div class="row mb-3">
                     <div class="col">
                         <label for="exampleInputPassword1" class="form-label fw-bold">General Fund</label>
@@ -251,6 +230,19 @@
                         />
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">District Spt. Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="dsp_tithe"
+                            name="dsp_tithe"
+                            value="{{church_report.dsp_tithe}}"
+                        />
+                    </div>
+                </div>
+
                 <div class="text-center mt-3">
                   <input type="submit" class="btn btn-primary w-30" value="Submit Church Data" />
                 </div>

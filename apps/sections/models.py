@@ -19,9 +19,17 @@ class SectionReport(AbstractBaseModel):
     report = models.ForeignKey("districts.DistrictReport", on_delete=models.CASCADE, null=True)
     district = models.ForeignKey("districts.District", on_delete=models.CASCADE, related_name="districtsectionreports")
     section = models.ForeignKey(Section, on_delete=models.SET_NULL, null=True)
-    month=models.CharField(max_length=255, null=True)
     year=models.IntegerField(null=True)
     
 
     def __str__(self) -> str:
-        return self.district.name
+        return f"{self.district.name} - {self.section.name} Report - {self.year}"
+    
+
+class SectionMonthlyReport(AbstractBaseModel):
+    section_report = models.ForeignKey(SectionReport, on_delete=models.CASCADE, null=True)
+    month=models.CharField(max_length=255, null=True)
+    year=models.IntegerField(null=True)
+
+    def __str__(self) -> str:
+        return f"{self.section_report.section.name} Monthly Report - {self.month} {self.year}"

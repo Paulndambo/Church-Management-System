@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.sections.models import Section, SectionReport
+from apps.sections.models import Section, SectionReport, SectionMonthlyReport
 from apps.users.models import Pastor
 
 
@@ -18,3 +18,9 @@ class PastorAdmin(admin.ModelAdmin):
 @admin.register(SectionReport)
 class SectionReportAdmin(admin.ModelAdmin):
     list_display = ["id", "section", "year", "district", "created_at"]
+
+
+
+@admin.register(SectionMonthlyReport)
+class SectionMonthlyReportAdmin(admin.ModelAdmin):
+    list_display = ["id", "section_report", "month", "year", "created_at"]

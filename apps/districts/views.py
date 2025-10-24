@@ -278,6 +278,7 @@ def district_report_details(request: HttpRequest, id: int):
     total_easter = sum(section_reports.values_list("total_easter", flat=True))
     kenya_kids = sum(section_reports.values_list("total_kenya_kids", flat=True))
     special_offering = sum(section_reports.values_list("total_special_offering", flat=True))
+    dsp_tithe = sum(section_reports.values_list("total_dsp_tithe", flat=True))
 
     ten_percent_general_fund = Decimal(0.1) * total_general_fund
     five_percent_sunday_school = Decimal(0.05) * total_sunday_school
@@ -291,6 +292,7 @@ def district_report_details(request: HttpRequest, id: int):
         + half_easter_offering
         + kenya_kids
         + special_offering
+        + dsp_tithe
     )
     district_grand_total = (
         total_general_fund
@@ -299,6 +301,7 @@ def district_report_details(request: HttpRequest, id: int):
         + total_easter
         + kenya_kids
         + special_offering
+        + dsp_tithe
     )
 
     sections = Section.objects.all()
@@ -352,6 +355,7 @@ def district_report_details(request: HttpRequest, id: int):
         "total_church_support": total_church_support,
         "total_additionals": total_additionals,
         "total_presbyter_tithe": total_presbyter_tithe,
+        "total_dsp_tithe": dsp_tithe,
     }
     return render(request, "districts/report_details.html", context)
 
@@ -376,6 +380,7 @@ def district_report(request: HttpRequest, id: int):
     total_easter = sum(section_reports.values_list("total_easter", flat=True))
     kenya_kids = sum(section_reports.values_list("total_kenya_kids", flat=True))
     special_offering = sum(section_reports.values_list("total_special_offering", flat=True))
+    dsp_tithe = sum(section_reports.values_list("total_dsp_tithe", flat=True))
 
     ten_percent_general_fund = Decimal(0.1) * total_general_fund
     five_percent_sunday_school = Decimal(0.05) * total_sunday_school
@@ -389,6 +394,7 @@ def district_report(request: HttpRequest, id: int):
         + half_easter_offering
         + kenya_kids
         + special_offering
+        + dsp_tithe
     )
     district_grand_total = (
         total_general_fund
@@ -397,6 +403,7 @@ def district_report(request: HttpRequest, id: int):
         + total_easter
         + kenya_kids
         + special_offering
+        + dsp_tithe
     )
 
     sections = Section.objects.all()
@@ -456,6 +463,7 @@ def district_report(request: HttpRequest, id: int):
         "total_church_support": total_church_support,
         "total_additionals": total_additionals,
         "total_presbyter_tithe": total_presbyter_tithe,
+        "total_dsp_tithe": dsp_tithe,
     }
     return render(request, "districts/district_report.html", context)
 
@@ -575,6 +583,7 @@ def get_section_summary(report_id: int):
             total_church_welfare=Sum("church_welfare"),
             total_children=Sum("children"),
             total_adult=Sum("adult"),
+            total_dsp_tithe=Sum("dsp_tithe"),
         )
         .order_by("section__name")
     )

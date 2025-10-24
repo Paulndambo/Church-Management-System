@@ -12,7 +12,7 @@ from django.core.paginator import Paginator
 
 
 
-from apps.sections.models import Section, SectionReport
+from apps.sections.models import Section, SectionReport, SectionMonthlyReport
 from apps.membership.models import Branch
 from apps.districts.models import District, KAGDistrictMonthlyReport, DistrictReport
 from apps.users.models import User, Pastor
@@ -52,42 +52,52 @@ def section_report_details(request: HttpRequest, id: int):
 
     pastors = Pastor.objects.filter(church__section=section)
 
-    church_reports = KAGDistrictMonthlyReport.objects.filter(section=section).order_by("-created_at")
+    church_reports = KAGDistrictMonthlyReport.objects.filter(section=section, section_report=section_report).order_by("-created_at")
 
     yearly_sum = sum(list(church_reports.values_list("total_collected", flat=True)))
+
+    monthly_reports = SectionMonthlyReport.objects.filter(section_report=section_report).order_by("month")
 
 
     context = {
         "section_report": section_report,
         "churches": churches,
         "pastors": pastors,
-        "church_reports": church_reports,
+        "monthly_reports": monthly_reports,
         "months": MONTHS_LIST,
         "total_collected": yearly_sum,
     }
     return render(request, "districts/section_reports/report_details.html", context)
+
     
-class SectionReportDetailView(View):
-    template_name = "districts/section_reports/report_details.html"
-    paginate_by = 10  # number of reports per page
+class MonthReportDetailView(View):
+    template_name = "districts/section_reports/monthly_report_details.html"
+    paginate_by = 15  # number of reports per page
 
     def get(self, request, id):
         # Retrieve section report and related data
-        section_report = get_object_or_404(SectionReport, id=id)
-        section = get_object_or_404(Section, id=section_report.section.id)
+        month_report = get_object_or_404(SectionMonthlyReport, id=id)
+        section = get_object_or_404(Section, id=month_report.section_report.section.id)
         churches = section.sectionbranches.all()
+
         pastors = Pastor.objects.filter(church__section=section)
+        
 
         # Handle search query
         search_query = request.GET.get("search", "").strip()
 
         print(f"Search Query: {search_query}")
 
-        church_reports = KAGDistrictMonthlyReport.objects.filter(section=section)
+        church_reports = KAGDistrictMonthlyReport.objects.filter(
+            section=section, 
+            section_report=month_report.section_report,
+            month=month_report.month,
+            year=month_report.year
+        )
 
         if search_query:
             church_reports = church_reports.filter(
-                Q(month__icontains=search_query)
+                Q(church__id__icontains=search_query)
             )
 
         church_reports = church_reports.order_by("-created_at")
@@ -104,9 +114,8 @@ class SectionReportDetailView(View):
         )
 
         context = {
-            "section_report": section_report,
+            "month_report": month_report,
             "churches": churches,
-            "pastors": pastors,
             "church_reports": page_obj,  # paginated queryset
             "months": MONTHS_LIST,
             "total_collected": yearly_sum,
@@ -114,6 +123,8 @@ class SectionReportDetailView(View):
             "is_paginated": page_obj.has_other_pages(),
             "page_obj": page_obj,
             "paginator": paginator,
+            "section_report": month_report.section_report,
+            "pastors": pastors,
         }
 
         return render(request, self.template_name, context)    
