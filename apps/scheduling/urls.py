@@ -1,6 +1,9 @@
 from django.urls import path
 
 from apps.scheduling import views
+from apps.scheduling.meetings import views as meeting_views
+from apps.scheduling.appointments import views as appointment_views
+
 
 urlpatterns = [
     path("prayer-requests/", views.PrayerRequestsListView.as_view(), name="prayer-requests"),
@@ -24,4 +27,18 @@ urlpatterns = [
     path("new-marriage-request/", views.new_marriage_request, name="new-marriage-request"),
     path("edit-marriage-request/", views.edit_marriage_request, name="edit-marriage-request"),
     path("delete-marriage-request/", views.delete_marriage_request, name="delete-marriage-request"),
+
+    path("church-meetings/", meeting_views.ChurchMeetingsListView.as_view(), name="church-meetings"),
+    path("church-meeting/<int:id>/details/", meeting_views.church_meeting_detail, name="church-meeting-detail"),
+    path("new-church-meeting/", meeting_views.new_church_meeting, name="new-church-meeting"),
+    path("edit-church-meeting/", meeting_views.edit_church_meeting, name="edit-church-meeting"),
+    path("delete-church-meeting/", meeting_views.delete_church_meeting, name="delete-church-meeting"),
+    path("add-church-meeting-attendance/", meeting_views.add_church_meeting_attendance, name="add-church-meeting-attendance"),
+    path("edit-church-meeting-attendance/", meeting_views.edit_church_meeting_attendance, name="edit-church-meeting-attendance"),
+    path("delete-church-meeting-attendance/", meeting_views.delete_church_meeting_attendance, name="delete-church-meeting-attendance"),
+
+    path("appointments/", appointment_views.AppointmentsListView.as_view(), name="appointments"),
+    path("new-appointment/", appointment_views.new_appointment, name="new-appointment"),
+    path("edit-appointment/", appointment_views.edit_appointment, name="edit-appointment"),
+    path("mark-appointment/", appointment_views.approve_or_decline, name="mark-appointment"),
 ]

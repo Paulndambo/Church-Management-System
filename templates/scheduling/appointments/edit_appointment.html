@@ -1,0 +1,139 @@
+<div class="modal fade" id="editAppointmentModal{{appointment.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Edit Appointment</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-appointment' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" name="appointment_id" id="appointment_id" value="{{appointment.id}}" readonly />
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">First Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="first_name"
+                      name="first_name"
+                      value="{{appointment.first_name}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="last_name"
+                      name="last_name"
+                        value="{{appointment.last_name}}"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Phone Number (optional)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="phone_number"
+                      name="phone_number"
+                        value="{{appointment.phone_number}}"
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Email (optional)</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                        value="{{appointment.email}}"
+                    />
+                  </div>
+              
+                </div>
+
+                <div class="row mb-3">
+                   <div class="col">
+                    <label class="form-label fw-bold">Appointment Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                         <option value="{{appointment.status}}" selected>{{appointment.status}}</option>
+                        {% for status in statuses %}
+                            {% if status != appointment.status %} 
+                                <option value="{{status}}">{{status}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                    
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="{{appointment.gender}}" selected>{{appointment.gender}}</option>
+                        {% for gender in genders %}
+                            {% if gender != appointment.gender %}
+                                <option value="{{gender}}">{{gender}}</option>
+                            {% endif %} 
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label class="form-label fw-bold">Appointment Type</label>
+                    <select class="form-select" id="appointment_type" name="appointment_type" required>
+                        <option value="{{appointment.appointment_type}}" selected>{{appointment.appointment_type}}</option>
+                        {% for appointment_type in appointment_types %}
+                            {% if appointment_type != appointment.appointment_type %}
+                                <option value="{{appointment_type}}">{{appointment_type}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                  <div class="col">
+                    <label class="form-label fw-bold">Appointment Date/Time</label>
+                    <input class="form-control" type="datetime-local" id="appointment_date" name="appointment_date" value="{{appointment.appointment_date|date:'Y-m-d\\TH:i'}}" required>
+                     
+                  </div>
+                </div>
+
+                   
+
+                <div class="row mb-3">
+                    <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Town (optional)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="town"
+                      name="town"
+                        value="{{appointment.town}}"
+                    
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Country (optional)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="country"
+                      name="country"
+                        value="{{appointment.country}}"
+                    />
+                  </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Submit Appointment</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

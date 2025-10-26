@@ -1,0 +1,124 @@
+<div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Create Appointment</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-appointment' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+    
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">First Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="first_name"
+                      name="first_name"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="last_name"
+                      name="last_name"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Phone Number (optional)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="phone_number"
+                      name="phone_number"
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Email (optional)</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                    />
+                  </div>
+              
+                </div>
+
+                <div class="row mb-3">
+                   <div class="col">
+                    <label class="form-label fw-bold">Appointment Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                         <option value="" selected disabled>Select Appointment Status</option>
+                        {% for status in statuses %}
+                            <option value="{{status}}">{{status}}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+                    
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="" selected disabled>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label class="form-label fw-bold">Appointment Type</label>
+                    <select class="form-select" id="appointment_type" name="appointment_type" required>
+                         <option value="" selected disabled>Select Appointment Type</option>
+                        {% for appointment_type in appointment_types %}
+                            <option value="{{appointment_type}}">{{appointment_type}}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+                  <div class="col">
+                    <label class="form-label fw-bold">Appointment Date/Time</label>
+                    <input class="form-control" type="datetime-local" id="appointment_date" name="appointment_date" required>
+                     
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Town (optional)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="town"
+                      name="town"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Country (optional)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="country"
+                      name="country"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Submit Appointment</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

@@ -55,3 +55,19 @@ def get_month_name(month_number: int) -> str:
 
 def format_date(date_str: str) -> date:
     return datetime.strptime(date_str, "%Y-%m-%d").date()
+
+
+def format_datetime(date_str: str):
+    """
+    Parses a date or datetime string and returns a datetime object.
+    Supports formats:
+      - 'YYYY-MM-DD'
+      - 'YYYY-MM-DD HH:MM'
+      - 'YYYY-MM-DDTHH:MM'
+    """
+    for fmt in ("%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+    raise ValueError(f"Invalid date format: {date_str}")

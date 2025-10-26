@@ -11,9 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.scheduling.models import (
-    Appointment, ChurchMeeting, ChurchMeetingAttendance,
     BurialRequest, BaptismRequest, PrayerRequest, MarriageRequest
 )
+from apps.core.constants import get_month_name, get_month_number
 # Create your views here.
 # Create your views here.
 date_today = datetime.now().date()
@@ -47,7 +47,7 @@ class BurialRequestsListView(LoginRequiredMixin, ListView):
 
 @login_required
 @transaction.atomic
-def new_burial_request(request):
+def new_burial_request(request: HttpRequest):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -72,7 +72,7 @@ def new_burial_request(request):
 
 @login_required
 @transaction.atomic
-def edit_burial_request(request):
+def edit_burial_request(request: HttpRequest):
     if request.method == "POST":
         burial_request_id = request.POST.get("burial_request_id")
         first_name = request.POST.get("first_name")
@@ -99,7 +99,7 @@ def edit_burial_request(request):
 
 @login_required
 @transaction.atomic
-def delete_burial_request(request):
+def delete_burial_request(request: HttpRequest):
     if request.method == "POST":
         burial_request_id = request.POST.get("burial_request_id")
         BurialRequest.objects.filter(id=burial_request_id).delete()
@@ -136,7 +136,7 @@ class PrayerRequestsListView(LoginRequiredMixin, ListView):
 
 @login_required
 @transaction.atomic
-def new_prayer_request(request):
+def new_prayer_request(request: HttpRequest):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -161,7 +161,7 @@ def new_prayer_request(request):
 
 @login_required
 @transaction.atomic
-def edit_prayer_request(request):
+def edit_prayer_request(request: HttpRequest):
     if request.method == "POST":
         prayer_request_id = request.POST.get("prayer_request_id")
         first_name = request.POST.get("first_name")
@@ -188,7 +188,7 @@ def edit_prayer_request(request):
 
 @login_required
 @transaction.atomic
-def delete_prayer_request(request):
+def delete_prayer_request(request: HttpRequest):
     if request.method == "POST":
         prayer_request_id = request.POST.get("prayer_request_id")
         PrayerRequest.objects.filter(id=prayer_request_id).delete()
@@ -225,7 +225,7 @@ class BaptismRequestsListView(LoginRequiredMixin, ListView):
 
 @login_required
 @transaction.atomic
-def new_baptism_request(request):
+def new_baptism_request(request: HttpRequest):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -250,7 +250,7 @@ def new_baptism_request(request):
 
 @login_required
 @transaction.atomic
-def edit_baptism_request(request):
+def edit_baptism_request(request: HttpRequest):
     if request.method == "POST":
         baptism_request_id = request.POST.get("baptism_request_id")
         first_name = request.POST.get("first_name")
@@ -277,7 +277,7 @@ def edit_baptism_request(request):
 
 @login_required
 @transaction.atomic
-def delete_baptism_request(request):
+def delete_baptism_request(request: HttpRequest):
     if request.method == "POST":
         baptism_request_id = request.POST.get("baptism_request_id")
         BaptismRequest.objects.filter(id=baptism_request_id).delete()
@@ -313,7 +313,7 @@ class MarriageRequestsListView(LoginRequiredMixin, ListView):
 
 @login_required
 @transaction.atomic
-def new_marriage_request(request):
+def new_marriage_request(request: HttpRequest):
     if request.method == "POST":
         bride_first_name = request.POST.get("bride_first_name")
         bride_last_name = request.POST.get("bride_last_name")
@@ -342,7 +342,7 @@ def new_marriage_request(request):
 
 @login_required
 @transaction.atomic
-def edit_marriage_request(request):
+def edit_marriage_request(request: HttpRequest):
     if request.method == "POST":
         marriage_request_id = request.POST.get("marriage_request_id")
         bride_first_name = request.POST.get("bride_first_name")
@@ -375,7 +375,7 @@ def edit_marriage_request(request):
 
 @login_required
 @transaction.atomic
-def delete_marriage_request(request):
+def delete_marriage_request(request: HttpRequest):
     if request.method == "POST":
         marriage_request_id = request.POST.get("marriage_request_id")
         MarriageRequest.objects.filter(id=marriage_request_id).delete()

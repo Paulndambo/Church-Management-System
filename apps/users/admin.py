@@ -6,4 +6,4 @@ from apps.users.models import User
 # Register your models here.
 @admin.register(User)
 class UsersAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "username", "email", "gender", "role"]
+    list_display = ["id", "name", "gender", "role", "branch", "church"]

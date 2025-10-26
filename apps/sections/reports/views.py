@@ -19,6 +19,7 @@ from apps.users.models import User, Pastor
 from apps.core.constants import MONTHS_LIST, YEARS_LIST, GENDER_CHOICES
 
 
+
 class SectionReportsListView(LoginRequiredMixin, ListView):
     model = SectionReport
     template_name = "districts/section_reports/reports.html"
@@ -27,13 +28,14 @@ class SectionReportsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get("search", "")
+        section_id = self.request.GET.get("section")
+        year = self.request.GET.get("year")
 
-        if search_query:
-            queryset = queryset.filter(
-                Q(year__icontains=search_query)
-            )
-        # Get sort parameter
+        if section_id:
+            queryset = queryset.filter(section__id=section_id)
+        if year:
+            queryset = queryset.filter(year__icontains=year)
+
         return queryset.order_by("-created_at")
 
     def get_context_data(self, **kwargs):
@@ -72,7 +74,7 @@ def section_report_details(request: HttpRequest, id: int):
     
 class MonthReportDetailView(View):
     template_name = "districts/section_reports/monthly_report_details.html"
-    paginate_by = 15  # number of reports per page
+    paginate_by = 50  # number of reports per page
 
     def get(self, request, id):
         # Retrieve section report and related data

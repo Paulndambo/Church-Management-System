@@ -62,3 +62,13 @@ class Church(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+
+
+class ChurchRole(AbstractBaseModel):
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    church = models.ForeignKey(Church, on_delete=models.CASCADE)
+    leadership_role = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name

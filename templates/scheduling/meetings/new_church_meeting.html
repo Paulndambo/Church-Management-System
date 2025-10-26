@@ -1,0 +1,68 @@
+<div class="modal fade" id="newChurchMeetingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">New Church Meeting</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-church-meeting' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Meeting Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="title"
+                      name="title"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Meeting Location</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="meeting_location"
+                      name="meeting_location"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Meeting Date</label>
+                    <input
+                      type="datetime-local"
+                      class="form-control"
+                      id="meeting_date"
+                      name="meeting_date"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Meeting Status</label>
+                    <select
+                      class="form-select"
+                      id="status"
+                      name="status"
+                      required>
+                      <option value="" selected disabled>Select Status</option>
+                      {% for status in meeting_statuses %}
+                        <option value="{{ status }}">{{ status }}</option>
+                      {% endfor %}  
+                  </select>
+                  </div>
+                </div>
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Create Church Meeting</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

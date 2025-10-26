@@ -248,6 +248,10 @@ def edit_section_data(request: HttpRequest):
         pastor = request.POST.get("pastor")
 
         church_id = request.POST.get("church_id")
+        section_id = request.POST.get("section_id")
+
+        month = request.POST.get("month")
+        year = request.POST.get("year")
 
         pastors_tithe = request.POST.get("pastors_tithe")
         presbyter_tithe = request.POST.get("presbyter_tithe")
@@ -269,10 +273,19 @@ def edit_section_data(request: HttpRequest):
 
         report = KAGDistrictMonthlyReport.objects.get(id=report_id)
 
-        section_report = SectionReport.objects.filter(section__id=report.section.id).first()
-        monthly_report = SectionMonthlyReport.objects.filter(
-            section_report=section_report, month=report.month, year=report.year
-        ).first()
+
+
+        month_report = SectionMonthlyReport.objects.get(
+            section_report=report.section_report, month=month, year=year
+        )
+
+        print("**************Church ID****************")
+        print(f"Church ID: {church_id}")
+        print(f"Month: {month}, Year: {year}")
+        print(f"Month Report: {month_report}")
+    
+        print(f"Section Report ID: {report.section_report}")
+        print("**************Church ID****************")
         
 
         KAGDistrictMonthlyReport.objects.filter(id=report_id).update(
@@ -297,7 +310,7 @@ def edit_section_data(request: HttpRequest):
             pastors_fund=pastors_fund,
         )
 
-        return redirect("monthly-report-detail", id=monthly_report.id)
+        return redirect("monthly-report-detail", id=month_report.id)
     return render(request, "districts/edit_section_data.html")
 
 

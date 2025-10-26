@@ -88,8 +88,8 @@
                     <i class="fas fa-angle-down ms-auto small opacity-75"></i>
                 </a>
                 <ul class="collapse submenu">
-                    <li><a href="#" class="nav-link"><i class="fas fa-handshake-simple me-2"></i> Meetings</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-calendar-plus me-2"></i> Appointments</a></li>
+                    <li><a href="{% url 'church-meetings' %}" class="nav-link"><i class="fas fa-handshake-simple me-2"></i> Meetings</a></li>
+                    <li><a href="{% url 'appointments' %}" class="nav-link"><i class="fas fa-calendar-plus me-2"></i> Appointments</a></li>
                     <li><a href="{% url 'events' %}" class="nav-link"><i class="fas fa-bell me-2"></i> Church Events</a></li>
                 </ul>
             </li>

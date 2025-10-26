@@ -34,6 +34,9 @@ class User(AbstractUser, AbstractBaseModel):
     branch = models.ForeignKey(
         "membership.Branch", on_delete=models.SET_NULL, null=True
     )
+    church = models.ForeignKey(
+        "core.Church", on_delete=models.SET_NULL, null=True, related_name="userchurch"
+    )
 
     def __str__(self):
         return self.username

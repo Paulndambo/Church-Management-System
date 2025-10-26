@@ -9,13 +9,14 @@
                 {% csrf_token %}
                 <div class="modal-body">
                 <input type="hidden" name="report_id" id="report_id" value="{{church_report.id}}" readonly/>
+                <input type="hidden" name="month" id="month" value="{{church_report.month}}" readonly/>
+                <input type="hidden" name="year" id="year" value="{{church_report.year}}" readonly/>
                 <input type="hidden" name="section_id" id="section_id" value="{{church_report.section.id}}" readonly/>
-                <input type="hidden" name="church_id" id="church_id" value="{{church_report.church.id}}" readonly/>
                 <div class="row mb-3">
                     <div class="col">
                         <label class="form-label fw-bold">Church</label>
                         <br/>
-                        <select class="form-select select-edit-church-name" id="church" name="church" required>
+                        <select class="form-select select-edit-church-name" id="church_id" name="church_id" required>
                             <option value="{{church_report.church.id}}">{{church_report.church.name}}({{church_report.church.section}})</option>
                             {% for church in churches %}
                                 {% if church.id != church_report.church.id %}
