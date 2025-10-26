@@ -28,7 +28,7 @@
                     <th>Contributor</th>
                     <th>Project</th>
                     <th>Amount</th>
-                    <th>Date</th>
+                    <th>Recorded On</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -38,7 +38,7 @@
                     <td>{{ contribution.contributor }}</td>
                     <td>{{ contribution.project }}</td>
                     <td>{{  contribution.amount}}</td>
-                    <td>{{  contribution.created_at|date:'Y-m-d'}}</td>
+                    <td>{{  contribution.created_at}}</td>
                     
                 </tr>
                 {% empty %}

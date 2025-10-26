@@ -1,7 +1,12 @@
 from django.urls import path
 from apps.users.views import (
-    login_user, logout_user,
-    VisitorListView, new_visitor, edit_visitor, delete_visitor
+    login_user,
+    logout_user,
+    VisitorListView,
+    new_visitor,
+    edit_visitor,
+    delete_visitor,
+    checkin_visitor
 )
 
 urlpatterns = [
@@ -11,4 +16,5 @@ urlpatterns = [
     path("new-visitor/", new_visitor, name="new-visitor"),
     path("edit-visitor/", edit_visitor, name="edit-visitor"),
     path("delete-visitor/", delete_visitor, name="delete-visitor"),
+    path("checkin-visitor/", checkin_visitor, name="checkin-visitor"),
 ]

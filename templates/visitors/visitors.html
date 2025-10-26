@@ -4,16 +4,16 @@
 
 {% block content %}
 <div class="table-card">
-    <div class="row py-3 px-2">
+    <div class="row py-3 px-5">
         <div class="col">
-            <h3>Church Visitors</h3>
+            <h3 class="fw-bold">Church Visitors</h3>
         </div>
         <div class="col">
             <input type="text" class="form-control" placeholder="Search..." 
             id="searchInput" value="{{ search_query }}">
         </div>
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newVisitorModal">New Visitors</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newVisitorModal">New ChurchVisitor</button>
         
           </div>
     </div>
@@ -31,7 +31,9 @@
                     <th>Gender</th>
                     <th>Phone Number</th>
                     <th>Branch</th>
+                    <th>Visits</th>
                     <th>Photo Consent</th>
+                    <th>Last Check-In</th>
                     <th></th>
                 </tr>
             </thead>
@@ -43,18 +45,24 @@
                     <td>{{ visitor.gender }}</td>
                     <td>{{ visitor.phone_number }}</td>
                     <td>{{ visitor.branch }}</td>
+                    <td>{{ visitor.times_attended }}</td>
+                    
                     <td>
                         <span class="status-badge status-{{ visitor.photo_consent|lower }}">
                             {{ visitor.photo_consent }}
                         </span>
                     </td>
+                    <td>{{ visitor.updated_at }}</td>
                     
                     <td>
                         <div class="d-flex gap-1">
+                            <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#checkinVisitorModal{{visitor.id}}">Check-In</a>
                             <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editVisitorModal{{visitor.id}}"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editVisitorModal{{visitor.id}}">Convert</a>
                         </div>
                     </td>
                    {% include "visitors/edit_visitor.html" %}
+                   {% include "visitors/checkin_visitor.html" %}
                 </tr>
                 {% empty %}
                 <tr>

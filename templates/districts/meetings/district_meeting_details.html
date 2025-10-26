@@ -6,14 +6,18 @@
 <div class="table-card">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3>District Meeting Attendance</h3>
+            <h3 class="fw-bold">{{meeting.meeting_date}} Baraza
+            </h3>
         </div>
         <div class="col">
             <input type="text" class="form-control" placeholder="Search..." 
             id="searchInput" value="{{ search_query }}">
         </div>
-        
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictMeetingAttendantModal{{meeting.id}}">Record Attendance</button>
+        </div>
     </div>
+{% include "districts/meetings/create_attendant.html" %}
     <!-- Table Toolbar --> 
     <!-- Loading Bar -->
     <div class="loader" id="loader"></div>
@@ -24,11 +28,9 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Presbyter</th>
-                    <th>Section</th>
-                    <th>Month</th>
+                    <th>Name</th>
+                    <th>Role</th>
                     <th>Status</th>
-                    <th>Meeting Date</th>
                     <th></th>
                 </tr>
             </thead>
@@ -36,17 +38,16 @@
                 {% for attendance in attendants %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ attendance.presbyter.name }}</td>
-                    <td>{{ attendance.section }}</td>
-                    <td>{{ attendance.month }}(<b>{{attendance.year}}</b>)</td>
+                    <td>{{ attendance.full_name }}</td>
+                    <td>{{ attendance.role }}</td>
                     <td>{{ attendance.status }}</td>
-                    <td>{{ attendance.meeting.meeting_date }}</td>
                     <td>
                         <div class="d-flex gap-1">
-                            <a href="{% url 'mark-district-meeting-attendance' attendance.id %}" class="btn btn-info btn-sm"><i class="fa-solid fa-check-double"></i></a>
+                            <a data-bs-toggle="modal" data-bs-target="#editDistrictMeetingAttendantModal{{attendance.id}}" class="btn btn-info btn-sm"><i class="fa-solid fa-pencil"></i></a>
+                            
                         </div>
                     </td>
-                   {% include "districts/meetings/mark_attendance.html" %}
+                   {% include "districts/meetings/edit_attendant.html" %}
                 </tr>
                 {% empty %}
                 <tr>
@@ -69,45 +70,10 @@
         {{ paginator.count }} 
         entries
     </div>
-    {% if is_paginated %}
-    <nav>
-        <ul class="pagination mb-0">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    Previous
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-            </li>
-            {% endif %}
-
-            {% for num in paginator.page_range %}
-            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    {{ num }}
-                </a>
-            </li>
-            {% endfor %}
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    Next
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Next</span>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+   
 </div>
 </div>
+
 
 {% endblock content %}
 

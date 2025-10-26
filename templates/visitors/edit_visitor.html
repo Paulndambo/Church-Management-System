@@ -86,17 +86,6 @@
 
                 <div class="row mb-3">
                   <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Brought By</label>
-                    <select class="form-select" id="brought_by" name="brought_by">
-                        <option value="{{visitor.brought_by.id}}">{{visitor.brought_by.name}}</option>
-                        {% for member in members %}
-                            {% if member.id != visitor.brought_by.id %}
-                                <option value={{member.id}}>{{member.name}}</option>
-                            {% endif %}
-                         {% endfor %}
-                      </select>
-                  </div>
-                  <div class="col">
                       <label for="exampleInputPassword1" class="form-label fw-bold">Branch</label>
                       <select class="form-select" id="branch" name="branch" required>
                         <option value="{{visitor.branch.id}}">{{visitor.branch.name}}</option>
@@ -107,19 +96,20 @@
                         {% endfor %}
                       </select>
                     </div>
-                  </div>
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Address</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="address"
+                        name="address"
+                        value="{{visitor.address}}"
+                      />
+                    </div>
+                </div>
   
                 <div class="row mb-2">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Address</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="address"
-                      name="address"
-                      value="{{visitor.address}}"
-                    />
-                  </div>
+                 
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">City/Town</label>
                     <input
@@ -143,7 +133,7 @@
                 </div>
 
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-primary w-30">Edit Visitor</button>
+                  <button type="submit" class="btn btn-primary w-30">Edit Church Visitor Details</button>
                 </div>
               </div>
               </form>

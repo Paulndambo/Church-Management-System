@@ -12,31 +12,38 @@ from django.db import transaction
 from apps.membership.models import Department, Branch, Member
 from apps.attendances.models import ChurchService
 from apps.core.constants import GENDER_CHOICES, USER_POSITIONS, STATUS_CHOICES
+from django.contrib import messages
+
 
 # Create your views here.
 def login_user(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
         print("***********User Information***************")
         print(username, password)
         print("***********User Information***************")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            next_url = request.GET.get('next', 'home')
-            return redirect(next_url)  # Redirect to the next URL or home page.
+            if user.role == "District Superintendent":
+                next_url = request.GET.get("next", "district-home")
+                return redirect(next_url)
+            next_url = request.GET.get("next", "home")
+            return redirect(next_url)
         else:
-            return redirect('login')
-    next_url = request.GET.get('next', '')
-    return render(request, 'accounts/login.html', {'next': next_url})
+            messages.error(request, "Invalid username or password. Please try again.")
+            next_url = request.GET.get("next", "")
+            return render(request, "accounts/login.html", {"next": next_url})
+    
+    next_url = request.GET.get("next", "")
+    return render(request, "accounts/login.html", {"next": next_url})
 
 
 @login_required
 def logout_user(request):
     logout(request)
-    return redirect('login')  # Redirect to a login page.
-
+    return redirect("login")  # Redirect to a login page.
 
 
 ### Church Visitors Management
@@ -69,6 +76,7 @@ class VisitorListView(LoginRequiredMixin, ListView):
         context["photo_consent_choices"] = ["Accept", "Decline"]
         return context
 
+
 @login_required
 @transaction.atomic
 def new_visitor(request):
@@ -80,11 +88,9 @@ def new_visitor(request):
         address = request.POST.get("address")
         city = request.POST.get("city")
         country = request.POST.get("country")
-        
-        
+
         branch = request.POST.get("branch")
         church_service = request.POST.get("church_service")
-        brought_by = request.POST.get("brought_by")
         photo_consent = request.POST.get("photo_consent")
 
         Visitor.objects.create(
@@ -97,12 +103,12 @@ def new_visitor(request):
             country=country,
             branch_id=branch,
             church_service_id=church_service,
-            brought_by_id=brought_by,
-            photo_consent=photo_consent
+            photo_consent=photo_consent,
         )
-    
+
         return redirect("visitors")
     return render(request, "visitors/new_visitor.html")
+
 
 @login_required
 def edit_visitor(request):
@@ -115,15 +121,13 @@ def edit_visitor(request):
         address = request.POST.get("address")
         city = request.POST.get("city")
         country = request.POST.get("country")
-        
-        
+
         branch = request.POST.get("branch")
         church_service = request.POST.get("church_service")
-        brought_by = request.POST.get("brought_by")
         photo_consent = request.POST.get("photo_consent")
-        
+
         visitor = Visitor.objects.get(id=visitor_id)
-  
+
         visitor.first_name = first_name
         visitor.last_name = last_name
         visitor.branch_id = branch
@@ -134,9 +138,8 @@ def edit_visitor(request):
         visitor.city = city
         visitor.country = country
         visitor.photo_consent = photo_consent
-        visitor.brought_by_id = brought_by
         visitor.save()
-        
+
         return redirect("visitors")
     return render(request, "visitors/edit_visitor.html")
 
@@ -147,8 +150,20 @@ def delete_visitor(request):
     if request.method == "POST":
         visitor_id = request.POST.get("visitor_id")
         visitor = Visitor.objects.get(id=visitor_id)
-        
+
         visitor.user.delete()
         visitor.delete()
         return redirect("visitors")
     return render(request, "visitors/delete_visitor.html")
+
+
+@login_required
+def checkin_visitor(request):
+    visitor_id = request.POST.get("visitor_id")
+
+    visitor = Visitor.objects.get(id=visitor_id)
+    visitor.times_attended += 1
+    visitor.save()
+
+    return redirect("visitors")
+    return render(request, "visitors/checkin_visitor.html")

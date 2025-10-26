@@ -1,0 +1,38 @@
+<div class="modal fade" id="markAppointmentModal{{appointment.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Mark Appointment</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'mark-appointment' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" name="appointment_id" id="appointment_id" value="{{appointment.id}}" readonly />
+           
+                <div class="row mb-4">
+                   <div class="col">
+                    <label class="form-label fw-bold">Mark Appointment Status as?</label>
+                    <select class="form-select" id="status" name="status" required>
+                         <option value="" selected disabled>Select Appointment Status</option>
+                        {% for status in statuses %}
+                            <option value="{{status}}">{{status}}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+
+                <div class="row mb-4">
+                  <div class="col">
+                    <label class="form-label fw-bold">If accepted, what date, if not accepted leave indicated date</label>
+                    <input class="form-control" type="datetime-local" id="appointment_date" name="appointment_date" value="{{appointment.appointment_date|date:'Y-m-d\\TH:i'}}" required>         
+                  </div>
+                </div>                
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Mark Appointment</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

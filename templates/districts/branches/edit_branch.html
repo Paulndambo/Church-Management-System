@@ -1,0 +1,62 @@
+<div class="modal fade" id="editBranchModal{{branch.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Edit Church Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-district-church' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                  <input type="hidden" readonly id="branch_id" name="branch_id" value="{{branch.id}}" />
+                  <input type="hidden" name="section_id" id="section_id" value="{{branch.section.id}}" readonly />
+                  <div class="row mb-3">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Branch Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    value="{{branch.name}}"
+                    required
+                  />
+                </div>
+             
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Town</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="town"
+                      name="town"
+                      value="{{branch.town}}"
+                      required
+                    />
+                  </div>
+              
+                </div>
+               
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Branch Location</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="location"
+                        name="location"
+                        value="{{branch.location}}"
+                        required
+                      />
+                  </div>  
+                </div>
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Church Details</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

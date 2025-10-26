@@ -1,0 +1,65 @@
+<div class="modal fade" id="newEventModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">New Church Event</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-event' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                  <div class="row mb-3">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Event Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    required
+                  />
+                </div>
+                </div>
+               
+                <div class="row mb-3">
+                   <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Starts On</label>
+                      <input
+                        type="datetime-local"
+                        class="form-control"
+                        id="starts_on"
+                        name="starts_on"
+                        required
+                      />
+                  </div>  
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Ends On</label>
+                      <input
+                        type="datetime-local"
+                        class="form-control"
+                        id="ends_on"
+                        name="ends_on"
+                        required
+                      />
+                  </div>  
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Event Type</label>
+                      <select class="form-select" id="event_type" name="event_type" required>
+                        {% for event_type in event_types %}
+                            <option value="{{event_type}}">{{event_type}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+  
+                <div class="text-center mt-3">
+                  <input type="submit" class="btn btn-primary w-30" value="Create Church Event" />
+                </div>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>

@@ -11,12 +11,12 @@
                     <input type="hidden" value="{{tithing.id}}" name="tithing_id" id="tithing_id" readonly required />
                 <div class="row mb-3">
                     <div class="col">
-                      <label for="exampleInputPassword1" class="form-label fw-bold">Member</label>
-                      <select class="form-select" id="member" name="member" required>
+                      <label for="member" class="form-label fw-bold">Member</label>
+                      <select class="form-select edit-member-select" id="member" name="member" required>
                         <option value="{{tithing.member.id}}">{{tithing.member.name}}</option>
                         {% for member in members %}
                             {% if member.id != tithing.member.id %}
-                                <option value={{member.id}}>{{member.name}}</option>
+                                <option value="{{ member.id }}">{{ member.name }}</option>
                             {% endif %}
                         {% endfor %}
                       </select>
@@ -25,7 +25,7 @@
   
                 <div class="row mb-2">
                   <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Total Amount</label>
+                    <label for="amount" class="form-label fw-bold">Total Amount</label>
                     <input
                       type="number"
                       class="form-control"
@@ -36,7 +36,7 @@
                     />
                   </div>
                   <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Service Date</label>
+                    <label for="tithing_date" class="form-label fw-bold">Service Date</label>
                     <input
                       type="date"
                       class="form-control"
@@ -55,3 +55,70 @@
       </div>
     </div>
   </div>
+
+<!-- Add Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<!-- Add Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Initialize Select2 for edit modal
+    $('.edit-member-select').select2({
+        placeholder: 'Search and select a member...',
+        allowClear: true,
+        width: '100%',
+        dropdownParent: $(this).closest('.modal'),
+        language: {
+            noResults: function() {
+                return "No members found";
+            }
+        }
+    });
+
+    // Reinitialize when modal is shown (handles multiple modals)
+    $('.modal').on('shown.bs.modal', function() {
+        $(this).find('.edit-member-select').select2({
+            placeholder: 'Search and select a member...',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $(this),
+            language: {
+                noResults: function() {
+                    return "No members found";
+                }
+            }
+        });
+    });
+
+    // Destroy Select2 when modal is hidden
+    $('.modal').on('hidden.bs.modal', function() {
+        $(this).find('.edit-member-select').select2('destroy');
+    });
+});
+</script>
+
+<style>
+/* Fix Select2 styling in modals */
+.select2-container--open {
+    z-index: 1070 !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-selection--single {
+    height: calc(1.5em + 0.75rem + 2px) !important;
+    padding: 0.375rem 0.75rem !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+.select2-selection--single .select2-selection__rendered {
+    line-height: 1.5 !important;
+}
+
+.select2-selection--single .select2-selection__arrow {
+    height: calc(1.5em + 0.75rem + 2px) !important;
+}
+</style>

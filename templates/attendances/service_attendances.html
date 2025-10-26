@@ -6,7 +6,7 @@
 <div class="table-card">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3>Service Attendance</h3>
+            <h3 class="fw-bold">Service Attendance</h3>
         </div>
         <div class="col">
             <input type="text" class="form-control" placeholder="Search..." 
@@ -28,10 +28,9 @@
                 <tr>
                     <th></th>
                     <th>Service</th>
-                    <th>Month</th>
-                    <th>Date</th>
+                    <th>Gender</th>
                     <th>Present</th>
-                    <th>Recorded At</th>
+                    <th>Service Date</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -39,14 +38,13 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ attendance.service.name }}</td>
-                    <td>{{ attendance.month }}(<b>{{attendance.year}}</b>)</td>
-                    <td>{{ attendance.service_date }}</td>
+                    <td>{{ attendance.gender }}</td>
                     <td>{{ attendance.total_present }}</td>
-                    <td>{{ attendance.created_at }}</td>
+                    <td>{{ attendance.service_date }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="8" class="text-center py-4">
+                    <td colspan="5" class="text-center py-4">
                         No Attendance found
                     </td>
                 </tr>
@@ -65,43 +63,7 @@
         {{ paginator.count }} 
         entries
     </div>
-    {% if is_paginated %}
-    <nav>
-        <ul class="pagination mb-0">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    Previous
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-            </li>
-            {% endif %}
-
-            {% for num in paginator.page_range %}
-            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    {{ num }}
-                </a>
-            </li>
-            {% endfor %}
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    Next
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Next</span>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+    
 </div>
 </div>
 
@@ -126,67 +88,6 @@
             }, 500);
         });
 
-        // Sort functionality
-        document.querySelectorAll('th[data-sort]').forEach(header => {
-            header.addEventListener('click', function() {
-                const sortField = this.dataset.sort;
-                const currentIcon = this.querySelector('i');
-                let direction = 'asc';
-
-                if (currentIcon.classList.contains('fa-sort-up')) {
-                    direction = 'desc';
-                }
-
-                window.location.href = `?sort=${sortField}&direction=${direction}`;
-            });
-        });
-
-        // Delete functionality
-        let studentToDelete = null;
-        
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                studentToDelete = this.dataset.id;
-            });
-        });
-
-        document.getElementById('confirmDelete').addEventListener('click', function() {
-            if (studentToDelete) {
-                loader.classList.add('active');
-                
-                fetch(`/students/${studentToDelete}/delete/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.reload();
-                    }
-                })
-                .finally(() => {
-                    loader.classList.remove('active');
-                });
-            }
-        });
-
-        // Utility function to get CSRF token
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
     });
 </script>
 {% endblock additional_scripts %}

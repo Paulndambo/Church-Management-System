@@ -9,12 +9,16 @@
             <h3>District Reports</h3>
         </div>
         <div class="col">
-            <input type="text" class="form-control" placeholder="Search..." 
-            id="searchInput" value="{{ search_query }}">
+            <select class="form-control" id="searchSelect">
+                <option value="">-- Select a year --</option>
+                {% for year in years %}
+                    <option value="{{ year }}" {% if search_query == year|stringformat:"s" %}selected{% endif %}>
+                        {{ year }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
-        <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictReportModal">Generate District Form Report</button>
-          </div>
+        
     </div>
     <!-- Table Toolbar --> 
     <!-- Loading Bar -->
@@ -114,65 +118,13 @@
 {% block additional_scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
+        const searchSelect = document.getElementById('searchSelect');
         const loader = document.getElementById('loader');
-        let searchTimeout;
 
-        // Search functionality
-        searchInput.addEventListener('keyup', function() {
-            clearTimeout(searchTimeout);
+        searchSelect.addEventListener('change', function() {
             loader.classList.add('active');
-
-            searchTimeout = setTimeout(() => {
-                const searchQuery = this.value;
-                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
-            }, 500);
-        });
-
-        // Sort functionality
-        document.querySelectorAll('th[data-sort]').forEach(header => {
-            header.addEventListener('click', function() {
-                const sortField = this.dataset.sort;
-                const currentIcon = this.querySelector('i');
-                let direction = 'asc';
-
-                if (currentIcon.classList.contains('fa-sort-up')) {
-                    direction = 'desc';
-                }
-
-                window.location.href = `?sort=${sortField}&direction=${direction}`;
-            });
-        });
-
-        // Delete functionality
-        let studentToDelete = null;
-        
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                studentToDelete = this.dataset.id;
-            });
-        });
-
-        document.getElementById('confirmDelete').addEventListener('click', function() {
-            if (studentToDelete) {
-                loader.classList.add('active');
-                
-                fetch(`/students/${studentToDelete}/delete/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.reload();
-                    }
-                })
-                .finally(() => {
-                    loader.classList.remove('active');
-                });
-            }
+            const searchQuery = this.value;
+            window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
         });
 
         // Utility function to get CSRF token

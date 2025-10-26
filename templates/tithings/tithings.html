@@ -4,16 +4,16 @@
 
 {% block content %}
 <div class="table-card">
-    <div class="row py-3 px-2">
+    <div class="row py-3 px-4">
         <div class="col">
-            <h3>Members Tithes</h3>
+            <h3 class="fw-bold">Members Tithes</h3>
         </div>
         <div class="col">
             <input type="text" class="form-control" placeholder="Search..." 
             id="searchInput" value="{{ search_query }}">
         </div>
         <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTitheModal">Record Tithe</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTitheModal">Record Member Tithe</button>
           </div>
     </div>
  
@@ -29,21 +29,20 @@
                     <th>Branch</th>
                     <th>Amount</th>
                     <th>Date</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
                 {% for tithing in tithings %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ tithing.member }}</td>
+                    <td>{{ tithing.member.name }}</td>
                     <td>{{ tithing.member.branch }}</td>
                     <td>{{  tithing.amount}}</td>
                     <td>{{  tithing.tithing_date}}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="8" class="text-center py-4">
+                    <td colspan="5" class="text-center py-4">
                         No branches found
                     </td>
                 </tr>
@@ -62,43 +61,7 @@
         {{ paginator.count }} 
         entries
     </div>
-    {% if is_paginated %}
-    <nav>
-        <ul class="pagination mb-0">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    Previous
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-            </li>
-            {% endif %}
-
-            {% for num in paginator.page_range %}
-            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    {{ num }}
-                </a>
-            </li>
-            {% endfor %}
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                    Next
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Next</span>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+ 
 </div>
 </div>
 {% include "tithings/new_tithing.html" %}

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monthly Church Report</title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --accent: #0891b2;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --bg-light: #f8fafc;
+      --success: #059669;
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+      margin: 0;
+    }
+
+    .report-container {
+      background: white;
+      width: 277mm;
+      margin: 0 auto;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Cover Page Styles */
+    .cover-page {
+      height: 190mm;
+      padding: 10mm;
+      background: white;
+      color: #1e293b;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-page::before,
+    .cover-page::after {
+      display: none;
+    }
+
+    .cover-header {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding-top: 2rem;
+    }
+
+    .cover-header h1 {
+      font-size: 3rem;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--primary);
+    }
+
+    .cover-header .subtitle {
+      font-size: 1.3rem;
+      margin-top: 0.5rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .cover-meta {
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .meta-item {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+      border: 1px solid #e2e8f0;
+    }
+
+    .meta-item label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+
+    .meta-item .value {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .overview-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .overview-card {
+      background: white;
+      color: var(--primary);
+      padding: 1.2rem;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+    }
+
+    .overview-card .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .overview-card .amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .cover-footer {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Content Pages */
+    .content-page {
+      padding: 10mm;
+      page-break-after: always;
+      page-break-inside: avoid;
+      max-width: 277mm;
+    }
+
+    .page-header {
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-header h2 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .page-number {
+      background: var(--primary);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.65rem;
+      background: white;
+      border: 1px solid var(--border);
+      table-layout: fixed;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: var(--primary);
+      padding: 0.4rem 0.2rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border: 1px solid var(--border);
+      word-wrap: break-word;
+      line-height: 1.2;
+    }
+
+    td {
+      padding: 0.4rem 0.2rem;
+      text-align: center;
+      border: 1px solid var(--border);
+      color: #334155;
+      word-wrap: break-word;
+      overflow: hidden;
+      font-size: 0.65rem;
+      line-height: 1.2;
+    }
+
+    tbody tr {
+      transition: none;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    tbody tr:hover {
+      background: #f1f5f9;
+    }
+
+    tfoot td {
+      font-weight: 700;
+      background: #f1f5f9;
+      color: var(--primary);
+      font-size: 0.7rem;
+      padding: 0.6rem 0.2rem;
+      border: 1px solid var(--border);
+    }
+
+    .signatures-page {
+      padding: 10mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      page-break-before: always;
+      max-width: 277mm;
+    }
+
+    .signatures {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4rem;
+      margin-top: 4rem;
+    }
+
+    .signature-line {
+      text-align: center;
+    }
+
+    .signature-space {
+      height: 80px;
+      border-bottom: 2px solid var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .signature-label {
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.9rem;
+    }
+
+    #download {
+      margin-bottom: 2rem;
+      padding: 1rem 2.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      transition: all 0.3s;
+      letter-spacing: 0.5px;
+    }
+
+    #download:hover {
+      background: #1e3a8a;
+      transform: translateY(-2px);
+    }
+
+    .stat-highlight {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+      
+      #download {
+        display: none;
+      }
+
+      .report-container {
+        box-shadow: none;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .content-page,
+      .cover-page,
+      .signatures-page {
+        padding: 10mm;
+        max-width: 100%;
+      }
+
+      table {
+        font-size: 0.6rem;
+      }
+
+      th, td {
+        padding: 0.3rem 0.15rem;
+        font-size: 0.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <button id="download">📄 Download PDF Report</button>
+
+    <div class="report-container" id="report">
+      
+      <!-- COVER PAGE -->
+      <div class="cover-page">
+        <div class="cover-header">
+          <h1>District Monthly Report</h1>
+          <div class="subtitle">Financial & Attendance Summary</div>
+        </div>
+
+        <div class="cover-meta">
+          <div class="meta-grid">
+            <div class="meta-item">
+              <label>District Name</label>
+              <div class="value">{{report.district.name}}</div>
+            </div>
+            <div class="meta-item">
+              <label>Reporting Period</label>
+              <div class="value">{{report.month}} {{report.year}}</div>
+            </div>
+            <div class="meta-item">
+              <label>Report Generated</label>
+              <div class="value" id="currentDate"></div>
+            </div>
+            <div class="meta-item">
+              <label>Meeting Date</label>
+              <div class="value">{{meeting_date|default:"TBD"}}</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin: 1.5rem 0 1rem; opacity: 0.9; font-size: 1.1rem; font-weight: 600;">
+            Financial Overview
+          </div>
+
+          <div class="overview-cards">
+            <div class="overview-card">
+              <div class="label">Total Revenue</div>
+              <div class="amount">KES {{ district_grand_total|default:"0" }}</div>
+            </div>
+            <div class="overview-card">
+              <div class="label">Total Expenses</div>
+              <div class="amount">KES {{total_expenses|default:"0"}}</div>
+            </div>
+            <div class="overview-card">
+              <div class="label">National Office Share</div>
+              <div class="amount">{{district_total|default:"0"}}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cover-footer">
+          <p>Generated by Church Management System</p>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem;">Confidential - For Official Use Only</p>
+        </div>
+      </div>
+
+      <!-- REVENUE PAGE 1 -->
+      <div class="content-page">
+        <div class="page-header">
+          <h2>Revenue Collections</h2>
+          <div class="page-number">Page 1</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Presbyter</th>
+              <th>General Fund</th>
+              <th>Sunday School</th>
+              <th>Pastors Fund</th>
+              <th>Presbyter Tithe</th>
+              <th>Pastor's Tithe</th>
+              <th>Easter Building</th>
+              <th>Kenya Kids</th>
+              <th>Special Offering</th>
+              <th>Adult Att.</th>
+              <th>Children Att.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in first_part %}
+            <tr>
+              <td>{{ report.section }}</td>
+              <td>{{ report.section.presbyter.name }}</td>
+              <td>{{ report.general_fund }}</td>
+              <td>{{ report.sunday_school }}</td>
+              <td>{{ report.pastors_fund }}</td>
+              <td>{{ report.presbyter_tithe }}</td>
+              <td>{{ report.pastors_tithe }}</td>
+              <td>{{ report.easter }}</td>
+              <td>{{ report.kenya_kids }}</td>
+              <td>{{ report.special_offering}}</td>
+              <td>{{ report.adult }}</td>
+              <td>{{ report.children }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"><strong>GRAND TOTALS</strong></td>
+              <td><strong>{{ total_general_fund }}</strong></td>
+              <td><strong>{{ total_sunday_school }}</strong></td>
+              <td><strong>{{ total_pastors_fund }}</strong></td>
+              <td><strong>{{ total_presbyter_tithe }}</strong></td>
+              <td><strong>{{ total_pastors_tithe }}</strong></td>
+              <td><strong>{{ easter_total }}</strong></td>
+              <td><strong>{{ kenya_kids }}</strong></td>
+              <td><strong>{{ special_offering }}</strong></td>
+              <td><strong>{{ total_adult_attendance }}</strong></td>
+              <td><strong>{{ total_children_attendance }}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- 
+      <div class="content-page">
+        <div class="page-header">
+          <h2>Revenue Collections (Continued)</h2>
+          <div class="page-number">Page 2</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Presbyter</th>
+              <th>General Fund</th>
+              <th>Sunday School</th>
+              <th>Pastors Fund</th>
+              <th>Presbyter Tithe</th>
+              <th>Pastor's Tithe</th>
+              <th>Easter Building</th>
+              <th>Kenya Kids</th>
+              <th>Special Offering</th>
+              <th>Adult Att.</th>
+              <th>Children Att.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in second_part %}
+            <tr>
+              <td>{{ report.section }}</td>
+              <td>{{ report.section.presbyter.name }}</td>
+              <td>{{ report.general_fund }}</td>
+              <td>{{ report.sunday_school }}</td>
+              <td>{{ report.pastors_fund }}</td>
+              <td>{{ report.presbyter_tithe }}</td>
+              <td>{{ report.pastors_tithe }}</td>
+              <td>{{ report.easter }}</td>
+              <td>{{ report.kenya_kids }}</td>
+              <td>{{ report.special_offering}}</td>
+              <td>{{ report.adult }}</td>
+              <td>{{ report.children }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"><strong>GRAND TOTALS</strong></td>
+              <td><strong>{{ total_general_fund }}</strong></td>
+              <td><strong>{{ total_sunday_school }}</strong></td>
+              <td><strong>{{ total_pastors_fund }}</strong></td>
+              <td><strong>{{ total_presbyter_tithe }}</strong></td>
+              <td><strong>{{ total_pastors_tithe }}</strong></td>
+              <td><strong>{{ easter_total }}</strong></td>
+              <td><strong>{{ kenya_kids }}</strong></td>
+              <td><strong>{{ special_offering }}</strong></td>
+              <td><strong>{{ total_adult_attendance }}</strong></td>
+              <td><strong>{{ total_children_attendance }}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      -->
+
+      <!-- EXPENSES PAGE -->
+      <div class="content-page">
+        <div class="page-header">
+          <h2>Expenses & Expenditures</h2>
+          <div class="page-number">Page 2</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 10%;">#</th>
+              <th style="width: 60%;">Expense Name</th>
+              <th style="width: 30%;">Amount (KES)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for expense in expenses %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td style="text-align: left; padding-left: 1rem;">{{expense.expense_name}}</td>
+              <td>{{expense.amount_spend}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"><strong>GRAND TOTAL</strong></td>
+              <td><strong>{{total_expenses}}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- CONTRIBUTIONS PAGE -->
+      <div class="content-page">
+        <div class="page-header">
+          <h2>Contribution to National Office</h2>
+          <div class="page-number">Page 3</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 10%;">#</th>
+              <th style="width: 60%;">Contribution Type</th>
+              <th style="width: 30%;">Amount (KES)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td style="text-align: left; padding-left: 1rem;">10% General Fund</td>
+              <td>{{ ten_percent_general_fund }}</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td style="text-align: left; padding-left: 1rem;">5% Sunday School</td>
+              <td>{{ five_percent_sunday_school }}</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td style="text-align: left; padding-left: 1rem;">5% Hazina ya Mchungaji</td>
+              <td>{{ five_percent_pastors_tithe }}</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td style="text-align: left; padding-left: 1rem;">Half Easter Offering</td>
+              <td>{{ half_easter_offering }}</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td style="text-align: left; padding-left: 1rem;">Kenya Kids</td>
+              <td>{{ kenya_kids }}</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td style="text-align: left; padding-left: 1rem;">Sadaka Maalum</td>
+              <td>{{ special_offering }}</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td style="text-align: left; padding-left: 1rem;">Fungu la Kumi la Dist. Supt</td>
+              <td>{{ district_supt_tithe }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"><strong>GRAND TOTAL</strong></td>
+              <td><strong>{{district_total}}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- ADDITIONALS PAGE -->
+      <div class="content-page">
+        <div class="page-header">
+          <h2>Additional Collections</h2>
+          <div class="page-number">Page 4</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 10%;">#</th>
+              <th style="width: 60%;">Collection Type</th>
+              <th style="width: 30%;">Amount (KES)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td style="text-align: left; padding-left: 1rem;">KAGDOM</td>
+              <td>{{ total_kagdom }}</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td style="text-align: left; padding-left: 1rem;">District Missions</td>
+              <td>{{ total_district_missions }}</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td style="text-align: left; padding-left: 1rem;">Resource Mobilisation</td>
+              <td>{{ total_resource_mobilisation }}</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td style="text-align: left; padding-left: 1rem;">Church Support</td>
+              <td>{{ total_church_support }}</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td style="text-align: left; padding-left: 1rem;">Church Welfare</td>
+              <td>{{ total_church_welfare }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"><strong>GRAND TOTAL</strong></td>
+              <td><strong>{{total_additionals}}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- SIGNATURES PAGE -->
+      <div class="signatures-page">
+        <div class="page-header">
+          <h2>Authorization & Approval</h2>
+          <div class="page-number">Page 5</div>
+        </div>
+        
+        <div style="text-align: center; color: var(--muted); margin: 2rem 0;">
+          <p style="font-size: 1rem;">This report has been reviewed and approved by the following officials:</p>
+        </div>
+
+        <div class="signatures">
+          <div class="signature-line">
+            <div class="signature-space"></div>
+            <div class="signature-label">District Superintendent</div>
+            <div style="color: var(--muted); margin-top: 0.5rem; font-size: 0.85rem;">Signature & Date</div>
+          </div>
+          <div class="signature-line">
+            <div class="signature-space"></div>
+            <div class="signature-label">District Treasurer</div>
+            <div style="color: var(--muted); margin-top: 0.5rem; font-size: 0.85rem;">Signature & Date</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem;">
+          <p>This document contains confidential financial information.</p>
+          <p>© {{report.year}} - All Rights Reserved</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    // Set current date
+    const dateElement = document.getElementById('currentDate');
+    if (dateElement) {
+      const today = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      dateElement.textContent = today.toLocaleDateString('en-US', options);
+    }
+
+    // PDF Download
+    document.getElementById("download").addEventListener("click", () => {
+      const element = document.getElementById("report");
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: 'District_Monthly_Report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 1.5,
+          scrollX: 0,
+          scrollY: 0,
+          useCORS: true,
+          letterRendering: true,
+          windowWidth: 1200
+        },
+        jsPDF: { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'landscape',
+          compress: true
+        },
+        pagebreak: { 
+          mode: ['avoid-all', 'css', 'legacy'],
+          before: '.content-page, .signatures-page',
+          after: '.cover-page, .content-page'
+        }
+      };
+      
+      html2pdf().from(element).set(opt).save();
+    });
+  </script>
+</body>
+</html>

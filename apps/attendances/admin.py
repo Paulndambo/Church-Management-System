@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from apps.attendances.models import ServiceAttendance, ServiceAttendanceMetric, ChurchService
+from apps.attendances.models import (
+    ServiceAttendance,
+    ServiceAttendanceMetric,
+    ChurchService,
+)
+
+
 # Register your models here.
 @admin.register(ServiceAttendance)
 class ServiceAttendanceAdmin(admin.ModelAdmin):
@@ -10,7 +16,16 @@ class ServiceAttendanceAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceAttendanceMetric)
 class ServiceAttendanceMetricAdmin(admin.ModelAdmin):
-    list_display = ["id", "branch", "service", "total_present", "service_date", "month", "year", "created_at"]
+    list_display = [
+        "id",
+        "branch",
+        "service",
+        "total_present",
+        "service_date",
+        "month",
+        "year",
+        "created_at",
+    ]
     list_filter = ["month", "year"]
 
 

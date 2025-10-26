@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-center">Record Service Attendance</h1>
+          <h1 class="modal-title fs-5 text-center fw-bold">Record Service Attendance</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <form action="{% url 'record-service-attendance' %}" method="POST" enctype="multipart/form-data">
@@ -28,6 +28,13 @@
                   </div>
                 </div>
                 <div class="row mb-3">
+                  <div class="col">
+                    <label class="form-label fw-bold">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                      <option value="Male">Male</option>
+                       <option value="Female">Female</option>
+                      </select>
+                  </div>
                     <div class="col">
                         <label for="exampleInputPassword1" class="form-label fw-bold">Total Present</label>
                         <input

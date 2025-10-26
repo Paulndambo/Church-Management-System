@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.partners.models import ChurchPartner
+
+
 # Create your views here.
 # Church Projects
 class PartnersListView(LoginRequiredMixin, ListView):
@@ -22,8 +24,7 @@ class PartnersListView(LoginRequiredMixin, ListView):
 
         if search_query:
             queryset = queryset.filter(
-                Q(id__icontains=search_query)
-                | Q(name__icontains=search_query)
+                Q(id__icontains=search_query) | Q(name__icontains=search_query)
             )
 
         # Get sort parameter
@@ -32,7 +33,7 @@ class PartnersListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs: dict[str, Any]):
         context = super().get_context_data(**kwargs)
         return context
-    
+
 
 @login_required
 @transaction.atomic
@@ -44,16 +45,16 @@ def new_partner(request: HttpRequest):
         town = request.POST.get("town")
         country = request.POST.get("country")
         occupation = request.POST.get("occupation")
-       
+
         ChurchPartner.objects.create(
             name=name,
             email=email,
             phone_number=phone_number,
             town=town,
             country=country,
-            occupation=occupation
+            occupation=occupation,
         )
-        
+
         return redirect("partners")
     return render(request, "partners/new_partner.html")
 
@@ -69,16 +70,16 @@ def edit_partner(request: HttpRequest):
         town = request.POST.get("town")
         country = request.POST.get("country")
         occupation = request.POST.get("occupation")
-       
+
         ChurchPartner.objects.filter(id=partner_id).update(
             name=name,
             email=email,
             phone_number=phone_number,
             town=town,
             country=country,
-            occupation=occupation
+            occupation=occupation,
         )
-        
+
         return redirect("partners")
     return render(request, "partners/edit_partner.html")
 

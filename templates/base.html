@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>DASHBOARD | CHURCH ERP</title>
+    <title>DASHBOARD | KANISA CLOUD</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <!-- Add Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<!-- Add Select2 JS -->
+   
+
     {% block additional_css %}
     {% endblock additional_css %}
     <style>
@@ -18,7 +26,7 @@
             
             /* Church Color Palette - User Specified Colors */
             --church-primary: #2C3E50;          /* Navy Blue - main church color */
-            --church-secondary: #81C784;        /* Soft Green - secondary */
+            --church-secondary: #8b4513;        /* Soft Green - secondary */
             --church-accent: #FFC107;           /* Gold - accent */
             --church-light-accent: #FFF8E1;     /* Light Gold - highlights */
             --church-cream: #FAFAFA;            /* Off-White - background */
@@ -27,6 +35,9 @@
             --church-deep-blue: #1B2631;        /* Darker Navy - dark accents */
             --church-blue-gold: #F57F17;        /* Darker Gold - metallic accents */
             --church-stone: #EEEEEE;            /* Light Gray - neutral */
+            --church-light: #eeece0;
+            --church-white: #ebe0c5;
+            --church-gold: #e9d9ab;
             
             /* Semantic Colors with Church Theme */
             --primary-color: var(--church-primary);
@@ -46,7 +57,8 @@
 
         body {
             font-family: 'Crimson Text', serif;
-            background: linear-gradient(135deg, var(--church-ivory) 0%, var(--church-cream) 100%);
+            /*background: linear-gradient(135deg, var(--church-light) 0%, #e8ddc7 100%); */
+            background-color: var(--church-gold);
             color: var(--church-dark);
             position: relative;
         }
@@ -59,10 +71,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(129, 199, 132, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(44, 62, 80, 0.02) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255, 193, 7, 0.02) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
@@ -90,6 +98,7 @@
         .border-church-primary { border-color: var(--church-primary) !important; }
         .border-church-accent { border-color: var(--church-accent) !important; }
         .border-church-stone { border-color: var(--church-stone) !important; }
+        .text-church-gold { color: var(--church-gold) !important; }
 
         /* Church-themed shadows */
         .shadow-church { box-shadow: 0 4px 20px var(--church-shadow) !important; }
@@ -231,8 +240,8 @@
         }
 
         /* Cards */
-        .card {
-           font-family: 'Cinzel', serif;
+        .card h6 {
+            font-family: 'Cinzel', serif;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
@@ -240,7 +249,7 @@
         .card h3 {
             font-weight: 600;
             font-size: 2.2rem;
-            color: var(--church-primary);
+            
         }
 
         .card:hover {
@@ -248,11 +257,12 @@
             box-shadow: 0 8px 25px var(--church-shadow-deep);
         }
 
+
         .card-stat {
-            background: linear-gradient(135deg, var(--church-cream) 0%, var(--church-ivory) 100%);
+            
             border-radius: 12px;
             box-shadow: 0 4px 20px var(--church-shadow);
-            border: 2px solid var(--church-stone) !important;
+            border: none !important;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -264,14 +274,13 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--church-accent) 0%, var(--church-blue-gold) 100%);
+            height: 3px;
+            background: linear-gradient(90deg, var(--church-gold) 0%, var(--church-light-gold) 100%);
         }
 
         .card-stat:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 30px var(--church-shadow-deep);
-            border-color: var(--church-accent) !important;
+            box-shadow: 0 8px 30px var(--church-shadow);
         }
 
         .card-stat .card-body {
@@ -395,6 +404,10 @@
             border: 1px solid #ccc;
         }
 
+        .table-headers-borders th {
+            border: 1px solid #ccc;
+        }
+
        .table-container {
             display: block;
             width: 100%;
@@ -413,7 +426,7 @@
             padding: 5px;            /* reduce padding for compactness */
         }
 
-        .big-table th span {
+        .big-tableeeee th span {
             display: inline-block;
             transform: rotate(-20deg); /* tilt headers */
             transform-origin: bottom left; /* pivot from bottom-left corner */
@@ -425,7 +438,7 @@
             height: 120px;
         }
 
-        .big-table th::after {
+        .big-tableeee th::after {
             content: "";
             position: absolute;
             bottom: 0;
@@ -521,7 +534,6 @@
         }
 
         
-
         .feature-icon {
             width: 60px;
             height: 60px;
@@ -653,6 +665,14 @@
             100% { transform: translateX(250%); }
         }
 
+        .chart-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--church-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
         /* Add church-themed decorative elements in the background */
         .wrapper::before {
             content: '';
@@ -661,7 +681,6 @@
             right: 0;
             width: 300px;
             height: 300px;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23FFC107" d="M50 0L87 25L87 75L50 100L13 75L13 25Z"/></svg>');
             background-repeat: no-repeat;
             opacity: 0.05;
             z-index: -1;
@@ -675,7 +694,6 @@
             left: 0;
             width: 200px;
             height: 200px;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%232C3E50" d="M45 0H55V40H100V60H55V100H45V60H0V40H45Z"/></svg>');
             background-repeat: no-repeat;
             opacity: 0.03;
             z-index: -1;
@@ -765,6 +783,7 @@
     <div class="wrapper">
         {% if request.user.role == "District Supritendant" %}
         {% include "includes/district_sidebar.html" %}
+        {% elif request.user.role == "Church Usher" %}
         {% else %}
         {% include "includes/sidebar.html" %}
         {% endif %}

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="table-card">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Accounts Transactions</h3>
+        </div>
+    </div>
+ 
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th>Kind</th>
+                    <th>Amount</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ transaction.source.account_name }}</td>
+                    <td>{{ transaction.destination.account_name }}</td>
+                    <td>{{ transaction.transaction_type }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.created_at }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">
+                        No transactions found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+     <!-- Table Footer with Pagination -->
+    <div class="table-footer">
+        <div class="page-info">
+            Showing 
+            {{ page_obj.start_index }} 
+            to 
+            {{ page_obj.end_index }} 
+            of 
+            {{ paginator.count }} 
+            entries
+        </div>
+      
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const loader = document.getElementById('loader');
+        let searchTimeout;
+
+        // Search functionality
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(searchTimeout);
+            loader.classList.add('active');
+
+            searchTimeout = setTimeout(() => {
+                const searchQuery = this.value;
+                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+            }, 500);
+        });
+
+    });
+</script>
+{% endblock additional_scripts %}

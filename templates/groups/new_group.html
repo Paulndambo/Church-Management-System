@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-center fw-bold">New Church Group</h1>
+          <h1 class="modal-title fs-5 text-center fw-bold">New Bible Study Group</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <form action="{% url 'new-group' %}" method="POST" enctype="multipart/form-data">
@@ -43,34 +43,9 @@
                     </div>
                 </div>
 
+            
                 <div class="row mb-3">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Chairperson</label>
-                    <select class="form-select" id="chairperson" name="chairperson">
-                        {% for member in members %}
-                            <option value={{member.id}}>{{member.user.name}}</option>
-                         {% endfor %}
-                      </select>
-                  </div>
-                  <div class="col">
-                      <label for="exampleInputPassword1" class="form-label fw-bold">Secretary</label>
-                      <select class="form-select" id="secretary" name="secretary">
-                        {% for member in members %}
-                            <option value={{member.id}}>{{member.user.name}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                  <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">Group Treasurer</label>
-                    <select class="form-select" id="treasurer" name="treasurer">
-                        {% for member in members %}
-                            <option value={{member.id}}>{{member.user.name}}</option>
-                        {% endfor %}
-                      </select>
-                  </div>
+                  
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Group Status</label>
                     <select class="form-select" id="status" name="status" required>
@@ -83,7 +58,7 @@
                 
                            
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-primary w-30">Create Church Group</button>
+                  <button type="submit" class="btn btn-primary w-30">Create Bible Study Group</button>
                 </div>
               </div>
               </form>

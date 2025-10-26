@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="table-card mb-4">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3 class="fw-bold">{{branch.name}} Month Report</h3>
+        </div>
+        
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#captureSectionDataModal{{report.id}}">Fill Section Report</button>
+        </div>
+    </div>
+</div>
+
+{% include "districts/capture_section_data.html" %}
+
+<div class="table-card mb-4">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Church Monthly Data</h3>
+        </div>
+    </div>
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container big-table px-2">
+        <table class="table data-table table-sm table-borders-all">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th><span>General Fund</span></th>
+                    <th><span>Sunday School</span></th>
+                    <th><span>Pastors Fund</span></th>
+                    <th><span>Presbyter Tithe</span></th>
+                    <th><span>Pastor's Tithe</span></th>
+                    <th><span>Easter Building</span></th>
+                    <th><span>Kenya Kids</span></th>
+                    <th><span>Special Offering</span></th>
+                    <th><span>Adult Att.</span></th>
+                    <th><span>Children Att.</span></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for church_report in church_reports %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ church_report.general_fund }}</td>
+                    <td>{{ church_report.sunday_school }}</td>
+                    <td>{{ church_report.pastors_fund }}</td>
+                    <td>{{ church_report.presbyter_tithe }}</td>
+                    <td>{{ church_report.pastors_tithe }}</td>
+                    <td>{{ church_report.easter }}</td>
+                    <td>{{ church_report.kenya_kids }}</td>
+                    <td>{{ church_report.special_offering}}</td>
+                    <td>{{ church_report.adult }}</td>
+                    <td>{{ church_report.children }}</td>
+
+                    {% include "districts/edit_section_data.html" %}
+                    {% include "districts/delete_section_data.html" %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="12" class="text-center py-4">
+                        No finances found
+                    </td>
+                </tr>
+                {% endfor %}
+             
+                <tr>
+                    <td></td>
+                    <td><b>Totals</b></td>
+                    <td></td>
+                    <td><b>{{ total_general_fund }}</b></td>
+                    <td><b>{{ total_sunday_school }}</b></td>
+                    <td><b>{{ total_pastors_fund }}</b></td>
+                    <td><b>{{ total_presbyter_tithe }}</b></td>
+                    <td><b>{{ total_pastors_tithe }}</b></td>
+                    <td><b>{{ easter_total }}</b></td>
+                    <td><b>{{ kenya_kids }}</b></td>
+                    <td><b>{{ special_offering }}</b></td>
+                    <td><b>{{ total_adult_attendance }}</b></td>
+                    <td><b>{{ total_children_attendance }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

@@ -12,7 +12,7 @@
                 <div class="row mb-3">
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Church Member</label>
-                    <select class="form-select" id="member" name="member">
+                    <select class="form-select attendance-member-select" id="member" name="member">
                         {% for member in members %}
                             <option value={{member.id}}>{{member.name}}</option>
                          {% endfor %}
@@ -44,3 +44,51 @@
       </div>
     </div>
   </div>
+
+
+
+<!-- Add Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<!-- Add Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('.attendance-member-select').select2({
+        placeholder: 'Search and select a member...',
+        allowClear: true,
+        width: '100%',
+        dropdownParent: $('#newAttendanceModal'),
+        language: {
+            noResults: function() {
+                return "No members found";
+            }
+        }
+    });
+});
+</script>
+
+<style>
+/* Fix Select2 styling in modals */
+.select2-container--open {
+    z-index: 1070 !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-selection--single {
+    height: calc(1.5em + 0.75rem + 2px) !important;
+    padding: 0.375rem 0.75rem !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+.select2-selection--single .select2-selection__rendered {
+    line-height: 1.5 !important;
+}
+
+.select2-selection--single .select2-selection__arrow {
+    height: calc(1.5em + 0.75rem + 2px) !important;
+}
+</style>

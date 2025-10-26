@@ -3,136 +3,174 @@
 {% block content %}
 <!-- Stats Row -->
 <div class="row g-4 mb-4">
-            <div class="col-xl-6 col-md-6">
-                <div class="card card-stat h-80">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-primary">Total Members</h6>
-                                <h3 class="text-church-primary">{{total_members}}</h3>
-                            </div>
-                            <i class="fas fa-users stats-icon text-church-gold"></i>
-                        </div>
-                       
+    <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">TOTAL CHURCHES</h6>
+                        <h3 class="text-church-secondary">{{total_churches}}</h3>
                     </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6 col-md-6">
-                <div class="card card-stat h-80">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-secondary">Monthly Tithes</h6>
-                                <h3 class="text-church-secondary">{{tithes_total}} Kes</h3>
-                            </div>
-                            <i class="fas fa-church stats-icon text-church-gold"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6 col-md-6">
-                <div class="card card-stat h-80">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-primary">Department Savings</h6>
-                                <h3 class="text-church-primary">{{total_department_savings}} Kes.</h3>
-                            </div>
-                            <i class="fas fa-piggy-bank stats-icon text-church-gold"></i>
-                        </div>
-                      
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6 col-md-6">
-                <div class="card card-stat h-80">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-secondary">Total Offerings</h6>
-                                <h3 class="text-church-secondary">{{total_offerings}} Kes</h3>
-                            </div>
-                            <i class="fas fa-hand-holding-heart stats-icon text-church-gold"></i>
-                        </div>
-                      
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6 col-md-6">
-                <div class="card card-stat h-80">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-secondary">Projects Contributions</h6>
-                                <h3 class="text-church-secondary">{{projects_contributions}} Kes</h3>
-                            </div>
-                            <i class="fas fa-hammer stats-icon text-church-gold"></i>
-                        </div>
-                     
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6 col-md-6">
-                <div class="card card-stat h-80">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-church-secondary">Project Pledges</h6>
-                                <h3 class="text-church-secondary">{{projects_pledges}} Kes</h3>
-                            </div>
-                            <i class="fas fa-handshake stats-icon text-church-gold"></i>
-                        </div>
-                      
-                    </div>
+                    <i class="fas fa-users stats-icon text-church-gold"></i>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">TOTAL SECTIONS</h6>
+                        <h3 class="text-church-secondary">{{total_sections}}</h3>
+                    </div>
+                    <i class="fas fa-church stats-icon text-church-gold"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-8 col-md-8">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">TOTAL INCOME</h6>
+                        <h3 class="text-church-secondary">{{total_for_year}} Kes.</h3>
+                    </div>
+                    <i class="fas fa-piggy-bank stats-icon text-church-gold"></i>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4 col-md-4">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">TOTAL ATTENDANCE</h6>
+                        <h3 class="text-church-secondary">{{total_attendance}}</h3>
+                    </div>
+                    <i class="fas fa-hand-holding-heart stats-icon text-church-gold"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-8">
+        <div class="chart-container">
+            <h5 class="chart-title fw-bold">REVENUE OVERVIEW</h5>
+            <canvas id="collectionsOverviewChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="chart-container">
+            <h5 class="chart-title fw-bold">ATTENDANCE DISTRIBUTION</h5>
+            <canvas id="attendancesDistributionChart"></canvas>
+        </div>
+    </div>
+</div>
 
    
 {% endblock content %}
 
 {% block additional_scripts %}
 <script>
-    
-        // Attendance Chart
-        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-        const attendanceChart = new Chart(attendanceCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Sunday Service', 'Midweek Prayer', 'Youth Group', 'Bible Study'],
-                datasets: [{
-                    data: [450, 180, 95, 120],
-                    backgroundColor: [
-                        '#d4af37',
-                        '#8b4513',
-                        '#2c1810',
-                        '#f4e4a6'
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
+let collectionsOverviewChart;
+let attendancesDistributionChart;
+
+const initialData = {
+    district_finance_metrics: {
+        labels: JSON.parse('{{ district_finance_metrics.labels|safe }}'),
+        totals: JSON.parse('{{ district_finance_metrics.totals|safe }}'),
+        expenses: JSON.parse('{{ district_finance_metrics.expenses|safe }}'),
+    },
+    attendance_metrics: {
+        labels: JSON.parse('{{ attendance_metrics.labels|safe }}'),
+        counts: JSON.parse('{{ attendance_metrics.counts|safe }}'),
+    }
+}
+
+function initCharts(yearData) {
+    const collectionsOverviewCtx = document.getElementById('collectionsOverviewChart').getContext('2d');
+    const attendancesDistributionCtx = document.getElementById('attendancesDistributionChart').getContext('2d');
+
+    if (collectionsOverviewChart) {
+        collectionsOverviewChart.destroy();
+    }
+    if (attendancesDistributionChart) {
+        attendancesDistributionChart.destroy();
+    }
+
+    collectionsOverviewChart = new Chart(collectionsOverviewCtx, {
+        type: 'line',
+        data: {
+            labels: yearData.district_finance_metrics.labels,
+            datasets: [{
+                label: 'Revenue (Kes)',
+                data: yearData.district_finance_metrics.totals,
+                borderColor: 'rgba(153, 102, 255, 1)',
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                fill: true,
+                tension: 0.1
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                family: 'Crimson Text',
-                                size: 12
-                            },
-                            padding: 15
-                        }
-                    }
+            {
+                label: 'Expense (Kes)',
+                data: yearData.district_finance_metrics.expenses,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true,
+                tension: 0.1
+            }
+        ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
-    </script>
+        }
+    });
+
+    attendancesDistributionChart = new Chart(attendancesDistributionCtx, {
+        type: 'pie',
+        data: {
+            labels: yearData.attendance_metrics.labels,
+            datasets: [{
+                data: yearData.attendance_metrics.counts,
+                backgroundColor: [
+                    '#36A2EB',
+                    '#FF6384',
+                    '#FFCE56'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: false,
+                    text: 'Attendance Distribution'
+                }
+            }
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initCharts(initialData);
+});
+
+</script>
 {% endblock additional_scripts %}

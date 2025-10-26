@@ -6,14 +6,21 @@
 <div class="table-card">
     <div class="row py-3 px-2">
         <div class="col">
-            <h3>District Churches</h3>
+            <h3 class="fw-bold">District Churches</h3>
+        </div>
+       
+        <div class="col">
+            <select class="form-control" id="searchSelect">
+                <option value="">-- Select a section --</option>
+                {% for section in sections %}
+                    <option value="{{ section.name }}" {% if search_query == section.name %}selected{% endif %}>
+                        {{ section.name }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
         <div class="col">
-            <input type="text" class="form-control" placeholder="Search..." 
-            id="searchInput" value="{{ search_query }}">
-        </div>
-        <div class="col">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictBranchModal">New Church</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newDistrictChurchModal">Add Church</button>
           </div>
     </div>
  
@@ -29,6 +36,7 @@
                     <th>Section</th>
                     <th>Town</th>
                     <th>Created On</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -39,6 +47,10 @@
                     <td>{{ branch.section }}</td>
                     <td>{{ branch.town }}</td>
                     <td>{{  branch.created_at}}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editBranchModal{{branch.id}}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    {% include "districts/branches/edit_branch.html" %}
                 </tr>
                 {% empty %}
                 <tr>
@@ -53,7 +65,61 @@
 
     <!-- Table Footer with Pagination -->
     <div class="table-footer">
-        
+        <div class="page-info">
+        Showing 
+        {{ page_obj.start_index }} 
+        to 
+        {{ page_obj.end_index }} 
+        of 
+        {{ paginator.count }} 
+        entries
+    </div>
+    {% if is_paginated %}
+<nav>
+  <ul class="pagination mb-0">
+    <!-- Previous -->
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+    <!-- Page numbers -->
+    {% for num in paginator.page_range %}
+      {% if num == 1 or num == paginator.num_pages %}
+        {# Always show first and last page #}
+        {% if num == page_obj.number %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a></li>
+        {% endif %}
+
+      {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+        {# Show nearby pages #}
+        {% if num == page_obj.number %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a></li>
+        {% endif %}
+
+      {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+        <li class="page-item disabled"><span class="page-link">…</span></li>
+      {% endif %}
+    {% endfor %}
+
+    <!-- Next -->
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
     </div>
 </div>
 {% include "districts/branches/new_branch.html" %}
@@ -63,65 +129,13 @@
 {% block additional_scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
+        const searchSelect = document.getElementById('searchSelect');
         const loader = document.getElementById('loader');
-        let searchTimeout;
 
-        // Search functionality
-        searchInput.addEventListener('keyup', function() {
-            clearTimeout(searchTimeout);
+        searchSelect.addEventListener('change', function() {
             loader.classList.add('active');
-
-            searchTimeout = setTimeout(() => {
-                const searchQuery = this.value;
-                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
-            }, 500);
-        });
-
-        // Sort functionality
-        document.querySelectorAll('th[data-sort]').forEach(header => {
-            header.addEventListener('click', function() {
-                const sortField = this.dataset.sort;
-                const currentIcon = this.querySelector('i');
-                let direction = 'asc';
-
-                if (currentIcon.classList.contains('fa-sort-up')) {
-                    direction = 'desc';
-                }
-
-                window.location.href = `?sort=${sortField}&direction=${direction}`;
-            });
-        });
-
-        // Delete functionality
-        let studentToDelete = null;
-        
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                studentToDelete = this.dataset.id;
-            });
-        });
-
-        document.getElementById('confirmDelete').addEventListener('click', function() {
-            if (studentToDelete) {
-                loader.classList.add('active');
-                
-                fetch(`/students/${studentToDelete}/delete/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.reload();
-                    }
-                })
-                .finally(() => {
-                    loader.classList.remove('active');
-                });
-            }
+            const searchQuery = this.value;
+            window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
         });
 
         // Utility function to get CSRF token

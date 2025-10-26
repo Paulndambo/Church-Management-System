@@ -1,0 +1,23 @@
+<div class="modal fade" id="deleteBaptismRequestModal{{baptism_request.id}}" tabindex="-1" aria-labelledby="newTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newTransactionModalLabel">Delete Baptism Request</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'delete-baptism-request' %}">
+                    {% csrf_token %}
+                    <input type="number" id="baptism_request_id" name="baptism_request_id" value="{{baptism_request.id}}" hidden readonly required />
+                    <div class="mb-3">
+                        <p>Are you sure you want to delete baptism request for <br> <b>{{baptism_request.first_name}} {{baptism_request.last_name}}</b>?</p>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Close</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

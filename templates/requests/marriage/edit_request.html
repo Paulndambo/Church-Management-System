@@ -1,0 +1,129 @@
+<div class="modal fade" id="editMarriageRequestModal{{marriage_request.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Edit Wedding Request</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-marriage-request' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" value="{{marriage_request.id}}" id="marriage_request_id" name="marriage_request_id" readonly />
+                  <div class="row mb-3">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Bride First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="bride_first_name"
+                    name="bride_first_name"
+                    value="{{marriage_request.bride_first_name}}"
+                    required
+                  />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Bride Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="bride_last_name"
+                      name="bride_last_name"
+                      value="{{marriage_request.bride_last_name}}"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                 <div class="row mb-3">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Groom First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="groom_first_name"
+                    name="groom_first_name"
+                    value="{{marriage_request.groom_first_name}}"
+                    required
+                  />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Groom Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="groom_last_name"
+                      name="groom_last_name"
+                      value="{{marriage_request.groom_last_name}}"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Phone Number</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="phone_number"
+                      name="phone_number"
+                      value="{{marriage_request.phone_number}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">marriage_request By</label>
+                    <select class="form-select" id="request_type" name="request_type">
+                        <option value={{marriage_request.request_type}}>{{marriage_request.request_type}}</option>
+                        {% for request_type in request_types %}
+                            {% if request_type != marriage_request.request_type %}
+                                <option value={{request_type}}>{{request_type}}</option>
+                            {% endif %}
+                         {% endfor %}
+                      </select>
+                  </div>
+                </div>
+            
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Wedding Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="wedding_date"
+                      name="wedding_date"
+                      value="{{marriage_request.wedding_date|date:'Y-m-d'}}"
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Wedding Location</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="wedding_location"
+                      name="wedding_location"
+                      value="{{marriage_request.wedding_location}}"
+                    />
+                  </div>
+                </div>  
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Wedding Request Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value={{marriage_request.status}}>{{marriage_request.status}}</option>
+                        {% for status in request_statuses %}
+                            {% if status != marriage_request.status %}
+                                <option value={{status}}>{{status}}</option>
+                            {% endif %}
+                         {% endfor %}
+                      </select>
+                  </div>
+                </div>             
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Wedding Request</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

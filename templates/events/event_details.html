@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Stats Row -->
+<div class="dashboard">
+    <div class="row g-4 mb-4">
+    <!-- Event Name -->
+    <div class="col-xl-6 col-md-6">
+      <div class="card card-stat h-80">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-church-primary">EVENT NAME</h6>
+              <h3 class="text-church-secondary">{{ event.name }}</h3>
+            </div>
+            <i class="fas fa-calendar-alt stats-icon text-church-gold"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tickets Amount Raised -->
+    <div class="col-xl-6 col-md-6">
+      <div class="card card-stat h-80">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-church-primary">TICKETS AMOUNT RAISED</h6>
+              <h3 class="text-church-secondary">{{ total_amount }} KES.</h3>
+            </div>
+            <i class="fas fa-money-bill-wave stats-icon text-church-gold"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <div class="row g-4 mb-4">
+        <div class="col-xl-6 col-md-6">
+            <a href="#" class="text-decoration-none">
+                <div class="card card-stat h-80 hover-shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">TICKETS SOLD</h6>
+                        <h3 class="text-church-secondary">{{ tickets_sold }}</h3>
+                    </div>
+                    <i class="fas fa-ticket-alt stats-icon text-church-gold"></i>
+                    </div>
+                </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Attendance -->
+        <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                <h6 class="text-church-primary">TOTAL ATTENDANCE</h6>
+                <h3 class="text-church-secondary">{{ total_attendance }}</h3>
+                </div>
+                <i class="fas fa-users stats-icon text-church-gold"></i>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+<div class="table-card mt-3">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3 class="fw-bold">Event Ticket Packages</h3>
+        </div>
+       
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTicketTypeModal{{event.id}}">Create Ticket Package</button>
+          </div>
+    </div>
+    {% include "events/new_ticket_type.html" %}
+ 
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th>Cost</th>
+                    <th>Total Tickets</th>
+                    <th>Purchased</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for ticket_type in ticket_types %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ ticket_type.title }}</td>
+                    <td>{{ ticket_type.cost }}</td>
+                    <td>{{ ticket_type.total_tickets }}</td>
+                    <td>{{ ticket_type.purchased }}</td>
+                    
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editTicketTypeModal{{ticket_type.id}}"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteTicketTypeModal{{ticket_type.id}}"><i class="fas fa-trash"></i></a>
+                            
+                        </div>
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#sellEventTicketModal{{ticket_type.id}}">Sell Ticket</a>
+                    </td>
+                    {% include "events/edit_ticket_type.html" %}
+                    {% include "events/delete_ticket_type.html" %}
+                    {% include "events/new_event_ticket.html" %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">
+                        No branches found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<div class="table-footer">
+    <div class="page-info">
+        Showing 
+        {{ page_obj.start_index }} 
+        to 
+        {{ page_obj.end_index }} 
+        of 
+        {{ paginator.count }} 
+        entries
+    </div>
+    {% if is_paginated %}
+    <nav>
+        <ul class="pagination mb-0">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    Previous
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+            {% endif %}
+
+            {% for num in paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    Next
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Next</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+</div>
+</div>
+{% endblock content %}

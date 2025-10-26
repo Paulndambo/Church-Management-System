@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="table-card">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Church Money Accounts</h3>
+        </div>
+       
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newMoneyAccountModal">New Money Account</button>
+          </div>
+    </div>
+ 
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Account Name</th>
+                    <th>Account Type</th>
+                    <th>Balance</th>
+                    <th>Date Created</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for account in money_accounts %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ account.account_name }}</td>
+                    <td>{{ account.account_type }}</td>
+                    <td>{{ account.balance }}</td>
+                    <td>{{ account.created_at }}</td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editMoneyAccountModal{{account.id}}"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'money-account-detail' account.id %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                        </div>
+                    </td>
+                    {% include "money_accounts/edit_money_account.html" %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">
+                        No money accounts found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+     <!-- Table Footer with Pagination -->
+    <div class="table-footer">
+        <div class="page-info">
+            Showing 
+            {{ page_obj.start_index }} 
+            to 
+            {{ page_obj.end_index }} 
+            of 
+            {{ paginator.count }} 
+            entries
+        </div>
+      
+    </div>
+</div>
+{% include "money_accounts/new_money_account.html" %}
+
+{% endblock content %}
+
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const loader = document.getElementById('loader');
+        let searchTimeout;
+
+        // Search functionality
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(searchTimeout);
+            loader.classList.add('active');
+
+            searchTimeout = setTimeout(() => {
+                const searchQuery = this.value;
+                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+            }, 500);
+        });
+
+    });
+</script>
+{% endblock additional_scripts %}

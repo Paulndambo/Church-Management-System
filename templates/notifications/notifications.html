@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="table-card">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3>Messages</h3>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" placeholder="Search..." 
+            id="searchInput" value="{{ search_query }}">
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">Create Message</button>
+        
+          </div>
+    </div>
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>title</th>
+                    <th>Type</th>
+                    <th>Scheduled</th>
+                    <th>Is Send</th>
+                    <th>Created At</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for message in messages %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ message.title }}</td>
+                    <td>{{ message.message_type }}</td>
+                    <td>{{ message.scheduled }}</td>
+                    <td>{{ message.is_send }}</td>
+                    <td>{{ message.created_at }}</td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editMessageModal{{message.id}}"><i class="fas fa-edit"></i></a>
+                        </div>
+                    </td>
+                   {% include "notifications/edit_message.html" %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        No messages found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+  <div class="table-footer">
+    <div class="page-info">
+        Showing 
+        {{ page_obj.start_index }} 
+        to 
+        {{ page_obj.end_index }} 
+        of 
+        {{ paginator.count }} 
+        entries
+    </div>
+</div>
+</div>
+
+{% include "notifications/new_message.html" %}
+{% endblock content %}
+
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const loader = document.getElementById('loader');
+        let searchTimeout;
+
+        // Search functionality
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(searchTimeout);
+            loader.classList.add('active');
+
+            searchTimeout = setTimeout(() => {
+                const searchQuery = this.value;
+                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+            }, 500);
+        });
+
+        // Sort functionality
+        document.querySelectorAll('th[data-sort]').forEach(header => {
+            header.addEventListener('click', function() {
+                const sortField = this.dataset.sort;
+                const currentIcon = this.querySelector('i');
+                let direction = 'asc';
+
+                if (currentIcon.classList.contains('fa-sort-up')) {
+                    direction = 'desc';
+                }
+
+                window.location.href = `?sort=${sortField}&direction=${direction}`;
+            });
+        });
+
+        // Delete functionality
+        let studentToDelete = null;
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                studentToDelete = this.dataset.id;
+            });
+        });
+
+        // Utility function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock additional_scripts %}

@@ -1,0 +1,376 @@
+<div class="modal fade" id="editChurchDataModal{{church_report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Capture Church Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-church-data' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" name="report_id" id="report_id" value="{{church_report.id}}" readonly/>
+                <input type="hidden" name="month" id="month" value="{{church_report.month}}" readonly/>
+                <input type="hidden" name="year" id="year" value="{{church_report.year}}" readonly/>
+                <input type="hidden" name="section_id" id="section_id" value="{{church_report.section.id}}" readonly/>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label fw-bold">Church</label>
+                        <br/>
+                        <select class="form-select select-edit-church-name" id="church_id" name="church_id" required>
+                            <option value="{{church_report.church.id}}">{{church_report.church.name}}({{church_report.church.section}})</option>
+                            {% for church in churches %}
+                                {% if church.id != church_report.church.id %}
+                                    <option value="{{church.id}}">{{church.name}}({{church.section}})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                  <div class="col">
+                        <label class="form-label fw-bold">Pastor</label>
+                        <br/>
+                        <select class="form-select select-edit-pastor-name" id="pastor" name="pastor" required>
+                            <option value="{{church_report.pastor.id}}">{{church_report.pastor.name}}({{church_report.pastor.pastor_role}})</option>
+                            {% for pastor in pastors %}
+                                {% if pastor.id != church_report.pastor.id %}
+                                    <option value="{{pastor.id}}">{{pastor.name}}({{pastor.pastor_role}})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label fw-bold">Total Collected</label>
+                        
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="total_collected"
+                                name="total_collected"
+                                value="{{church_report.total_collected}}"
+                            />
+                   
+                    </div>
+                     <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Kenya Kids</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="kenya_kids"
+                            name="kenya_kids"
+                            value="{{church_report.kenya_kids}}"
+                        />
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">General Fund</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="general_fund"
+                            name="general_fund"
+                            required
+                            value="{{church_report.general_fund}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Sunday School</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="sunday_school"
+                            name="sunday_school"
+                            value="{{church_report.sunday_school}}"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Pastors Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="pastors_tithe"
+                            name="pastors_tithe"
+                            value="{{church_report.pastors_tithe}}"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Presbyter Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="presbyter_tithe"
+                            name="presbyter_tithe"
+                            value="{{church_report.presbyter_tithe}}"
+                            required
+                        />
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Easter</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="easter"
+                            name="easter"
+                            value="{{church_report.easter}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Special Offering</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="special_offering"
+                            name="special_offering"
+                            value="{{church_report.special_offering}}"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Children Attendance</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="children"
+                            name="children"
+                            value="{{church_report.children}}"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Adult Attendance</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="adult"
+                            name="adult"
+                            value="{{church_report.adult}}"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">KAGDOM</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="kagdom"
+                            name="kagdom"
+                            value="{{church_report.kagdom}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">District Missions</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="district_missions"
+                            name="district_missions"
+                            value="{{church_report.district_missions}}"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Pastor's Fund</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="pastors_fund"
+                            name="pastors_fund"
+                            value="{{church_report.pastors_fund}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Church Welfare</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="church_welfare"
+                            name="church_welfare"
+                            value="{{church_report.church_welfare}}"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Resource Mobilisation</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="resource_mobilisation"
+                            name="resource_mobilisation"
+                            value="{{church_report.resource_mobilisation}}"
+                            
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Church Support</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="church_support"
+                            name="church_support"
+                            value="{{church_report.church_support}}"
+                        />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label fw-bold">District Spt. Tithe</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="dsp_tithe"
+                            name="dsp_tithe"
+                            value="{{church_report.dsp_tithe}}"
+                        />
+                    </div>
+                </div>
+
+                <div class="text-center mt-3">
+                  <input type="submit" class="btn btn-primary w-30" value="Submit Church Data" />
+                </div>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>
+
+<!-- Add Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<!-- Add Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Initialize Select2 for edit modal when modal is shown
+    $('#editChurchDataModal{{church_report.id}}').on('shown.bs.modal', function() {
+        var modalElement = $(this);
+        var selectElement = modalElement.find('.select-edit-pastor-name');
+        
+        // Only initialize if not already initialized
+        if (!selectElement.data('select2')) {
+            selectElement.select2({
+                placeholder: 'Search and select a church...',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: modalElement.find('.modal-body'),
+                language: {
+                    noResults: function() {
+                        return "No churches found";
+                    }
+                }
+            });
+        }
+    });
+
+    // Destroy Select2 when modal is hidden
+    $('#editChurchDataModal{{church_report.id}}').on('hidden.bs.modal', function() {
+        $(this).find('.select-edit-pastor-name').select2('destroy');
+    });
+});
+
+$(document).ready(function() {
+    // Initialize Select2 for edit modal when modal is shown
+    $('#editChurchDataModal{{church_report.id}}').on('shown.bs.modal', function() {
+        var modalElement = $(this);
+        var selectElement = modalElement.find('.select-edit-church-name');
+        
+        // Only initialize if not already initialized
+        if (!selectElement.data('select2')) {
+            selectElement.select2({
+                placeholder: 'Search and select a church...',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: modalElement.find('.modal-body'),
+                language: {
+                    noResults: function() {
+                        return "No churches found";
+                    }
+                }
+            });
+        }
+    });
+
+    // Destroy Select2 when modal is hidden
+    $('#editChurchDataModal{{church_report.id}}').on('hidden.bs.modal', function() {
+        $(this).find('.select-edit-church-name').select2('destroy');
+    });
+});
+</script>
+
+<style>
+/* Fix Select2 styling in modals */
+.select2-container--open {
+    z-index: 1070 !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.375rem !important;
+    background-color: #fff !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 0.75rem !important;
+    line-height: 36px !important;
+    color: #212529 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 8px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    margin-top: 8px !important;
+}
+
+.select2-container--default .select2-dropdown {
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.375rem !important;
+}
+
+.select2-container--default .select2-results__option {
+    padding: 8px 12px !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #0d6efd !important;
+}
+
+.select2-search__field {
+    padding: 6px !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #dee2e6 !important;
+}
+</style>

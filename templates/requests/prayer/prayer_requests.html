@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="table-card">
+    <div class="row py-3 px-5">
+        <div class="col">
+            <h3 class="fw-bold">Prayer Requests</h3>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" placeholder="Search..." 
+            id="searchInput" value="{{ search_query }}">
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPrayerRequestModal">New Prayer Request</button>
+        
+          </div>
+    </div>
+    <!-- Table Toolbar --> 
+    <!-- Loading Bar -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Phone Number</th>
+                    <th>Requested By</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for prayer_request in requests %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ prayer_request.first_name }} {{prayer_request.last_name}}</td>
+                    <td>{{ prayer_request.gender }}</td>
+                    <td>{{ prayer_request.phone_number }}</td>
+                    <td>{{ prayer_request.request_type }}</td>
+                    <td>{{ prayer_request.request_date }}</td>
+                    
+                    <td>
+                        <span class="status-badge status-{{ prayer_request.status|lower }}">
+                            {{ prayer_request.status }}
+                        </span>
+                    </td>
+                   
+                    
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPrayerRequestModal{{prayer_request.id}}"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePrayerRequestModal{{prayer_request.id}}"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </td>
+                   {% include "requests/prayer/edit_request.html" %}
+                   {% include "requests/prayer/delete_request.html" %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        No members found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+  <div class="table-footer">
+    <div class="page-info">
+        Showing 
+        {{ page_obj.start_index }} 
+        to 
+        {{ page_obj.end_index }} 
+        of 
+        {{ paginator.count }} 
+        entries
+    </div>
+    {% if is_paginated %}
+    <nav>
+        <ul class="pagination mb-0">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    Previous
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+            {% endif %}
+
+            {% for num in paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                    Next
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Next</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+</div>
+
+{% include "requests/prayer/new_request.html" %}
+{% endblock content %}
+
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const loader = document.getElementById('loader');
+        let searchTimeout;
+
+        // Search functionality
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(searchTimeout);
+            loader.classList.add('active');
+
+            searchTimeout = setTimeout(() => {
+                const searchQuery = this.value;
+                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+            }, 500);
+        });
+
+     
+    });
+</script>
+{% endblock additional_scripts %}

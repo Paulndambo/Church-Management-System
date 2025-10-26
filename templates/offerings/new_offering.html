@@ -2,17 +2,18 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-center">Record Service Offering</h1>
+          <h1 class="modal-title fs-5 text-center fw-bold">Record Service Offering</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <form action="{% url 'new-offering' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
 
-                <div class="row mb-3">
+                <div class="row mb-4">
                     <div class="col">
                       <label for="exampleInputPassword1" class="form-label fw-bold">Branch</label>
                       <select class="form-select" id="branch" name="branch" required>
+                         <option value="" selected disabled>Select Branch</option>
                         {% for branch in branches %}
                             <option value={{branch.id}}>{{branch.name}}</option>
                         {% endfor %}
@@ -20,7 +21,9 @@
                     </div>
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Church Service</label>
+
                     <select class="form-select" id="service" name="service" required>
+                        <option value="" selected disabled>Select Service</option>
                         {% for service in services %}
                             <option value={{service.id}}>{{service.name}}</option>
                          {% endfor %}
@@ -28,8 +31,29 @@
                   </div>
                   
                   </div>
-  
-                <div class="row mb-2">
+                  
+                <div class="row mb-4">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Offering Type</label>
+                    <select class="form-select" id="offering_type" name="offering_type" required>
+                       <option value="" selected disabled>Select Offering Type</option>
+                        {% for offering_type in offering_types %}
+                            <option value={{offering_type.id}}>{{offering_type.name}}</option>
+                         {% endfor %}
+                      </select>
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Offering Channel</label>
+                    <select class="form-select" id="offering_channel" name="offering_channel" required>
+                        <option value="" selected disabled>Select Offering Channel</option>
+                        {% for channel in channels %}
+                            <option value={{channel.id}}>{{channel.name}}</option>
+                         {% endfor %}
+                      </select>
+                  </div>
+                </div>
+
+                <div class="row mb-4">
                   <div class="col">
                     <label for="exampleInputPassword1" class="form-label fw-bold">Total Amount</label>
                     <input
@@ -37,6 +61,7 @@
                       class="form-control"
                       id="amount"
                       name="amount"
+                      value="0"
                       required
                     />
                   </div>
@@ -52,7 +77,7 @@
                   </div>
                 </div>               
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-primary w-30">Record Offerings</button>
+                  <button type="submit" class="btn btn-primary w-30">Record Offering</button>
                 </div>
               </div>
               </form>

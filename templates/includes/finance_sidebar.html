@@ -1,0 +1,77 @@
+<nav id="sidebar">
+    <div class="sidebar-header d-flex justify-content-between align-items-center">
+        <span class="text-white link-text">CHURCH ERP</span>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-nav">
+        <ul class="list-unstyled">
+            <!-- Dashboard -->
+            <li>
+                <a href="/" class="nav-link">
+                    <i class="fas fa-gauge icon"></i>
+                    <span class="link-text">Dashboard</span>
+                </a>
+            </li>
+
+            <!-- Finance Section -->
+            <li>
+                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-sack-dollar icon"></i>
+                    <span class="link-text">Finance</span>
+                    <i class="fas fa-angle-down ms-auto small opacity-75"></i>
+                </a>
+                <ul class="collapse submenu">
+                    <li><a href="{% url 'offerings' %}" class="nav-link"><i class="fas fa-hand-holding-heart me-2"></i> Offerings</a></li>
+                    <li><a href="{% url 'tithings' %}" class="nav-link"><i class="fas fa-donate me-2"></i> Members Tithings</a></li>
+                    <li><a href="{% url 'expenses' %}" class="nav-link"><i class="fas fa-file-invoice-dollar me-2"></i> Expenses</a></li>
+                    <li><a href="{% url 'department-savings' %}" class="nav-link"><i class="fas fa-piggy-bank me-2"></i> Department Savings</a></li>
+                    <li><a href="{% url 'donations' %}" class="nav-link"><i class="fas fa-gift me-2"></i> Donations</a></li>
+                    <li><a href="{% url 'church-ledger' %}" class="nav-link"><i class="fas fa-book me-2"></i> Church Ledger</a></li>
+                </ul>
+            </li>
+
+            <!-- Church Projects -->
+            <li>
+                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-diagram-project icon"></i>
+                    <span class="link-text">Projects</span>
+                    <i class="fas fa-angle-down ms-auto small opacity-75"></i>
+                </a>
+                <ul class="collapse submenu">
+                    <li><a href="{% url 'projects' %}" class="nav-link"><i class="fas fa-clipboard-list me-2"></i> Projects</a></li>
+                    <li><a href="{% url 'contributions' %}" class="nav-link"><i class="fas fa-hand-holding-usd me-2"></i> Contributions</a></li>
+                    <li><a href="{% url 'pledges' %}" class="nav-link"><i class="fas fa-file-signature me-2"></i> Pledges</a></li>
+                </ul>
+            </li>
+
+            <!-- Reports -->
+            <li>
+                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-chart-line icon"></i>
+                    <span class="link-text">Reports</span>
+                    <i class="fas fa-angle-down ms-auto small opacity-75"></i>
+                </a>
+                <ul class="collapse submenu">
+                    <li><a href="{% url 'monthly-reports' %}" class="nav-link"><i class="fas fa-calendar-check me-2"></i> Monthly Reports</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-chart-pie me-2"></i> Summary Stats</a></li>
+                </ul>
+            </li>
+
+            <!-- Profile & Settings -->
+            <li>
+                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-user-gear icon"></i>
+                    <span class="link-text">Profile</span>
+                    <i class="fas fa-angle-down ms-auto small opacity-75"></i>
+                </a>
+                <ul class="collapse submenu">
+                    <li><a href="#" class="nav-link"><i class="fas fa-sliders me-2"></i> Settings</a></li>
+                    <li><a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-right-from-bracket me-2"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

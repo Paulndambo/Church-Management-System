@@ -1,0 +1,107 @@
+<div class="modal fade" id="editBaptismRequestModal{{baptism_request.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Edit Baptism Request</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-baptism-request' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                  <input type="hidden" value="{{baptism_request.id}}" id="baptism_request_id" name="baptism_request_id" readonly />
+                  <div class="row mb-3">
+                <div class="col">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="first_name"
+                    name="first_name"
+                    value="{{baptism_request.first_name}}"
+                    required
+                  />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="last_name"
+                      name="last_name"
+                      value="{{baptism_request.last_name}}"
+                      required
+                    />
+                  </div>
+                </div>
+   
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Phone Number</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="phone_number"
+                      name="phone_number"
+                      value="{{baptism_request.phone_number}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Gender</label>
+                    <select class="form-select" id="gender" name="gender">
+                      <option value={{baptism_request.gender}}>{{baptism_request.gender}}</option>
+                        {% for gender in genders %}
+                          {% if gender != baptism_request.gender %}
+                            <option value={{gender}}>{{gender}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+               
+    
+                <div class="row mb-2">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Request By</label>
+                    <select class="form-select" id="request_type" name="request_type">
+                      <option value={{baptism_request.request_type}}>{{baptism_request.request_type}}</option>
+                        {% for request_type in request_types %}
+                          {% if request_type != baptism_request.request_type %}
+                            <option value={{request_type}}>{{request_type}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">RBaptism Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="request_date"
+                      name="request_date"
+                      value="{{baptism_request.request_date|date:'Y-m-d'}}"
+                    />
+                  </div>
+                </div>  
+                 <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Baptism Request Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value={{baptism_request.status}}>{{baptism_request.status}}</option>
+                        {% for status in request_statuses %}
+                            {% if status != baptism_request.status %}
+                                <option value={{status}}>{{status}}</option>
+                            {% endif %}
+                         {% endfor %}
+                      </select>
+                  </div>
+                </div>              
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Baptism Request</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,59 @@
+<div class="modal fade" id="editDistrictMeetingAttendantModal{{attendance.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Edit Meeting Attendant</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-attendant' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" name="meeting_id" id="meeting_id" value="{{attendance.meeting.id}}" readonly/>
+                <input type="hidden" name="attendant_id" id="attendant_id" value="{{attendance.id}}" readonly/>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Full Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="full_name"
+                      name="full_name"
+                      value="{{attendance.full_name}}"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label class="form-label fw-bold">Role</label>
+                    <select class="form-select" id="role" name="role" required>
+                        <option value="{{attendance.role}}">{{attendance.role}}</option>
+                        {% for role in roles %}
+                            {% if role != attendance.role %}
+                                <option value="{{role}}">{{role}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                  <div class="col">
+                    <label class="form-label fw-bold">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="{{attendance.status}}">{{attendance.status}}</option>
+                        {% for status in statuses %}
+                            {% if status != attendance.status %}
+                                <option value="{{status}}">{{status}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Edit Meeting Attendant</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,93 @@
+<div class="modal fade" id="editChurchMeetingAttendanceModal{{attendance.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center fw-bold">Edit Church Meeting Attendance</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-church-meeting-attendance' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="hidden" name="meeting_id" id="meeting_id" value="{{attendance.meeting.id}}" readonly/>
+                <input type="hidden" name="attendance_id" id="attendance_id" value="{{attendance.id}}" readonly/>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">First Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="first_name"
+                      name="first_name"
+                        value="{{attendance.first_name}}"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="last_name"
+                      name="last_name"
+                        value="{{attendance.last_name}}"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Phone Number (optional)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="phone_number"
+                      name="phone_number"
+                        value="{{attendance.phone_number}}"
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="{{attendance.gender}}" selected>{{attendance.gender}}</option>
+                        {% for gender in genders %}
+                            {% if gender != attendance.gender %}
+                                <option value="{{gender}}">{{gender}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label class="form-label fw-bold">Role</label>
+                    <select class="form-select" id="role" name="role" required>
+                        <option value="{{attendance.role}}" selected>{{attendance.role}}</option>
+                        {% for role in roles %}
+                            {% if role.name != attendance.role %}
+                                <option value="{{role.name}}">{{role.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                  <div class="col">
+                    <label class="form-label fw-bold">Present or Absent?</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="{{attendance.status}}" selected>{{attendance.status}}</option>
+                        {% for status in statuses %}
+                            {% if status != attendance.status %}
+                                <option value="{{status}}">{{status}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary w-30">Submit Attendance</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>
