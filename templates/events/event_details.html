@@ -3,6 +3,17 @@
 {% block content %}
 <!-- Stats Row -->
 <div class="dashboard">
+    <div class="row g-4">
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'events' %}">Church Events</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ event.name }}</li>
+  </ol>
+</nav>
+
+</div>
+
     <div class="row g-4 mb-4">
     <!-- Event Name -->
     <div class="col-xl-6 col-md-6">
