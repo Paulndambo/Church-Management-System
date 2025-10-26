@@ -20,6 +20,7 @@ class DepartmentSaving(AbstractBaseModel):
     month = models.CharField(max_length=50, null=True)
     year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
 
 
 class MemberDepartmentSaving(AbstractBaseModel):
@@ -31,6 +32,7 @@ class MemberDepartmentSaving(AbstractBaseModel):
     month = models.CharField(max_length=50, null=True)
     year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
         return self.member.user.username if self.member else "Member"
@@ -45,6 +47,8 @@ class MemberTithing(AbstractBaseModel):
     month = models.CharField(max_length=50, null=True)
     year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
+    #tithe_channel = models.CharField(max_length=255, null=True, default="Cash")
 
     def __str__(self) -> str:
         return self.member.user.username if self.member else "Tithe"
@@ -62,6 +66,9 @@ class Offering(AbstractBaseModel):
     month = models.CharField(max_length=50, null=True)
     year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    offering_type = models.ForeignKey("core.ChurchOfferingType", on_delete=models.SET_NULL, null=True)
+    offering_channel = models.ForeignKey("core.ChurchOfferingChannel", on_delete=models.SET_NULL, null=True)
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
 
 
 class MemberOffering(AbstractBaseModel):
@@ -79,6 +86,7 @@ class MemberOffering(AbstractBaseModel):
     month = models.CharField(max_length=50, null=True)
     year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
 
 
 class ChurchExpense(AbstractBaseModel):
@@ -88,6 +96,7 @@ class ChurchExpense(AbstractBaseModel):
     month = models.CharField(max_length=50, null=True)
     year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
@@ -102,9 +111,11 @@ class ChurchDonation(AbstractBaseModel):
     year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     receipt_number = models.CharField(max_length=255, null=True, blank=True)
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
 
 
 class ChurchLedger(AbstractBaseModel):
+    church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField(null=True)
@@ -118,6 +129,8 @@ class ChurchLedger(AbstractBaseModel):
         max_digits=1000, decimal_places=2, default=Decimal("0")
     )
     transaction_date = models.DateField(null=True)
+    txn_type = models.CharField(max_length=255, null=True)
+    
 
     def __str__(self):
         return self.name

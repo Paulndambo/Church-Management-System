@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.core.models import UserActionLog, Church, Country, ChurchRole
+from apps.core.models import UserActionLog, Church, Country, ChurchRole, ChurchOfferingType, ChurchOfferingChannel
 
 
 # Register your models here.
@@ -23,3 +23,14 @@ class CountryAdmin(admin.ModelAdmin):
 @admin.register(ChurchRole)
 class ChurchRoleAdmin(admin.ModelAdmin):
     list_display = ["id", "church", "name", "leadership_role", "created_at"]
+
+
+@admin.register(ChurchOfferingType)
+class ChurchOfferingTypeAdmin(admin.ModelAdmin):
+    list_display = ["id", "church", "name", "created_at"]
+
+
+
+@admin.register(ChurchOfferingChannel)
+class ChurchOfferingChannelAdmin(admin.ModelAdmin):
+    list_display = ["id", "church", "name", "created_at"]

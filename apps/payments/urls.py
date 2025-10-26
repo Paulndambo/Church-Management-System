@@ -1,11 +1,12 @@
 from django.urls import path
 
 from apps.payments import views
+from apps.payments.offerings import views as offering_views
 
 
 urlpatterns = [
-    path("offerings/", views.OfferingsListView.as_view(), name="offerings"),
-    path("new-offering/", views.new_offering, name="new-offering"),
+    path("offerings/", offering_views.OfferingsListView.as_view(), name="offerings"),
+    path("new-offering/", offering_views.new_offering, name="new-offering"),
     path("tithings/", views.MemberTithingsListView.as_view(), name="tithings"),
     path("new-tithing/", views.new_member_tithing, name="new-tithing"),
     path(

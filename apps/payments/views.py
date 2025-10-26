@@ -181,72 +181,6 @@ def new_member_tithing(request):
     return render(request, "tithings/new_tithing.html")
 
 
-### Service Offerings
-class OfferingsListView(LoginRequiredMixin, ListView):
-    model = Offering
-    template_name = "offerings/offerings.html"
-    context_object_name = "offerings"
-    paginate_by = 10
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.GET.get("search", "")
-
-        if search_query:
-            queryset = queryset.filter(
-                Q(id__icontains=search_query)
-                | Q(service__name__icontains=search_query)
-                | Q(branch__name__icontains=search_query)
-            )
-
-        # Get sort parameter
-        return queryset.order_by("-created_at")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["branches"] = Branch.objects.all()
-        context["services"] = ChurchService.objects.all()
-        return context
-
-
-@login_required
-@transaction.atomic
-def new_offering(request):
-    if request.method == "POST":
-        branch = request.POST.get("branch")
-        service = request.POST.get("service")
-        amount = request.POST.get("amount")
-        offering_date = request.POST.get("offering_date")
-
-        date_obj = format_date(offering_date)
-        month_name = get_month_name(date_obj.month)
-        year = date_obj.year
-
-        offering = Offering.objects.create(
-            branch_id=branch,
-            service_id=service,
-            amount=amount,
-            offering_date=offering_date,
-            captured_by=request.user,
-            month=month_name,
-            year=year,
-        )
-
-        ChurchLedger.objects.create(
-            name=f"{offering.service.name} {offering_date} Offering",
-            description=f"Offering - {offering.service.name} - {offering.branch.name}",
-            amount=Decimal(amount),
-            direction="Income",
-            user=request.user,
-            month=month_name,
-            year=year,
-            transaction_date=offering_date,
-        )
-
-        return redirect("offerings")
-    return render(request, "offerings/new_offering.html")
-
-
 ### Church Expenses
 class ChurchExpensesListView(LoginRequiredMixin, ListView):
     model = ChurchExpense
@@ -301,6 +235,7 @@ def new_expense(request):
             month=month_name,
             year=year,
             transaction_date=date_spend,
+            txn_type="Expense",
         )
 
         return redirect("expenses")
@@ -393,6 +328,7 @@ def new_church_donation(request):
             month=month_name,
             year=year,
             transaction_date=donation_date,
+            txn_type="Donation",
         )
 
         return redirect("donations")

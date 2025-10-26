@@ -50,7 +50,7 @@ class Church(AbstractBaseModel):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=500, null=True)
     town = models.CharField(max_length=255)
-    #country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
     phone = models.CharField(max_length=20, null=True)
     email = models.EmailField(null=True)
     website = models.URLField(null=True)
@@ -72,3 +72,22 @@ class ChurchRole(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+    
+
+class ChurchOfferingType(AbstractBaseModel):
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    church = models.ForeignKey(Church, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+    
+
+class ChurchOfferingChannel(AbstractBaseModel):
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    church = models.ForeignKey(Church, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+    
