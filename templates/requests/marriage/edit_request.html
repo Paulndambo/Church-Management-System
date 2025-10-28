@@ -5,10 +5,11 @@
           <h1 class="modal-title fs-5 text-center fw-bold">Edit Wedding Request</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-            <form action="{% url 'edit-marriage-request' %}" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'edit-member-request' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <input type="hidden" value="{{marriage_request.id}}" id="marriage_request_id" name="marriage_request_id" readonly />
+                    <input type="hidden" value="{{marriage_request.id}}" id="request_id" name="request_id" readonly />
+                    <input type="hidden" value="Wedding" id="category" name="category" readonly />
                   <div class="row mb-3">
                 <div class="col">
                   <label for="exampleInputPassword1" class="form-label fw-bold">Bride First Name</label>
@@ -72,7 +73,7 @@
                     />
                   </div>
                   <div class="col">
-                    <label for="exampleInputPassword1" class="form-label fw-bold">marriage_request By</label>
+                    <label for="exampleInputPassword1" class="form-label fw-bold">Requested By</label>
                     <select class="form-select" id="request_type" name="request_type">
                         <option value={{marriage_request.request_type}}>{{marriage_request.request_type}}</option>
                         {% for request_type in request_types %}

@@ -44,15 +44,8 @@
                     <td>{{ baptism_request.gender }}</td>
                     <td>{{ baptism_request.phone_number }}</td>
                     <td>{{ baptism_request.request_type }}</td>
+                    <td>{{ baptism_request.status }}</td>
                     <td>{{ baptism_request.request_date }}</td>
-                    
-                    <td>
-                        <span class="status-badge status-{{ baptism_request.status|lower }}">
-                            {{ baptism_request.status }}
-                        </span>
-                    </td>
-                   
-                    
                     <td>
                         <div class="d-flex gap-1">
                             <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editBaptismRequestModal{{baptism_request.id}}"><i class="fas fa-edit"></i></a>

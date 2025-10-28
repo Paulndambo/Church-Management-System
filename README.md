@@ -38,8 +38,8 @@ The Church Management System is a modern, user-friendly web application that pro
 
 ## 🛠️ Technology Stack
 
-- **Backend**: Django 5.1.2
-- **Database**: SQLite (development) / PostgreSQL (production ready)
+- **Backend**: Django 5.1.x
+- **Database**: SQLite (development) / PostgreSQL (production-ready)
 - **Frontend**: HTML5, CSS3, JavaScript
 - **UI Framework**: Custom responsive design
 - **Deployment**: Docker support included
@@ -47,7 +47,7 @@ The Church Management System is a modern, user-friendly web application that pro
 ## 🚀 Installation
 
 ### Prerequisites
-- Python 3.8 or higher
+- Python 3.10+
 - pip (Python package installer)
 - Git
 
@@ -63,7 +63,10 @@ The Church Management System is a modern, user-friendly web application that pro
    ```bash
    python -m venv venv
    
-   # On Windows
+   # On Windows (PowerShell)
+   .\venv\Scripts\Activate.ps1
+   
+   # On Windows (cmd)
    venv\Scripts\activate
    
    # On macOS/Linux
@@ -91,39 +94,81 @@ The Church Management System is a modern, user-friendly web application that pro
    ```
 
 7. **Access the application**
-   - Open your browser and go to `http://127.0.0.1:8000`
-   - Admin panel: `http://127.0.0.1:8000/admin`
+   - App: `http://127.0.0.1:8000`
+   - Admin: `http://127.0.0.1:8000/admin`
+
+### Quickstart
+- Default login URL is `http://127.0.0.1:8000/users/login/`
+- A custom user model is used: `users.User`
+- Static files are served from `templates` and `static` during development; for production, configure a proper static files backend and run `python manage.py collectstatic`
 
 ### Docker Setup
 
-1. **Build and run with Docker**
+1. **Build the image**
    ```bash
    docker build -t church-system .
+   ```
+
+2. **Apply migrations in the container**
+   ```bash
+   docker run --rm church-system python manage.py migrate
+   ```
+
+3. **Run the application**
+   ```bash
    docker run -p 8000:8000 church-system
    ```
 
-2. **Access the application**
-   - Open your browser and go to `http://localhost:8000`
+4. **Access the app**
+   - `http://localhost:8000`
+
+> Note: The provided Dockerfile runs the Django development server. For production, use a WSGI server (e.g., Gunicorn) behind a reverse proxy and configure persistent storage for the database and static/media files.
 
 ## 📁 Project Structure
 
 ```
 ChurchSystem/
 ├── apps/                    # Django applications
-│   ├── core/               # Core functionality
-│   ├── users/              # User management
-│   ├── membership/         # Member and branch management
-│   ├── payments/           # Financial management
-│   ├── projects/           # Project management
-│   └── events/             # Event management
+│   ├── core/               # Core functionality & landing pages
+│   ├── users/              # Custom user model & auth
+│   ├── membership/         # Members, branches, visitors
+│   ├── payments/           # Tithes, offerings, department savings
+│   ├── projects/           # Projects, pledges, contributions
+│   ├── events/             # Events, tickets, registrations
+│   ├── districts/          # District/section/branch admin
+│   ├── sections/           # Sections and reports
+│   ├── attendances/        # Service attendance tracking
+│   ├── partners/           # Partner management
+│   ├── reports/            # Reporting
+│   ├── finances/           # Expenses and accounts
+│   ├── scheduling/         # Appointments and meetings
+│   └── countries/          # Countries reference data
 ├── ChurchSystem/           # Main project settings
 ├── templates/              # HTML templates
 ├── static/                 # Static files (CSS, JS, images)
-├── manage.py              # Django management script
-├── requirements.txt       # Python dependencies
-├── Dockerfile            # Docker configuration
-└── README.md             # This file
+├── manage.py               # Django management script
+├── requirements.txt        # Python dependencies
+├── Dockerfile              # Docker configuration
+└── README.md               # This file
 ```
+
+## 🔗 Base URLs
+These routes are registered in `ChurchSystem/urls.py`:
+- `/` → `apps.core`
+- `/admin/` → Django Admin
+- `/users/` → `apps.users`
+- `/membership/` → `apps.membership`
+- `/payments/` → `apps.payments`
+- `/projects/` → `apps.projects`
+- `/partners/` → `apps.partners`
+- `/reports/` → `apps.reports`
+- `/districts/` → `apps.districts`
+- `/attendances/` → `apps.attendances`
+- `/notifications/` → `apps.notifications`
+- `/sections/` → `apps.sections`
+- `/events/` → `apps.events`
+- `/finances/` → `apps.finances`
+- `/scheduling/` → `apps.scheduling`
 
 ## 🎨 UI Design
 
@@ -138,17 +183,17 @@ The application features a modern, clean interface with a carefully chosen color
 ## 🔧 Configuration
 
 ### Environment Variables
-Create a `.env` file in the project root for production settings:
+For production, configure the following environment variables in your hosting platform and update `ChurchSystem/settings.py` or use a dedicated settings module:
 
 ```env
 DEBUG=False
 SECRET_KEY=your-secret-key-here
 ALLOWED_HOSTS=your-domain.com
-DATABASE_URL=your-database-url
+DATABASE_URL=postgres://user:password@host:5432/dbname
 ```
 
 ### Database Configuration
-The system uses SQLite by default for development. For production, update the database settings in `ChurchSystem/settings.py`:
+The system uses SQLite by default for development (`db.sqlite3`). For production, switch to PostgreSQL and configure credentials in `ChurchSystem/settings.py` or through your chosen configuration approach:
 
 ```python
 DATABASES = {
@@ -196,19 +241,17 @@ python manage.py test
 ## 📈 Deployment
 
 ### Production Checklist
-- [ ] Set `DEBUG=False` in settings
+- [ ] Set `DEBUG=False` in settings or environment
 - [ ] Configure production database
-- [ ] Set up static file serving
-- [ ] Configure HTTPS
+- [ ] Set up static file serving (e.g., WhiteNoise, CDN, or web server)
+- [ ] Configure HTTPS/SSL
 - [ ] Set up proper logging
-- [ ] Configure backup strategy
-- [ ] Set up monitoring
+- [ ] Configure backups and monitoring
 
 ### Recommended Hosting Platforms
-- **Heroku**: Easy deployment with PostgreSQL
 - **DigitalOcean**: VPS with full control
-- **AWS**: Scalable cloud infrastructure
-- **Google Cloud Platform**: Enterprise-grade hosting
+- **AWS/GCP/Azure**: Scalable cloud infrastructure
+- **Heroku/Fly.io/Render**: Simple PaaS deployments
 
 ## 🤝 Contributing
 

@@ -1,19 +1,23 @@
-from decimal import Decimal
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.http import HttpRequest
-from django.db.models import Q
-from typing import Any
+from django.db.models import Q, Sum
+from typing import Any, Dict
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.views import View
+from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
+from decimal import Decimal
 
-from apps.membership.models import Department, Branch, Member, MemberGroup, GroupMember
-from apps.core.models import UserActionLog
+from apps.membership.models import Member
+from apps.core.models import UserActionLog, ChurchOfferingChannel
 from apps.users.models import User
+from apps.payments.models import ChurchLedger
 
 from apps.events.models import (
-    ChurchEvent, ChurchEventTicketType, ChurchEventTicket, EventAttendance
+    ChurchEvent, ChurchEventTicketType, ChurchEventTicket, EventAttendance, EventTicketPayment
 )
 
 from apps.events.ticket_number_generator import generate_ticket_number
@@ -124,7 +128,8 @@ def event_details(request: HttpRequest, id: int):
         "tickets_sold": total_tickets,
         "total_attendance": event_attendances.count(),
         "total_amount": total_amount_raised,
-        "members": Member.objects.all()
+        "members": Member.objects.all(),
+        "channels": ChurchOfferingChannel.objects.all()
     }
     return render(request, "events/event_details.html", context)
 
@@ -140,15 +145,20 @@ def create_member_event_ticket(request: HttpRequest):
         email = request.POST.get("email")
         ticket_type = request.POST.get("ticket_type")
         number_of_tickets = request.POST.get("number_of_tickets")
+
         amount_paid = request.POST.get("amount_paid")
+        payment_method = request.POST.get("payment_method")
+
+        payment_channel = ChurchOfferingChannel.objects.filter(id=payment_method).first()
+
 
         event_ticket_type = ChurchEventTicketType.objects.get(id=ticket_type)
         church_event = ChurchEvent.objects.get(id=event)
-
-        ticket_number = generate_ticket_number(
+        last_ticket=ChurchEventTicket.objects.order_by("-created_at").first()
+        ticket_number: str = generate_ticket_number(
             event=church_event,
             ticket_type=event_ticket_type,
-            last_ticket=ChurchEventTicket.objects.order_by("-created_at").first()
+            last_ticket_id=last_ticket.id if last_ticket else 0
         )
 
         ticket = ChurchEventTicket.objects.create(
@@ -169,6 +179,49 @@ def create_member_event_ticket(request: HttpRequest):
         ticket.ticket_type.purchased += int(number_of_tickets)
         ticket.ticket_type.total_tickets -= int(number_of_tickets)
         ticket.ticket_type.save()
+
+        if church_event.event_type == "Paid Event":
+
+            if Decimal(ticket.amount_paid) >= ticket.total_amount:
+                ticket.paid_status = "Paid"
+            elif Decimal(ticket.amount_paid) > 0:
+                ticket.paid_status = "Partial"
+            else:
+                ticket.paid_status = "Unpaid"
+            ticket.save()
+
+            if Decimal(ticket.amount_paid) > 0:
+                EventTicketPayment.objects.create(
+                    ticket=ticket,
+                    amount_paid=Decimal(amount_paid),
+                    payment_method_id=payment_method
+                )
+
+                EventAttendance.objects.create(
+                    event_id=event,
+                    ticket=ticket,
+                    status="Pending"
+                )
+        else:
+            ticket.paid_status = "Paid"
+            ticket.save()
+            EventAttendance.objects.create(
+                event_id=event,
+                ticket=ticket,
+                status="Pending"
+            )
+        
+        UserActionLog.objects.create(
+            user=request.user,
+            action_type="Create",
+            action_description=f"{request.user} has created an event ticket for {ticket.name} for {church_event.name}",
+            metadata={
+                "ticket_type": event_ticket_type.title,
+                "customer": f"{first_name} {last_name}",
+                "amount_paid": amount_paid,
+                "payment_method": payment_channel.name if payment_channel else "Free Ticket"
+            }
+        )
 
         return redirect("event-detail", id=event)
     return render(request, "events/new_event_ticket.html")
@@ -213,3 +266,47 @@ def edit_event_ticket_type(request: HttpRequest):
         )
         return redirect("event-detail", id=event)
     return render(request, "events/edit_ticket_type.html")
+
+
+    
+class EventTicketsListView(View):
+    template_name = "events/event_tickets.html"
+    paginate_by = 10  # number of reports per page
+
+    def get(self, request: HttpRequest, id: int):
+        # Retrieve section report and related data
+        tickets = ChurchEventTicket.objects.filter(event__id=id)
+        event = ChurchEvent.objects.get(id=id)
+
+        # Handle search query
+        search_query = request.GET.get("search", "").strip()
+
+        print(f"Search Query: {search_query}")
+
+        
+        if search_query:
+            tickets = tickets.filter(
+                Q(ticket_number__icontains=search_query) |
+                Q(first_name__icontains=search_query) |
+                Q(last_name__icontains=search_query) 
+            )
+
+        tickets = tickets.order_by("-created_at")
+
+        # Pagination
+        paginator = Paginator(tickets, self.paginate_by)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+
+        context: Dict[str, Any] = {
+            "event": event,
+            "tickets": page_obj,  # paginated queryset
+            "search_query": search_query,
+            "is_paginated": page_obj.has_other_pages(),
+            "page_obj": page_obj,
+            "paginator": paginator,
+
+        }
+
+        return render(request, self.template_name, context)    

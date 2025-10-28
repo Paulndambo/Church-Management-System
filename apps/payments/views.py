@@ -10,7 +10,6 @@ from decimal import Decimal
 from apps.payments.models import (
     MemberTithing,
     DepartmentSaving,
-    Offering,
     ChurchExpense,
     MemberDepartmentSaving,
     ChurchLedger,
@@ -18,8 +17,9 @@ from apps.payments.models import (
 )
 from apps.membership.models import Member, Department, Branch
 from apps.attendances.models import ChurchService
+from apps.core.models import ChurchOfferingChannel, UserActionLog
 
-from apps.core.constants import format_date, get_month_name, get_month_number
+from apps.core.constants import format_date, get_month_name, get_month_number, MONTHS_LIST, YEARS_LIST
 
 date_today = datetime.now().date()
 
@@ -89,6 +89,13 @@ def new_department_saving(request):
             transaction_date=savings_date,
         )
 
+        UserActionLog.objects.create(
+            user=request.user,
+            action_type="Create",
+            action_description=f"Recorded new department saving of {amount} for department {saving.department.name} - {saving.branch.name}",
+            metadata={"saving_id": saving.id, "department": department.name, "amount": amount },
+        )
+
         return redirect("department-savings")
     return render(request, "department_savings/new_savings.html")
 
@@ -142,6 +149,9 @@ class MemberTithingsListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["members"] = Member.objects.all()
+        context["channels"] = ChurchOfferingChannel.objects.all()
+        context["months"] = MONTHS_LIST
+        context["years"] = YEARS_LIST
         return context
 
 
@@ -151,19 +161,20 @@ def new_member_tithing(request):
     if request.method == "POST":
         member = request.POST.get("member")
         amount = request.POST.get("amount")
-        tithing_date = request.POST.get("tithing_date")
+        year = request.POST.get("year")
+        month = request.POST.get("month")
+        tithe_channel = request.POST.get("tithe_channel")
 
-        date_obj = format_date(tithing_date)
-        month_name = get_month_name(date_obj.month)
-        year = date_obj.year
+        
 
         tithe = MemberTithing.objects.create(
             member_id=member,
             amount=amount,
-            tithing_date=tithing_date,
+            tithing_date=date_today,
             captured_by=request.user,
-            month=month_name,
+            month=month,
             year=year,
+            tithe_channel_id=tithe_channel,
         )
 
         ChurchLedger.objects.create(
@@ -172,9 +183,17 @@ def new_member_tithing(request):
             amount=Decimal(amount),
             direction="Income",
             user=request.user,
-            month=month_name,
+            month=month,
             year=year,
-            transaction_date=tithing_date,
+            transaction_date=date_today,
+            txn_type="Tithe",
+        )
+
+        UserActionLog.objects.create(
+            user=request.user,
+            action_type="Create",
+            action_description=f"Recorded new tithing of {amount} for member {tithe.member.user.get_full_name()}",
+            metadata={"tithe_id": tithe.id, "member": tithe.member.user.get_full_name(), "amount": amount },
         )
 
         return redirect("tithings")
@@ -236,6 +255,13 @@ def new_expense(request):
             year=year,
             transaction_date=date_spend,
             txn_type="Expense",
+        )
+
+        UserActionLog.objects.create(
+            user=request.user,
+            action_type="Create",
+            action_description=f"Recorded new church expense of {amount_allocated} for {expense.name}",
+            metadata={"expense_id": expense.id, "expense_name": expense.name, "amount": amount_allocated },
         )
 
         return redirect("expenses")

@@ -27,6 +27,7 @@
                     <th></th>
                     <th>Member</th>
                     <th>Branch</th>
+                    <th>Channel</th>
                     <th>Amount</th>
                     <th>Date</th>
                 </tr>
@@ -37,6 +38,7 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ tithing.member.name }}</td>
                     <td>{{ tithing.member.branch }}</td>
+                    <td>{{ tithing.tithe_channel }}</td>
                     <td>{{  tithing.amount}}</td>
                     <td>{{  tithing.tithing_date}}</td>
                 </tr>

@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="dashboard">
+    <div class="row g-4">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'events' %}">Church Events</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'event-detail' event.id %}">{{event.name}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ event.name }} Tickets</li>
+            </ol>
+        </nav>
+    </div>
+<div class="table-card">
+    <div class="row py-3 px-2">
+        <div class="col">
+            <h3 class="fw-bold">{{event.name}} Tickets</h3>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" placeholder="Search..." 
+            id="searchInput" value="{{ search_query }}">
+        </div>
+        
+    </div>
+ 
+    <div class="loader" id="loader"></div>
+    <!-- Table Container -->
+    <div class="table-container px-2">
+        <table class="table data-table table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Ticket No.</th>
+                    <th>Type</th>
+                    <th>Count</th>
+                    <th>Amount</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ ticket.name }}</td>
+                    <td>{{ ticket.ticket_number }}</td>
+                    <td>{{ ticket.ticket_type }}</td>
+                    <td>{{ ticket.number_of_tickets }}</td>
+                    <td>{{ ticket.amount_paid }}</td>
+                    <td>{{ ticket.phone_number }}</td>
+                    <td>{{ ticket.paid_status }}</td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#eventCheckInModal{{ticket.id}}"><i class="fas fa-cog"></i></a>
+                            <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#eventCheckInModal{{ticket.id}}"><i class="fas fa-print"></i></a>
+
+                        </div>
+                    </td>
+                    {% include "events/event_checkin.html" %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-4">
+                        No event tickets found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Table Footer with Pagination -->
+   <div class="table-footer">
+    <div class="page-info">
+        Showing 
+        {{ page_obj.start_index }} 
+        to 
+        {{ page_obj.end_index }} 
+        of 
+        {{ paginator.count }} 
+        entries
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock content %}
+
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const loader = document.getElementById('loader');
+        let searchTimeout;
+
+        // Search functionality
+        searchInput.addEventListener('keyup', function() {
+            clearTimeout(searchTimeout);
+            loader.classList.add('active');
+
+            searchTimeout = setTimeout(() => {
+                const searchQuery = this.value;
+                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
+            }, 500);
+        });
+
+    });
+</script>
+{% endblock additional_scripts %}

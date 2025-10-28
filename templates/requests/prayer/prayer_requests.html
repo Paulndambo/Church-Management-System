@@ -44,15 +44,8 @@
                     <td>{{ prayer_request.gender }}</td>
                     <td>{{ prayer_request.phone_number }}</td>
                     <td>{{ prayer_request.request_type }}</td>
+                    <td>{{ prayer_request.status }}</td>
                     <td>{{ prayer_request.request_date }}</td>
-                    
-                    <td>
-                        <span class="status-badge status-{{ prayer_request.status|lower }}">
-                            {{ prayer_request.status }}
-                        </span>
-                    </td>
-                   
-                    
                     <td>
                         <div class="d-flex gap-1">
                             <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPrayerRequestModal{{prayer_request.id}}"><i class="fas fa-edit"></i></a>

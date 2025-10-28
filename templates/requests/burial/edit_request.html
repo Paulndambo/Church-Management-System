@@ -5,10 +5,11 @@
           <h1 class="modal-title fs-5 text-center fw-bold">Edit Burial Request</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-            <form action="{% url 'edit-burial-request' %}" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'edit-member-request' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                  <input type="hidden" value="{{burial_request.id}}" id="burial_request_id" name="burial_request_id" readonly />
+                  <input type="hidden" value="{{burial_request.id}}" id="request_id" name="request_id" readonly />
+                  <input type="hidden" value="Burial" id="category" name="category" readonly />
                   <div class="row mb-3">
                 <div class="col">
                   <label for="exampleInputPassword1" class="form-label fw-bold">First Name</label>

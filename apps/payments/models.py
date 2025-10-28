@@ -48,7 +48,7 @@ class MemberTithing(AbstractBaseModel):
     year = models.IntegerField(null=True)
     captured_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     church = models.ForeignKey("core.Church", on_delete=models.SET_NULL, null=True)
-    #tithe_channel = models.CharField(max_length=255, null=True, default="Cash")
+    tithe_channel = models.ForeignKey("core.ChurchOfferingChannel", on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
         return self.member.user.username if self.member else "Tithe"

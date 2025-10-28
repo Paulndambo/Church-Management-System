@@ -1,18 +1,142 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block additional_css %}
+<style>
+    .stats-icon {
+  font-size: 2rem;
+  opacity: 0.9;
+}
+
+</style>
+{% endblock additional_css %}
+
 
 {% block content %}
+<div class="dashboard">
+  <div class="row g-4 mb-4">
+    <!-- TOTAL -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">TOTAL APPOINTMENTS</h6>
+                        <h3 class="text-church-secondary">{{ total_appointments }}</h3>
+                    </div>
+                    <i class="fa-solid fa-calendar-check stats-icon text-church-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">COMPLETED APPOINTMENTS</h6>
+                        <h3 class="text-church-secondary">{{ completed_appointments }}</h3>
+                    </div>
+                    <i class="fa-solid fa-circle-check stats-icon text-church-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCEPTED -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">ACCEPTED APPOINTMENTS</h6>
+                        <h3 class="text-church-secondary">{{ accepted_appointments }}</h3>
+                    </div>
+                    <i class="fa-solid fa-handshake stats-icon text-church-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DECLINED -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">DECLINED APPOINTMENTS</h6>
+                        <h3 class="text-church-secondary">{{ declined_appointments }}</h3>
+                    </div>
+                    <i class="fa-solid fa-ban stats-icon text-church-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PENDING -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">PENDING APPOINTMENTS</h6>
+                        <h3 class="text-church-secondary">{{ pending_appointments }}</h3>
+                    </div>
+                    <i class="fa-solid fa-hourglass-half stats-icon text-church-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANCELLED -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card card-stat h-80">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-church-primary">CANCELLED APPOINTMENTS</h6>
+                        <h3 class="text-church-secondary">{{ cancelled_appointments }}</h3>
+                    </div>
+                    <i class="fa-solid fa-circle-xmark stats-icon text-church-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="table-card">
     <div class="row py-3 px-2">
-        <div class="col">
+        <div class="col-md-3">
             <h3 class="fw-bold">Appointments</h3>
         </div>
-        <div class="col">
-            <input type="text" class="form-control" placeholder="Search..." 
-            id="searchInput" value="{{ search_query }}">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Search..." 
+                    id="nameSearch" name="nameSearch" value="{{ search_query }}">
+                </div>
+                <div class="col">
+                    <select class="form-control" id="statusSelect" name="statusSelect">
+                        <option value="">-- Select a status --</option>
+                        {% for status in statuses %}
+                            <option value="{{ status }}" {% if search_query == status %}selected{% endif %}>
+                                {{ status }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <button id="resetFiltersBtn" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-undo"></i> Reset Filters
+                    </button>
+                </div>
+            </div>
+            
         </div>
-        <div class="col">
+        <div class="col-md-3 text-end">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newAppointmentModal">New Appointment</button>
         </div>
     </div>
@@ -116,6 +240,7 @@
     {% endif %}
 </div>
 </div>
+</div>
 
 {% include "scheduling/appointments/new_appointment.html" %}
 {% endblock content %}
@@ -123,37 +248,30 @@
 {% block additional_scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const loader = document.getElementById('loader');
-        let searchTimeout;
+    const nameSearch = document.getElementById('nameSearch');
+    const statusSelect = document.getElementById('statusSelect');
+    const resetBtn = document.getElementById('resetFiltersBtn');
 
-        // Search functionality
-        searchInput.addEventListener('keyup', function() {
-            clearTimeout(searchTimeout);
-            loader.classList.add('active');
+    function applyFilters() {
+        const memberName = nameSearch.value;
+        const status = statusSelect.value;
 
-            searchTimeout = setTimeout(() => {
-                const searchQuery = this.value;
-                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
-            }, 500);
-        });
+        const params = new URLSearchParams(window.location.search);
+        if (memberName) params.set('memberName', memberName); else params.delete('memberName');
+        if (status) params.set('status', status); else params.delete('status');
 
-    
-        // Utility function to get CSRF token
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
+        window.location.search = params.toString();
+    }
+
+    nameSearch.addEventListener('change', applyFilters);
+    statusSelect.addEventListener('change', applyFilters);
+
+    // Reset filters handler
+    resetBtn.addEventListener('click', function() {
+        nameSearch.value = "";
+        statusSelect.value = "";
+        window.location.href = window.location.pathname; // Reload without filters
     });
+});
 </script>
 {% endblock additional_scripts %}

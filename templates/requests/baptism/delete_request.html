@@ -6,9 +6,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'delete-baptism-request' %}">
+                <form method="POST" action="{% url 'delete-member-request' %}">
                     {% csrf_token %}
-                    <input type="number" id="baptism_request_id" name="baptism_request_id" value="{{baptism_request.id}}" hidden readonly required />
+                    <input type="number" id="request_id" name="request_id" value="{{baptism_request.id}}" hidden readonly required />
+                    <input type="hidden" value="Baptism" id="category" name="category" readonly />
                     <div class="mb-3">
                         <p>Are you sure you want to delete baptism request for <br> <b>{{baptism_request.first_name}} {{baptism_request.last_name}}</b>?</p>
                     </div>

@@ -33,7 +33,6 @@
                     <th>Location</th>
                     <th>Date</th>
                     <th>Status</th>
-                    <th>Last Updated</th>
                     <th></th>
                 </tr>
             </thead>
@@ -46,14 +45,7 @@
                     <td>{{ marriage_request.phone_number }}</td>
                     <td>{{ marriage_request.wedding_location }}</td>
                     <td>{{ marriage_request.wedding_date }}</td>
-                    
-                    <td>
-                        <span class="status-badge status-{{ marriage_request.status|lower }}">
-                            {{ marriage_request.status }}
-                        </span>
-                    </td>
-                    <td>{{ marriage_request.updated_at }}</td>
-                    
+                    <td>{{ marriage_request.status }}</td>
                     <td>
                         <div class="d-flex gap-1">
                             <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editMarriageRequestModal{{marriage_request.id}}"><i class="fas fa-edit"></i></a>

@@ -10,4 +10,5 @@ urlpatterns = [
     path("new-event-ticket/", views.create_member_event_ticket, name="new-event-ticket"),
     path("new-event-ticket-type/", views.create_event_ticket_type, name="new-event-ticket-type"),
     path("edit-event-ticket-type/", views.edit_event_ticket_type, name="edit-event-ticket-type"),
+    path("<int:id>/event-tickets/", views.EventTicketsListView.as_view(), name="event-tickets"),
 ]

@@ -44,15 +44,8 @@
                     <td>{{ burial_request.gender }}</td>
                     <td>{{ burial_request.phone_number }}</td>
                     <td>{{ burial_request.request_type }}</td>
+                    <td>{{ burial_request.status }}</td>
                     <td>{{ burial_request.request_date }}</td>
-                    
-                    <td>
-                        <span class="status-badge status-{{ burial_request.status|lower }}">
-                            {{ burial_request.status }}
-                        </span>
-                    </td>
-                   
-                    
                     <td>
                         <div class="d-flex gap-1">
                             <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editBurialRequestModal{{burial_request.id}}"><i class="fas fa-edit"></i></a>

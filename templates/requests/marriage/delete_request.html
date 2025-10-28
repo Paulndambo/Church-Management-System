@@ -6,9 +6,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'delete-marriage-request' %}">
+                <form method="POST" action="{% url 'delete-member-request' %}">
                     {% csrf_token %}
-                    <input type="number" id="marriage_request_id" name="marriage_request_id" value="{{marriage_request.id}}" hidden readonly required />
+                    <input type="number" id="request_id" name="request_id" value="{{marriage_request.id}}" hidden readonly required />
+                    <input type="hidden" value="Wedding" id="category" name="category" readonly />
                     <div class="mb-3">
                         <p>Are you sure you want to delete marriage request for <br> <b>{{marriage_request.groom}}</b> & <b>{{marriage_request.bride}}</b>?</p>
                     </div>

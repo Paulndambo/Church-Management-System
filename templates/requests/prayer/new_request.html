@@ -5,9 +5,10 @@
           <h1 class="modal-title fs-5 text-center fw-bold">Create Prayer Request</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-            <form action="{% url 'new-prayer-request' %}" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'new-member-request' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
+                  <input type="hidden" value="Prayer" id="category" name="category" readonly />
                   <div class="row mb-3">
                 <div class="col">
                   <label for="exampleInputPassword1" class="form-label fw-bold">First Name</label>

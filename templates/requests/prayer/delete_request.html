@@ -6,9 +6,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'delete-prayer-request' %}">
+                <form method="POST" action="{% url 'delete-member-request' %}">
                     {% csrf_token %}
-                    <input type="number" id="prayer_request_id" name="prayer_request_id" value="{{prayer_request.id}}" hidden readonly required />
+                    <input type="number" id="request_id" name="request_id" value="{{prayer_request.id}}" hidden readonly required />
+                    <input type="hidden" value="Prayer" id="category" name="category" readonly />
                     <div class="mb-3">
                         <p>Are you sure you want to delete bapatism request for <br> <b>{{prayer_request.first_name}} {{prayer_request.last_name}}</b>?</p>
                     </div>

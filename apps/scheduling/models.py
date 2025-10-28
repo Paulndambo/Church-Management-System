@@ -79,9 +79,28 @@ GENDER_CHOICES=[
     ("Female", "Female"),
 ]
 
-class BaptismRequest(AbstractBaseModel):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+
+ 
+CHURCH_MEMBER_REQUEST_CHOICES = [
+    ("Wedding", "Wedding"),
+    ("Burial", "Burial"),
+    ("Prayer", "Prayer"),
+    ("Baptism", "Baptism"),
+]
+    
+
+class ChurchMemberRequest(AbstractBaseModel):
+    category = models.CharField(max_length=255, choices=CHURCH_MEMBER_REQUEST_CHOICES)
+
+    groom_first_name = models.CharField(max_length=255, null=True)
+    groom_last_name = models.CharField(max_length=255, null=True)
+    bride_first_name = models.CharField(max_length=255, null=True)
+    bride_last_name = models.CharField(max_length=255, null=True)
+    wedding_date = models.DateField(max_length=255, null=True)
+    wedding_location = models.CharField(max_length=255, null=True)
+
+    first_name = models.CharField(max_length=255, null=True)
+    last_name = models.CharField(max_length=255, null=True)
     gender = models.CharField(max_length=255, choices=GENDER_CHOICES, null=True)
     phone_number = models.CharField(max_length=255)
     request_type = models.CharField(max_length=255, choices=REQUEST_TYPES, default="Member")
@@ -93,25 +112,7 @@ class BaptismRequest(AbstractBaseModel):
     church = models.ForeignKey(Church, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.first_name
-    
-
-class MarriageRequest(AbstractBaseModel):
-    groom_first_name = models.CharField(max_length=255)
-    groom_last_name = models.CharField(max_length=255)
-    bride_first_name = models.CharField(max_length=255)
-    bride_last_name = models.CharField(max_length=255)
-    wedding_date = models.DateField(max_length=255)
-    wedding_location = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255)
-    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES, default="Member")
-    status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
-    month = models.CharField(max_length=255, null=True)
-    year = models.CharField(max_length=4, null=True)
-    church = models.ForeignKey(Church, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return self.groom_first_name
+        return self.first_name if self.category != "Wedding" else self.groom_first_name
     
 
     def groom(self):
@@ -119,36 +120,3 @@ class MarriageRequest(AbstractBaseModel):
 
     def bride(self):
         return f"{self.bride_first_name} {self.bride_last_name}"
-
-class BurialRequest(AbstractBaseModel):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=255, choices=GENDER_CHOICES, null=True)
-    phone_number = models.CharField(max_length=255)
-    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES, default="Member")
-    status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
-    request_date = models.DateField(max_length=255, null=True)
-    phone_number = models.CharField(max_length=255, null=True)
-    month = models.CharField(max_length=255, null=True)
-    year = models.CharField(max_length=4, null=True)
-    church = models.ForeignKey(Church, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return self.first_name
-    
-
-class PrayerRequest(AbstractBaseModel):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=255, choices=GENDER_CHOICES, null=True)
-    phone_number = models.CharField(max_length=255)
-    request_type = models.CharField(max_length=255, choices=REQUEST_TYPES, default="Member")
-    status = models.CharField(max_length=255, choices=REQUEST_STATUSES, default="Pending")
-    request_date = models.DateField(max_length=255, null=True)
-    phone_number = models.CharField(max_length=255, null=True)
-    month = models.CharField(max_length=255, null=True)
-    year = models.CharField(max_length=4, null=True)
-    church = models.ForeignKey(Church, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return self.first_name

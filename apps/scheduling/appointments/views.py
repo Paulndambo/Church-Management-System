@@ -25,12 +25,22 @@ class AppointmentsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get("search", "")
+        memberName = self.request.GET.get("memberName")
+        status = self.request.GET.get("status")
 
-        if search_query:
+        print("Member Name Filter:", memberName)
+        print("Status Filter:", status)
+
+        if memberName:
             queryset = queryset.filter(
-                Q(status__icontains=search_query)
+                Q(first_name__icontains=memberName) |
+                Q(last_name__icontains=memberName) |
+                Q(email__icontains=memberName) |
+                Q(phone_number__icontains=memberName)
             )
+
+        if status:
+            queryset = queryset.filter(status__iexact=status)
 
         # Get sort parameter
         return queryset.order_by("-created_at")
@@ -39,6 +49,12 @@ class AppointmentsListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["statuses"] = ["Accepted", "Declined", "Completed", "Cancelled", "Pending"]
         context["appointment_types"] = ["Member Appointment", "Non-Member Appointment"]
+        context["total_appointments"] = self.get_queryset().count()
+        context["pending_appointments"] = self.get_queryset().filter(status="Pending").count()
+        context["accepted_appointments"] = self.get_queryset().filter(status="Accepted").count()
+        context["declined_appointments"] = self.get_queryset().filter(status="Declined").count()
+        context["completed_appointments"] = self.get_queryset().filter(status="Completed").count()
+        context["cancelled_appointments"] = self.get_queryset().filter(status="Cancelled").count()
         return context
 
 

@@ -2,14 +2,14 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-center">Record Member Tithe</h1>
+          <h1 class="modal-title fs-5 text-center fw-bold">Record Member Tithe</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <form action="{% url 'new-tithing' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
 
-                <div class="row mb-3">
+                <div class="row mb-4">
                     <div class="col">
                       <label for="member" class="form-label fw-bold">Member</label>
                       <select class="form-select member-select" id="member" name="member" required>
@@ -19,9 +19,39 @@
                         {% endfor %}
                       </select>
                     </div>
-                  </div>
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Tithing Channel</label>
+                      <select class="form-select" id="tithe_channel" name="tithe_channel" required>
+                          <option value="" selected disabled>Select Tithe Channel</option>
+                          {% for channel in channels %}
+                              <option value={{channel.id}}>{{channel.name}}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                  <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Year</label>
+                      <select class="form-select" id="year" name="year" required>
+                          <option value="" selected disabled>Select Year</option>
+                          {% for year in years %}
+                              <option value={{year}}>{{year}}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Month</label>
+                      <select class="form-select" id="month" name="month" required>
+                          <option value="" selected disabled>Select Month</option>
+                          {% for month in months %}
+                              <option value={{month}}>{{month}}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                </div>
   
-                <div class="row mb-2">
+                <div class="row mb-4">
                   <div class="col">
                     <label for="amount" class="form-label fw-bold">Total Amount</label>
                     <input
@@ -31,16 +61,6 @@
                       name="amount"
                       value="0"
                       required
-                    />
-                  </div>
-                  <div class="col">
-                    <label for="tithing_date" class="form-label fw-bold">Service Date</label>
-                    <input
-                      type="date"
-                      class="form-control"
-                      id="tithing_date"
-                      name="tithing_date"
-                        required
                     />
                   </div>
                 </div>               
