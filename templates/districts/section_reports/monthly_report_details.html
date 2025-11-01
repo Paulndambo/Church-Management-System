@@ -2,6 +2,12 @@
 
 {% block content %}
 <!-- Stats Row -->
+ <nav aria-label="breadcrumb" class="mb-0">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'section-reports' %}">Section Reports</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ month_report.section_report.section.name }} {{month_report.month}} {{month_report.section_report.year}} Reports</li>
+  </ol>
+</nav>
 <div class="dashboard">
     <div class="row g-4 mb-4">
        <div class="col-xl-6 col-md-6">

@@ -10,22 +10,23 @@ from django.contrib.auth.decorators import login_required
 from apps.membership.models import Branch
 from apps.users.models import Pastor
 from apps.core.constants import GENDER_CHOICES
+from apps.sections.models import Section
 
 
 class PastorsListView(LoginRequiredMixin, ListView):
     model = Pastor
     template_name = "districts/pastors/pastors.html"
     context_object_name = "pastors"
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get("search", "")
-
-        if search_query:
-            queryset = queryset.filter(
-                Q(id__icontains=search_query) | Q(first_name__icontains=search_query)
-            )
+    
+        section_id = self.request.GET.get("section")
+        
+        if section_id:
+            queryset = queryset.filter(church__section__id=section_id)
+        
         # Get sort parameter
         return queryset.exclude(pastor_role="Pastor Associate").order_by("-created_at")
 
@@ -34,6 +35,7 @@ class PastorsListView(LoginRequiredMixin, ListView):
         context["branches"] = Branch.objects.all()
         context["genders"] = GENDER_CHOICES
         context["pastor_roles"] = ["Lead Pastor", "Pastor Associate"]
+        context["sections"] = Section.objects.all()
         return context
     
 
@@ -117,18 +119,17 @@ class PastorsAssociatesListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get("search", "")
+        section_id = self.request.GET.get("section")
 
-        if search_query:
-            queryset = queryset.filter(
-                Q(id__icontains=search_query) | Q(first_name__icontains=search_query)
-            )
+        if section_id:
+            queryset = queryset.filter(church__section_id=section_id)
         # Get sort parameter
         return queryset.filter(pastor_role="Pastor Associate").order_by("-created_at")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["branches"] = Branch.objects.all()
+        context["sections"] = Section.objects.all()
         return context
     
 

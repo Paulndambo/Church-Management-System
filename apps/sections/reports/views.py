@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-
+from django.db.models import Case, When, IntegerField
 
 
 from apps.sections.models import Section, SectionReport, SectionMonthlyReport
@@ -48,27 +48,42 @@ class SectionReportsListView(LoginRequiredMixin, ListView):
 
 def section_report_details(request: HttpRequest, id: int):
     section_report = SectionReport.objects.get(id=id)
-
     section = Section.objects.get(id=section_report.section.id)
     churches = section.sectionbranches.all()
-
     pastors = Pastor.objects.filter(church__section=section)
 
-    church_reports = KAGDistrictMonthlyReport.objects.filter(section=section, section_report=section_report).order_by("-created_at")
+    church_reports = KAGDistrictMonthlyReport.objects.filter(
+        section=section,
+        section_report=section_report
+    ).order_by("-created_at")
 
-    yearly_sum = sum(list(church_reports.values_list("total_collected", flat=True)))
+    yearly_sum = sum(church_reports.values_list("total_collected", flat=True))
 
-    monthly_reports = SectionMonthlyReport.objects.filter(section_report=section_report).order_by("month")
+    # Define month order
+    month_order = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ]
 
+    # Annotate with numeric order for correct sorting
+    monthly_reports = SectionMonthlyReport.objects.filter(
+        section_report=section_report
+    ).annotate(
+        month_order=Case(
+            *[When(month=m, then=i) for i, m in enumerate(month_order, start=1)],
+            output_field=IntegerField()
+        )
+    ).order_by("year", "month_order")
 
     context = {
         "section_report": section_report,
         "churches": churches,
         "pastors": pastors,
         "monthly_reports": monthly_reports,
-        "months": MONTHS_LIST,
+        "months": month_order,  # You can still use your MONTHS_LIST here
         "total_collected": yearly_sum,
     }
+
     return render(request, "districts/section_reports/report_details.html", context)
 
     

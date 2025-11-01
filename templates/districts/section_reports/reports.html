@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
-        <h2>Church Reports</h2>
+        <h2>Section Reports</h2>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newYearlySectionReportsModal">
             <i class="fas fa-plus"></i> Create Church Reports
         </button>
@@ -63,7 +63,7 @@
             <div class="card section-card h-100">
                 <div class="card-body">
                     <div class="section-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">{{ report.section }}</h5>
+                        <h5 class="card-title fw-bold">Section: {{ report.section }}</h5>
                         <span class="badge bg-secondary">{{ report.year }}</span>
                     </div>
                     <p class="card-text"><strong>District:</strong> {{ report.section.district }}</p>

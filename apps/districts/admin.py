@@ -12,5 +12,8 @@ class DistrictAdmin(admin.ModelAdmin):
 @admin.register(KAGDistrictMonthlyReport)
 class KAGDistrictMonthlyReportAdmin(admin.ModelAdmin):
     list_display = ["id", "district", "section", "section_report", "year", "month", "created_at"]
+    search_fields = ["month"]
 
-admin.site.register(DistrictReport)
+@admin.register(DistrictReport)
+class DistrictReportAdmin(admin.ModelAdmin):
+    list_display = ["id", "district", "month", "year"]

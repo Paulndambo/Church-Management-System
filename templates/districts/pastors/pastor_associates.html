@@ -9,8 +9,15 @@
             <h3 class="fw-bold">KAG Pastor Associates</h3>
         </div>
         <div class="col">
-            <input type="text" class="form-control" placeholder="Search..." 
-            id="searchInput" value="{{ search_query }}">
+            <select class="form-control" id="sectionSelect" name="sectionSelect">
+                <option value="">-- Select a section --</option>
+                {% for section in sections %}
+                    <option value="{{ section.id }}"
+                        {% if request.GET.section == section.id|stringformat:"s" %}selected{% endif %}>
+                        {{ section.name }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
         <div class="col">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPastorAssociateModal">New Pastor Associate</button>
@@ -41,7 +48,7 @@
                     <td>{{ pastor.first_name }} {{ pastor.last_name }}</td>
                     <td>{{ pastor.gender }}</td>
                     <td>{{ pastor.phone_number }}</td>
-                    <td>{{ pastor.church }}</td>
+                    <td>{{ pastor.church }}(<b>{{pastor.church.section}}</b>)</td>
                     <td>{{ pastor.pastor_role }}</td>
                     <td>
                         <div class="d-flex gap-1">
@@ -126,22 +133,20 @@
 
 {% block additional_scripts %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const loader = document.getElementById('loader');
-        let searchTimeout;
+document.addEventListener('DOMContentLoaded', function() {
+    const sectionSelect = document.getElementById('sectionSelect');
+    
+    function applyFilters() {
+        const section = sectionSelect.value;
+        const params = new URLSearchParams(window.location.search);
+        if (section) params.set('section', section); else params.delete('section');
 
-        // Search functionality
-        searchInput.addEventListener('keyup', function() {
-            clearTimeout(searchTimeout);
-            loader.classList.add('active');
 
-            searchTimeout = setTimeout(() => {
-                const searchQuery = this.value;
-                window.location.href = `?search=${encodeURIComponent(searchQuery)}`;
-            }, 500);
-        });
-        
-    });
+        window.location.search = params.toString();
+    }
+
+    sectionSelect.addEventListener('change', applyFilters);
+    // Reset filters handler
+});
 </script>
 {% endblock additional_scripts %}
